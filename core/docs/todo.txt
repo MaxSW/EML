@@ -1,0 +1,2 @@
+proper error handling in parsing
+brackets needed around return

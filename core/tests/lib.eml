@@ -1,0 +1,9 @@
+var a = 5
+
+func b = (var c, var d){
+	return c * d
+}
+
+func c = (){
+	print("hello world")
+}
