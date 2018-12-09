@@ -12,3 +12,18 @@ Features:
 * Classes and objects in a JS style
 * APIs for maths and input
 
+Language example:
+```
+//import the graph API
+obj graph = import("graph")
+
+//create a numeric variable x
+var x = 0
+
+//create an equation y that is a function of x
+//whenever x changes y will automatically update
+var :y = x^2 -2x - 4
+
+//graph y as x changes from -5 to 5
+graph.graph(:x, :y, -5, 5)
+```
