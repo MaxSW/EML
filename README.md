@@ -24,6 +24,11 @@ var x = 0
 //whenever x changes y will automatically update
 var :y = x^2 -2x - 4
 
+print(y) //-4
+x = 10
+print(y) //76
+
+
 //graph y as x changes from -5 to 5
 graph.graph(:x, :y, -5, 5)
 ```
