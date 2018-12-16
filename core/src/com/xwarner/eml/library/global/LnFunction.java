@@ -1,4 +1,4 @@
-package com.xwarner.eml.api.global;
+package com.xwarner.eml.library.global;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

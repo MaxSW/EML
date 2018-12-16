@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.xwarner.eml.interpreter.Bundle;
 import com.xwarner.eml.interpreter.context.variables.BooleanVariable;
+import com.xwarner.eml.interpreter.context.variables.NullVariable;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
 import com.xwarner.eml.interpreter.context.variables.StringVariable;
 import com.xwarner.eml.interpreter.context.variables.Variable;
@@ -23,23 +24,36 @@ public class Function extends Variable {
 	}
 
 	public Object run(ArrayList<Object> args2, Bundle bundle) {
-
 		bundle.context.enter(this);
-		for (int i = 0; i < args.size(); i++) {
-			FunctionArgumentNode node = args.get(i);
 
-			Object o = args2.get(i);
-			Variable var = null;
-
-			if (o instanceof BigDecimal) {
-				var = new NumericVariable((BigDecimal) o);
-			} else if (node.type.equals("bool")) {
-				var = new BooleanVariable((Boolean) o);
-			} else if (node.type.equals("str")) {
-				var = new StringVariable((String) o);
+		if (args2 == null && args.size() != 0) {
+			for (int i = 0; i < args.size(); i++) {
+				FunctionArgumentNode node = args.get(i);
+				bundle.context.createVariable(node.name, new NullVariable());
 			}
+		} else {
 
-			bundle.context.createVariable(node.name, var);
+			for (int i = 0; i < args.size(); i++) {
+				FunctionArgumentNode node = args.get(i);
+
+				Variable var = null;
+
+				if (i < args2.size()) {
+					Object o = args2.get(i);
+
+					if (o instanceof BigDecimal) {
+						var = new NumericVariable((BigDecimal) o);
+					} else if (node.type.equals("bool")) {
+						var = new BooleanVariable((Boolean) o);
+					} else if (node.type.equals("str")) {
+						var = new StringVariable((String) o);
+					}
+				} else {
+					var = new NullVariable();
+				}
+
+				bundle.context.createVariable(node.name, var);
+			}
 		}
 		ArrayList<Node> children = body.getChildren();
 		for (int i = 0; i < children.size(); i++) {
@@ -50,6 +64,7 @@ public class Function extends Variable {
 				return ((ReturnFlag) o).obj;
 			}
 		}
+
 		bundle.context.exit();
 		return null;
 	}

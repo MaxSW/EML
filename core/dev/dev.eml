@@ -1,12 +1,6 @@
-obj console = import("console")
+obj graph = import("graph")
 
+var x = 0
+var :y = x + 2
 
-print("enter a number")
-var a = console.getNumber()
-
-print("your number was " + a)
-
-print("enter your name")
-str b = console.getString()
-
-print("your name is " + b)
+graph.graph(:x, :y, 10, 50)

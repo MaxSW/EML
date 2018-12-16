@@ -1,0 +1,23 @@
+func alert = (str text, str title){
+	___invoke("gui.alert", "alert", text, title)
+}
+
+func info = (str text, str title){
+	___invoke("gui.alert", "info", text, title)
+}
+
+func warn = (str text, str title){
+	___invoke("gui.alert", "warn", text, title)
+}
+
+func error = (str text, str title){
+	___invoke("gui.alert", "error", text, title)
+}
+
+func getNumber = (str text, str title){
+	return (___invoke("gui.get", "number", text, title))
+}
+
+func getString = (str text, str title){
+	return (___invoke("gui.get", "string", text, title))
+}

@@ -1,0 +1,3 @@
+ func between = (var a, var b){
+ 	return (___invoke("random.between", a, b))
+ }
