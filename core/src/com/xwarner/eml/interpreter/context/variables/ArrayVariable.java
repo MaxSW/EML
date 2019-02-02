@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.xwarner.eml.interpreter.Bundle;
 import com.xwarner.eml.nodes.ReferenceNode;
 import com.xwarner.eml.nodes.variables.ArrayMemberNode;
+import com.xwarner.eml.nodes.variables.VariableReferenceNode;
 
 public class ArrayVariable extends Variable {
 
@@ -31,12 +32,19 @@ public class ArrayVariable extends Variable {
 	}
 
 	public Variable getVariable(ReferenceNode ref, int level, Bundle bundle) {
-		ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level);
-		int i = ((BigDecimal) node.invoke2(bundle)).intValue();
-		if (!values.containsKey(i))
-			values.put(i, new NumericVariable(BigDecimal.ZERO));
-		return values.get(i);
-
+		if (ref.getChildren().get(level) instanceof ArrayMemberNode) {
+			ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level);
+			int i = ((BigDecimal) node.invoke2(bundle)).intValue();
+			if (!values.containsKey(i))
+				values.put(i, new NumericVariable(BigDecimal.ZERO));
+			return values.get(i);
+		} else {
+			VariableReferenceNode node = (VariableReferenceNode) ref.getChildren().get(level);
+			if (node.name.equals("length")) {
+				return new NumericVariable(BigDecimal.valueOf(values.size()));
+			}
+		}
+		return null;
 	}
 
 	public void setVariable(ReferenceNode ref, int level, Bundle bundle, Object object) {

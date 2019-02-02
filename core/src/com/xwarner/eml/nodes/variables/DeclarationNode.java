@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.context.objects.BlankObject;
 import com.xwarner.eml.interpreter.context.objects.EObject;
 import com.xwarner.eml.interpreter.context.variables.ArrayVariable;
 import com.xwarner.eml.interpreter.context.variables.BooleanVariable;
@@ -74,7 +75,7 @@ public class DeclarationNode extends Node {
 						bundle.context.createVariable(ref, new VectorVariable((Vector) exp.invoke2(bundle)), 0, bundle);
 					} else if (varType.equals("mat")) {
 						bundle.context.createVariable(ref, new MatrixVariable((Matrix) exp.invoke2(bundle)), 0, bundle);
-					} 
+					}
 				} else if (children.get(1) instanceof ObjectCreationNode) {
 					EObject obj = (EObject) children.get(1).invoke2(bundle);
 					bundle.context.createVariable(ref, obj, 0, bundle);
@@ -85,10 +86,10 @@ public class DeclarationNode extends Node {
 				}
 			} else {
 				if (varType.equals("obj") && children.size() == 1) {
-					EObject obj = new EObject(null);
+					EObject obj = new BlankObject();
 					obj.instantiate(bundle);
 					bundle.context.createVariable(ref, obj, 0, bundle);
-				}else if (varType.equals("arr")) {
+				} else if (varType.equals("arr")) {
 					bundle.context.createVariable(ref, new ArrayVariable(), 0, bundle);
 				}
 			}

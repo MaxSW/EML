@@ -9,13 +9,20 @@ import com.xwarner.eml.interpreter.Bundle;
 import com.xwarner.eml.interpreter.context.variables.NullVariable;
 import com.xwarner.eml.library.Invokable;
 
+/**
+ * Loads maths related functions into the invoke function
+ * 
+ * @author max
+ *
+ */
+
 public class Maths {
 
 	public void load(HashMap<String, Invokable> map) {
 		map.put("maths.round", new Invokable() {
 			public Object run(ArrayList<Object> args, Bundle bundle) {
 				BigDecimal val = (BigDecimal) args.get(1);
-				if(args.get(2) instanceof NullVariable)
+				if (args.get(2) instanceof NullVariable)
 					return val.setScale(0, RoundingMode.HALF_EVEN);
 				BigDecimal val2 = (BigDecimal) args.get(2);
 				return val.setScale(val2.intValue(), RoundingMode.HALF_EVEN);

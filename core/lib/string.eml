@@ -1,0 +1,11 @@
+func split = (str s){
+	
+}
+
+func substr = (str s, var a, var b){
+	
+}
+
+func replace = (str s, str a, str b){
+	
+}

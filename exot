@@ -1,0 +1,199 @@
+[1mdiff --git a/core/dev/dev.eml b/core/dev/dev.eml[m
+[1mindex 3514175..a330b69 100644[m
+[1m--- a/core/dev/dev.eml[m
+[1m+++ b/core/dev/dev.eml[m
+[36m@@ -1,6 +1,4 @@[m
+[31m-obj graph = import("graph")[m
+[32m+[m[32mobj a = ___invoke("test")[m
+[32m+[m[32mprint(a.a)[m
+ [m
+[31m-var x = 0[m
+[31m-var :y = x + 2[m
+[31m-[m
+[31m-graph.graph(:x, :y, 10, 50)[m
+\ No newline at end of file[m
+[32m+[m[32mprint(a.b())[m
+\ No newline at end of file[m
+[1mdiff --git a/core/docs/api.txt b/core/docs/api.txt[m
+[1mdeleted file mode 100644[m
+[1mindex 41443fc..0000000[m
+[1m--- a/core/docs/api.txt[m
+[1m+++ /dev/null[m
+[36m@@ -1,21 +0,0 @@[m
+[31m-Maths[m
+[31m-	round(num, ?dp)[m
+[31m-	floor(num)[m
+[31m-	ceil(num)[m
+[31m-	abs(num)[m
+[31m-	sin(num)[m
+[31m-	cos(num)[m
+[31m-	tan(num)[m
+[31m-	[m
+[31m-	[m
+[31m-Alert[m
+[31m-	alert(message, ?title)[m
+[31m-	info(message, ?title)[m
+[31m-	warn(message, ?title)[m
+[31m-	error(message, ?title)[m
+[31m-[m
+[31m-Input[m
+[31m-	getNumber(?message, ?title)[m
+[31m-[m
+[31m-Random[m
+[31m-	between(from, to)[m
+\ No newline at end of file[m
+[1mdiff --git a/core/docs/example.eml b/core/docs/example.eml[m
+[1mindex b34bbf1..cbe4ee2 100644[m
+[1m--- a/core/docs/example.eml[m
+[1m+++ b/core/docs/example.eml[m
+[36m@@ -1,22 +1,18 @@[m
+[31m-obj input = import("input")[m
+ obj alert = import("alert")[m
+ obj random = import("random")[m
+ [m
+[31m-var in = input.getNumber("Choose a number between 1 and 10")[m
+ [m
+[31m-if(in > 10){[m
+[31m-	alert.warn("Your number was too high")[m
+[31m-} else if(in < 1){[m
+[31m-	alert.warn("Your number was too low")[m
+[31m-} else {[m
+[31m-	if(in == random.between(1, 10)){[m
+[31m-		alert.info("You won")[m
+[31m-	}else{[m
+[31m-		alert.info("You lost")[m
+[32m+[m[32mwhile(true){[m
+[32m+[m	[32mvar in = alert.getNumber("Choose a number between 1 and 10")[m
+[32m+[m	[32mif(in > 10){[m
+[32m+[m		[32malert.warn("Your number was too high")[m
+[32m+[m	[32m} else if(in < 1){[m
+[32m+[m		[32malert.warn("Your number was too low")[m
+[32m+[m	[32m} else {[m
+[32m+[m		[32mif(in == random.between(1, 10)){[m
+[32m+[m			[32malert.info("You won")[m
+[32m+[m		[32m}else{[m
+[32m+[m			[32malert.info("You lost")[m
+[32m+[m		[32m}[m
+ 	}[m
+ }[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m- [m
+\ No newline at end of file[m
+[1mdiff --git a/core/src/com/xwarner/eml/library/global/InvokeFunction.java b/core/src/com/xwarner/eml/library/global/InvokeFunction.java[m
+[1mindex 50d0b68..3a75192 100644[m
+[1m--- a/core/src/com/xwarner/eml/library/global/InvokeFunction.java[m
+[1m+++ b/core/src/com/xwarner/eml/library/global/InvokeFunction.java[m
+[36m@@ -1,15 +1,26 @@[m
+ package com.xwarner.eml.library.global;[m
+ [m
+[32m+[m[32mimport java.math.BigDecimal;[m
+ import java.util.ArrayList;[m
+ import java.util.HashMap;[m
+ [m
+ import com.xwarner.eml.interpreter.Bundle;[m
+ import com.xwarner.eml.interpreter.context.functions.Function;[m
+[32m+[m[32mimport com.xwarner.eml.interpreter.context.objects.BlankObject;[m
+[32m+[m[32mimport com.xwarner.eml.interpreter.context.variables.NumericVariable;[m
+ import com.xwarner.eml.library.Invokable;[m
+ import com.xwarner.eml.library.invokables.GUI;[m
+ import com.xwarner.eml.library.invokables.Maths;[m
+ import com.xwarner.eml.library.invokables.Random;[m
+ [m
+[32m+[m[32m/**[m
+[32m+[m[32m * A global function that is used in EML to call pre-specified Java functions.[m
+[32m+[m[32m * Acts as the link between the two languages.[m
+[32m+[m[32m *[m[41m [m
+[32m+[m[32m * @author max[m
+[32m+[m[32m *[m
+[32m+[m[32m */[m
+[32m+[m
+ public class InvokeFunction extends Function {[m
+ [m
+ 	public HashMap<String, Invokable> map;[m
+[36m@@ -19,6 +30,23 @@[m [mpublic class InvokeFunction extends Function {[m
+ 		new Maths().load(map);[m
+ 		new Random().load(map);[m
+ 		new GUI().load(map);[m
+[32m+[m		[32mmap.put("test", new Invokable() {[m
+[32m+[m
+[32m+[m			[32m@Override[m
+[32m+[m			[32mpublic Object run(ArrayList<Object> args, Bundle bundle) {[m
+[32m+[m				[32mBlankObject obj = new BlankObject();[m
+[32m+[m				[32mobj.vars.put("a", new NumericVariable(BigDecimal.valueOf(5.12)));[m
+[32m+[m				[32mobj.funcs.put("b", new Function() {[m
+[32m+[m					[32mpublic Object run(ArrayList<Object> args2, Bundle bundle) {[m
+[32m+[m						[32mSystem.out.println("hello world!");[m
+[32m+[m						[32mreturn BigDecimal.ONE;[m
+[32m+[m					[32m}[m
+[32m+[m				[32m});[m
+[32m+[m				[32mobj.instantiate(bundle);[m
+[32m+[m				[32mreturn obj;[m
+[32m+[m			[32m}[m
+[32m+[m
+[32m+[m		[32m});[m
+ 	}[m
+ [m
+ 	public Object run(ArrayList<Object> args, Bundle bundle) {[m
+[1mdiff --git a/core/src/com/xwarner/eml/library/invokables/Maths.java b/core/src/com/xwarner/eml/library/invokables/Maths.java[m
+[1mindex 4d3617c..8e87ff8 100644[m
+[1m--- a/core/src/com/xwarner/eml/library/invokables/Maths.java[m
+[1m+++ b/core/src/com/xwarner/eml/library/invokables/Maths.java[m
+[36m@@ -9,13 +9,20 @@[m [mimport com.xwarner.eml.interpreter.Bundle;[m
+ import com.xwarner.eml.interpreter.context.variables.NullVariable;[m
+ import com.xwarner.eml.library.Invokable;[m
+ [m
+[32m+[m[32m/**[m
+[32m+[m[32m * Loads maths related functions into the invoke function[m
+[32m+[m[32m *[m[41m [m
+[32m+[m[32m * @author max[m
+[32m+[m[32m *[m
+[32m+[m[32m */[m
+[32m+[m
+ public class Maths {[m
+ [m
+ 	public void load(HashMap<String, Invokable> map) {[m
+ 		map.put("maths.round", new Invokable() {[m
+ 			public Object run(ArrayList<Object> args, Bundle bundle) {[m
+ 				BigDecimal val = (BigDecimal) args.get(1);[m
+[31m-				if(args.get(2) instanceof NullVariable)[m
+[32m+[m				[32mif (args.get(2) instanceof NullVariable)[m
+ 					return val.setScale(0, RoundingMode.HALF_EVEN);[m
+ 				BigDecimal val2 = (BigDecimal) args.get(2);[m
+ 				return val.setScale(val2.intValue(), RoundingMode.HALF_EVEN);[m
+[1mdiff --git a/core/src/com/xwarner/eml/nodes/variables/DeclarationNode.java b/core/src/com/xwarner/eml/nodes/variables/DeclarationNode.java[m
+[1mindex 418acee..d179be8 100644[m
+[1m--- a/core/src/com/xwarner/eml/nodes/variables/DeclarationNode.java[m
+[1m+++ b/core/src/com/xwarner/eml/nodes/variables/DeclarationNode.java[m
+[36m@@ -4,6 +4,7 @@[m [mimport java.math.BigDecimal;[m
+ import java.util.ArrayList;[m
+ [m
+ import com.xwarner.eml.interpreter.Bundle;[m
+[32m+[m[32mimport com.xwarner.eml.interpreter.context.objects.BlankObject;[m
+ import com.xwarner.eml.interpreter.context.objects.EObject;[m
+ import com.xwarner.eml.interpreter.context.variables.ArrayVariable;[m
+ import com.xwarner.eml.interpreter.context.variables.BooleanVariable;[m
+[36m@@ -74,7 +75,7 @@[m [mpublic class DeclarationNode extends Node {[m
+ 						bundle.context.createVariable(ref, new VectorVariable((Vector) exp.invoke2(bundle)), 0, bundle);[m
+ 					} else if (varType.equals("mat")) {[m
+ 						bundle.context.createVariable(ref, new MatrixVariable((Matrix) exp.invoke2(bundle)), 0, bundle);[m
+[31m-					} [m
+[32m+[m					[32m}[m
+ 				} else if (children.get(1) instanceof ObjectCreationNode) {[m
+ 					EObject obj = (EObject) children.get(1).invoke2(bundle);[m
+ 					bundle.context.createVariable(ref, obj, 0, bundle);[m
+[36m@@ -85,10 +86,10 @@[m [mpublic class DeclarationNode extends Node {[m
+ 				}[m
+ 			} else {[m
+ 				if (varType.equals("obj") && children.size() == 1) {[m
+[31m-					EObject obj = new EObject(null);[m
+[32m+[m					[32mEObject obj = new BlankObject();[m
+ 					obj.instantiate(bundle);[m
+ 					bundle.context.createVariable(ref, obj, 0, bundle);[m
+[31m-				}else if (varType.equals("arr")) {[m
+[32m+[m				[32m} else if (varType.equals("arr")) {[m
+ 					bundle.context.createVariable(ref, new ArrayVariable(), 0, bundle);[m
+ 				}[m
+ 			}[m
