@@ -1,4 +1,4 @@
-package com.xwarner.eml.tools;
+package com.xwarner.eml.util;
 
 import java.io.IOException;
 import java.io.PrintWriter;

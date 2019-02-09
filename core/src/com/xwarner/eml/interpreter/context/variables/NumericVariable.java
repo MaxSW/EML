@@ -29,5 +29,9 @@ public class NumericVariable extends Variable {
 		super.setValue(value);
 		this.value = (BigDecimal) value;
 	}
+	
+	public String toString() {
+		return value.toString();
+	}
 
 }

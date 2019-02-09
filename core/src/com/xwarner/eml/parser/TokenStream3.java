@@ -1,7 +1,7 @@
 package com.xwarner.eml.parser;
 
 import com.xwarner.eml.parser.tokens.Token;
-import com.xwarner.eml.tools.ErrorHandler;
+import com.xwarner.eml.util.ErrorHandler;
 
 public class TokenStream3 extends TokenStream {
 
@@ -17,9 +17,11 @@ public class TokenStream3 extends TokenStream {
 		Token token = stream.peek();
 		if (token == null)
 			return null;
+		
+		//TODO
 
 		if (token.value.equals("[")) {
-			Token t = new Token(Token.VECTOR, "", token.line);
+			Token t = new Token(Token.VECTOR, "", token.line, "");
 			t.node = parseVectorOrMatrix(stream);
 			return t;
 		}

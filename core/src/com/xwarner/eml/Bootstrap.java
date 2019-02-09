@@ -11,7 +11,7 @@ import com.xwarner.eml.parser.TokenStream2;
 import com.xwarner.eml.parser.TokenStream3;
 import com.xwarner.eml.parser.TokenStream4;
 import com.xwarner.eml.parser.Tree;
-import com.xwarner.eml.tools.IOManager;
+import com.xwarner.eml.util.IOManager;
 
 public class Bootstrap {
 

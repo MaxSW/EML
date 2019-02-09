@@ -7,7 +7,7 @@ import com.xwarner.eml.nodes.values.OperatorNode;
 import com.xwarner.eml.nodes.variables.ArrayMemberNode;
 import com.xwarner.eml.nodes.variables.VariableReferenceNode;
 import com.xwarner.eml.parser.tokens.Token;
-import com.xwarner.eml.tools.ErrorHandler;
+import com.xwarner.eml.util.ErrorHandler;
 
 /**
  * Converts the stream of tokens into a new stream of tokens with variable
@@ -38,15 +38,17 @@ public class TokenStream2 extends TokenStream {
 	}
 
 	private Token parseReference(Token token) {
-		Token t = new Token(Token.REFERENCE, "", token.line);
+		Token t = new Token(Token.REFERENCE, "", token.line, "");
 		ReferenceNode node = new ReferenceNode();
 		if (token.type == Token.NAME) {
 			node.addChild(new VariableReferenceNode(token.value));
 			t.value = token.value;
+			t.src += token.value;
 		} else {
 			Token t2 = stream.next();
 			node.addChild(new VariableReferenceNode(t2.value));
 			t.value = t2.value;
+			t.src += t2.value;
 			node.flag = true;
 		}
 		t.node = node;
@@ -59,6 +61,7 @@ public class TokenStream2 extends TokenStream {
 				if (token.value.equals(".") && !nextChild) {
 					nextChild = true;
 					stream.next();
+					t.value += token.value;
 				} else if (token.value.equals("[") && !nextChild) {
 					stream.next();
 					ArrayMemberNode amn = new ArrayMemberNode();
@@ -77,12 +80,14 @@ public class TokenStream2 extends TokenStream {
 					}
 					amn.addChild(exp);
 					t.node.addChild(amn);
+					t.value += token.value;
 				} else {
 					break;
 				}
 			} else if (token.type == Token.NAME && nextChild) {
 				t.node.addChild(new VariableReferenceNode(stream.next().value));
 				nextChild = false;
+				t.value += token.value;
 			} else {
 				break;
 			}

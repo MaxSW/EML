@@ -9,15 +9,16 @@ public class Token {
 	public static final int REFERENCE = 11, EXPRESSION = 12, INVOCATION = 13, VECTOR = 14;
 
 	public int type;
-	public String value;
+	public String value, src;
 
 	public Node node;
 	public int line;
 
-	public Token(int type, String value, int line) {
+	public Token(int type, String value, int line, String src) {
 		this.type = type;
 		this.value = value;
 		this.line = line;
+		this.src = src;
 	}
 
 	public static String type(int type) {

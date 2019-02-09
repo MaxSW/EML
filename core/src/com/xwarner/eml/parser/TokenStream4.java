@@ -2,7 +2,7 @@ package com.xwarner.eml.parser;
 
 import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.parser.tokens.Token;
-import com.xwarner.eml.tools.ErrorHandler;
+import com.xwarner.eml.util.ErrorHandler;
 
 /**
  * Converts the stream of tokens into a new stream of tokens with expressions
@@ -31,7 +31,7 @@ public class TokenStream4 extends TokenStream {
 			return null;
 
 		if (shouldParseExpression(token)) {
-			Token t = new Token(Token.EXPRESSION, "", token.line);
+			Token t = new Token(Token.EXPRESSION, "", token.line, "");
 			t.node = new ExpressionNode();
 			parseExpression(stream, t.node);
 			return t;
@@ -39,7 +39,7 @@ public class TokenStream4 extends TokenStream {
 			if (!stream.done()) {
 				Token tt = stream.next();
 				if (stream.peek().value.equals("(")) {
-					Token t = new Token(Token.INVOCATION, "", token.line);
+					Token t = new Token(Token.INVOCATION, "", token.line, "");
 					t.node = parseInvocation(stream, token);
 					return t;
 				} else {

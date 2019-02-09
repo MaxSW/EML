@@ -18,7 +18,7 @@ import com.xwarner.eml.nodes.variables.AssignmentNode;
 import com.xwarner.eml.nodes.variables.DeclarationNode;
 import com.xwarner.eml.nodes.variables.VariableChangeNode;
 import com.xwarner.eml.parser.tokens.Token;
-import com.xwarner.eml.tools.ErrorHandler;
+import com.xwarner.eml.util.ErrorHandler;
 
 public class Parser extends TokenStream {
 

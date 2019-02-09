@@ -2,7 +2,7 @@ package com.xwarner.eml.parser;
 
 import com.xwarner.eml.parser.tokens.Token;
 import com.xwarner.eml.parser.tokens.TokenMatcher;
-import com.xwarner.eml.tools.ErrorHandler;
+import com.xwarner.eml.util.ErrorHandler;
 
 /**
  * Converts the input stream into a stream of tokens
@@ -59,31 +59,35 @@ public class TokenStream1 extends TokenStream {
 				}
 			} else {
 				// a division operator
-				return new Token(Token.OPERATOR, "/" + readWhile(isOperator), input.line());
+				String op = readWhile(isOperator);
+				return new Token(Token.OPERATOR, "/" + op, input.line(), "/" + op);
 			}
 		} else if (isAssignment.match(c)) {
 			input.next();
 			char cc = input.peek();
 			if (isAssignment.match(cc)) {
 				input.next();
-				return new Token(Token.OPERATOR, "==", input.line());
+				return new Token(Token.OPERATOR, "==", input.line(), "==");
 			} else
-				return new Token(Token.ASSIGNMENT, "=", input.line());
+				return new Token(Token.ASSIGNMENT, "=", input.line(), "=");
 		} else if (isDigit.match(c)) {
-			return new Token(Token.NUMBER, readNumber(), input.line());
+			String num = readNumber();
+			return new Token(Token.NUMBER, num, input.line(), num);
 		} else if (isNameStart.match(c)) {
 			return readName();
 		} else if (isPunctuation.match(c)) {
-			return new Token(Token.PUNCTUATION, Character.toString(input.next()), input.line());
+			String s = Character.toString(input.next());
+			return new Token(Token.PUNCTUATION, s, input.line(), s);
 		} else if (isOperator.match(c)) {
-			return new Token(Token.OPERATOR, readWhile(isOperator), input.line());
+			String op = readWhile(isOperator);
+			return new Token(Token.OPERATOR, op, input.line(), op);
 		} else if (c == '"') {
 			return readString();
 		} else if (isNewline.match(c)) {
 			input.next();
 			// skip multiple last lines
 			if (last != null && last.type != Token.NEWLINE)
-				return new Token(Token.NEWLINE, "", input.line());
+				return new Token(Token.NEWLINE, "\\n", input.line(), "\\n");
 			else
 				return readNext();
 		}
@@ -122,7 +126,7 @@ public class TokenStream1 extends TokenStream {
 	private Token readName() {
 		String id = readWhile(isName);
 		int type = isKeyword(id) ? Token.KEYWORD : Token.NAME;
-		return new Token(type, id, input.line());
+		return new Token(type, id, input.line(), id);
 	}
 
 	private Token readString() {
@@ -149,7 +153,7 @@ public class TokenStream1 extends TokenStream {
 				str += c;
 			}
 		}
-		return new Token(Token.STRING, str, input.line());
+		return new Token(Token.STRING, str, input.line(), "\"" + str + "\"");
 	}
 
 	/* Matchers */

@@ -20,7 +20,7 @@ import com.xwarner.eml.interpreter.context.variables.values.Vector;
 import com.xwarner.eml.nodes.ReferenceNode;
 import com.xwarner.eml.nodes.variables.ArrayMemberNode;
 import com.xwarner.eml.nodes.variables.VariableReferenceNode;
-import com.xwarner.eml.tools.ErrorHandler;
+import com.xwarner.eml.util.ErrorHandler;
 
 public class SubContext {
 	private HashMap<String, Variable> vars;
@@ -158,6 +158,9 @@ public class SubContext {
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
 					return children.get(obj).runFunction(ref, args, bundle, level + 1);
+				}else if(var2 instanceof ArrayVariable) {
+					ArrayVariable arr = (ArrayVariable) var2;
+					return arr.runFunction(ref, args, bundle, level + 1);
 				}
 			}
 			ErrorHandler.error("unknown variable reference");

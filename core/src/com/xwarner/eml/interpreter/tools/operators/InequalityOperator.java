@@ -4,8 +4,7 @@ import java.math.BigDecimal;
 
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
 import com.xwarner.eml.interpreter.context.variables.values.Vector;
-import com.xwarner.eml.interpreter.tools.operators.Operator;
-import com.xwarner.eml.tools.ErrorHandler;
+import com.xwarner.eml.util.ErrorHandler;
 
 public class InequalityOperator extends Operator {
 

@@ -30,7 +30,7 @@ import com.xwarner.eml.nodes.variables.DeclarationNode;
 import com.xwarner.eml.nodes.variables.VariableChangeNode;
 import com.xwarner.eml.nodes.variables.VariableReferenceNode;
 import com.xwarner.eml.parser.Tree;
-import com.xwarner.eml.tools.IOManager;
+import com.xwarner.eml.util.IOManager;
 
 public class PartialCompiler {
 

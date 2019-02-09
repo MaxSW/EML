@@ -1,6 +1,6 @@
 package com.xwarner.eml.parser;
 
-import com.xwarner.eml.tools.ErrorHandler;
+import com.xwarner.eml.util.ErrorHandler;
 
 public class InputStream {
 
@@ -20,8 +20,9 @@ public class InputStream {
 			return ' ';
 		char c = source.charAt(pos);
 		pos++;
-		if (c == '\n')
+		if (c == '\n') {
 			line++;
+		}
 		return c;
 	}
 
@@ -35,6 +36,10 @@ public class InputStream {
 
 	public int line() {
 		return line;
+	}
+
+	public int pos() {
+		return pos;
 	}
 
 }

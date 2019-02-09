@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.xwarner.eml.interpreter.Bundle;
 import com.xwarner.eml.interpreter.context.functions.Function;
-import com.xwarner.eml.tools.ErrorHandler;
+import com.xwarner.eml.util.ErrorHandler;
 
 public class PrintFunction extends Function {
 

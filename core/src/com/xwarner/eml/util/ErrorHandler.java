@@ -1,4 +1,4 @@
-package com.xwarner.eml.tools;
+package com.xwarner.eml.util;
 
 import com.xwarner.eml.parser.tokens.Token;
 
