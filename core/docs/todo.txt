@@ -1,6 +1,0 @@
-* += for strings
-* collections?
-
-## Longer Term
-* rebuild parser
-* rebuild context/variable system
