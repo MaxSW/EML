@@ -6,6 +6,13 @@ import com.xwarner.eml.interpreter.Bundle;
 import com.xwarner.eml.interpreter.context.variables.definitions.Definition;
 import com.xwarner.eml.nodes.ReferenceNode;
 
+/**
+ * Variables are not used internally for calculations!
+ * 
+ * @author max
+ *
+ */
+
 public class Variable {
 
 	/**
