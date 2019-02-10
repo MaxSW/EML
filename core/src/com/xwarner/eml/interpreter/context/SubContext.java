@@ -99,24 +99,22 @@ public class SubContext {
 		} else {
 			if (vars.containsKey(vrn.name)) {
 				Variable var2 = vars.get(vrn.name);
+				Variable var = null;
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
-					Variable var = children.get(obj).getVariable(ref, level + 1, bundle);
+					var = children.get(obj).getVariable(ref, level + 1, bundle);
 					var.setReference(ref);
-					return var;
 				} else if (var2 instanceof ArrayVariable) {
 					ArrayVariable var3 = (ArrayVariable) var2;
-					Variable var = var3.getVariable(ref, level + 1, bundle);
+					var = var3.getVariable(ref, level + 1, bundle);
 					var.setReference(ref);
-					return var;
 				} else if (var2 instanceof VectorVariable) {
 					VectorVariable vec = (VectorVariable) var2;
 					ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level + 1);
 					int i = ((BigDecimal) node.invoke2(bundle)).intValue();
 					Vector vector = (Vector) vec.getValue(bundle);
-					Variable var = new NumericVariable(vector.vals[i]);
+					var = new NumericVariable(vector.vals[i]);
 					var.setReference(ref);
-					return var;
 				} else if (var2 instanceof MatrixVariable) {
 					MatrixVariable mat = (MatrixVariable) var2;
 					ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level + 1);
@@ -124,10 +122,16 @@ public class SubContext {
 					node = (ArrayMemberNode) ref.getChildren().get(level + 2);
 					int j = ((BigDecimal) node.invoke2(bundle)).intValue();
 					Matrix matrix = (Matrix) mat.getValue(bundle);
-					NumericVariable var = new NumericVariable(matrix.vals[i][j]);
+					var = new NumericVariable(matrix.vals[i][j]);
 					var.setReference(ref);
-					return var;
+				} else {
+					var = var2.getVariable(ref, level + 1, bundle);
+					if (var == null)
+						ErrorHandler.error("unknown variable of " + vrn.name);
+					else
+						var.setReference(ref);
 				}
+				return var;
 			}
 			ErrorHandler.error("unknown variable reference " + vrn.name);
 			return null;
@@ -158,9 +162,8 @@ public class SubContext {
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
 					return children.get(obj).runFunction(ref, args, bundle, level + 1);
-				}else if(var2 instanceof ArrayVariable) {
-					ArrayVariable arr = (ArrayVariable) var2;
-					return arr.runFunction(ref, args, bundle, level + 1);
+				} else if (var2 instanceof Variable) {
+					return ((Variable) var2).runFunction(ref, args, bundle, level + 1);
 				}
 			}
 			ErrorHandler.error("unknown variable reference");

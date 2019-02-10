@@ -9,6 +9,10 @@ public class NumericVariable extends Variable {
 
 	private BigDecimal value;
 
+	public NumericVariable(int i) {
+		this.value = BigDecimal.valueOf(i);
+	}
+
 	public NumericVariable(BigDecimal value) {
 		this.value = value;
 	}
@@ -29,7 +33,7 @@ public class NumericVariable extends Variable {
 		super.setValue(value);
 		this.value = (BigDecimal) value;
 	}
-	
+
 	public String toString() {
 		return value.toString();
 	}

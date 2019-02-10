@@ -58,6 +58,7 @@ public class TokenStream2 extends TokenStream {
 				break;
 			token = stream.peek();
 			if (token.type == Token.PUNCTUATION) {
+				t.src += token.src;
 				if (token.value.equals(".") && !nextChild) {
 					nextChild = true;
 					stream.next();
@@ -68,6 +69,7 @@ public class TokenStream2 extends TokenStream {
 					ExpressionNode exp = new ExpressionNode();
 					while (true) {
 						Token tt = stream.next();
+						t.src += tt.src;
 						if (tt.value.equals("]"))
 							break;
 						if (tt.type == Token.NUMBER)

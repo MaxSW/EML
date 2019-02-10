@@ -17,12 +17,14 @@ public class TokenStream3 extends TokenStream {
 		Token token = stream.peek();
 		if (token == null)
 			return null;
-		
-		//TODO
+
+		// TODO
 
 		if (token.value.equals("[")) {
 			Token t = new Token(Token.VECTOR, "", token.line, "");
-			t.node = parseVectorOrMatrix(stream);
+			TokenDataSet set = parseVectorOrMatrix(stream);
+			t.node = set.node;
+			t.src = set.src;
 			return t;
 		}
 

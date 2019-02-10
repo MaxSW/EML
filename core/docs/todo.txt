@@ -1,2 +1,6 @@
-proper error handling in parsing
-brackets needed around return
+* += for strings
+* collections?
+
+## Longer Term
+* rebuild parser
+* rebuild context/variable system

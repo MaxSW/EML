@@ -33,15 +33,17 @@ public class TokenStream4 extends TokenStream {
 		if (shouldParseExpression(token)) {
 			Token t = new Token(Token.EXPRESSION, "", token.line, "");
 			t.node = new ExpressionNode();
-			parseExpression(stream, t.node);
+			t.src = parseExpression(stream, t.node);
 			return t;
 		} else if (token.type == Token.REFERENCE) {
 			if (!stream.done()) {
 				Token tt = stream.next();
 				if (stream.peek().value.equals("(")) {
 					Token t = new Token(Token.INVOCATION, "", token.line, "");
-					t.node = parseInvocation(stream, token);
-					return t;
+					TokenDataSet set = parseInvocation(stream, token);
+					t.node = set.node;
+					t.src = set.src;
+ 					return t;
 				} else {
 					return tt;
 				}

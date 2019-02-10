@@ -43,8 +43,8 @@ public class TokenStream {
 		return null;
 	}
 
-	/* Common methods */
-	protected void parseExpression(TokenStream stream, Node node) {
+	protected String parseExpression(TokenStream stream, Node node) {
+		String src = "";
 		int count = 0, sCount = 0;
 		while (true) {
 			if (stream.done())
@@ -54,46 +54,52 @@ public class TokenStream {
 			// System.out.println(t.value);
 
 			if (t.type == Token.NEWLINE)
-				return;
+				return src;
 			if (t.value.equals("}"))
-				return;
+				return src;
 			if (t.value.equals("{"))
-				return;
+				return src;
 			if (t.value.equals(","))
-				return;
+				return src;
 			if (t.value.equals(")") && count == 0)
-				return;
+				return src;
 			if (t.value.equals(";"))
-				return;
+				return src;
 			if (t.value.equals("]") && sCount == 0)
-				return;
+				return src;
 			if (t.value.equals("|"))
-				return;
+				return src;
 
 			if (t.type == Token.KEYWORD && !(t.value.equals("true") || t.value.equals("false")))
-				return;
+				return src;
 
 			t = stream.next();
 			Node n = null;
 			if (t.type == Token.REFERENCE) {
+				src += t.src;
 				if (!stream.done()) {
-					if (stream.peek().value.equals("("))
-						n = parseInvocation(stream, t);
-					else
+					if (stream.peek().value.equals("(")) {
+						TokenDataSet set = parseInvocation(stream, t);
+						n = set.node;
+						src += set.src;
+					} else {
 						n = t.node;
+					}
 				} else {
 					n = t.node;
 				}
 			} else if (t.type == Token.NUMBER) {
+				src += t.src;
 				n = new NumberNode(Float.parseFloat(t.value));
 			} else if (t.type == Token.OPERATOR || t.value.equals("(") || t.value.equals(")")) {
+				src += t.src;
 				if (t.value.equals("("))
 					count++;
 				else if (t.value.equals(")"))
 					count--;
 
 				if (stream.done())
-					return;
+					return src;
 
 				if (stream.peek().value.equals("=")) {
 					n = new OperatorNode(t.value + "=");
@@ -102,77 +108,96 @@ public class TokenStream {
 					n = new OperatorNode(t.value);
 
 			} else if (t.type == Token.STRING) {
+				src += t.src;
 				n = new StringNode(t.value);
 			} else if (t.type == Token.ASSIGNMENT) {
+				src += t.src;
 				if (stream.peek().value.equals("=")) {
 					n = new OperatorNode("==");
 					stream.next();
 				} else
 					n = new OperatorNode("=");
 			} else if (t.type == Token.KEYWORD) {
+				src += t.src;
 				if (t.value.equals("true"))
 					n = new BooleanNode(true);
 				else if (t.value.equals("false"))
 					n = new BooleanNode(false);
 			} else if (t.type == Token.VECTOR) {
+				src += t.src;
 				n = t.node;
 			}
 
-			if (t.value.equals("["))
+			if (t.value.equals("[")) {
+				src += t.src;
 				sCount++;
-			else if (t.value.equals("]"))
+			} else if (t.value.equals("]")) {
+				src += t.src;
 				sCount--;
+			}
 
 			node.addChild(n);
 
 		}
+		return src;
 	}
 
-	protected Node parseInvocation(TokenStream stream, Token ref) {
+	protected TokenDataSet parseInvocation(TokenStream stream, Token ref) {
 		Node n = new InvocationNode();
+		String src = "";
+		src += ref.src;
 		n.addChild(ref.node);
 		stream.next(); // consume the (
+		src += "(";
 		if (stream.done())
 			throw new Error("inccorect function invocation");
 
 		if (stream.peek().value.equals(")")) {
+			src += ")";
 			stream.next(); // consume the )
-			return n;
+			return new TokenDataSet(n, src);
 		} else {
 			while (true) {
 				ExpressionNode an = new ExpressionNode();
-				parseExpression(stream, an);
+				src += parseExpression(stream, an);
 				n.addChild(an);
 				if (stream.done())
-					return n;
+					return new TokenDataSet(n, src);
 				Token t = stream.next();
-				if (t.value.equals(")"))
-					return n;
+				if (t.value.equals(")")) {
+					src += ")";
+					return new TokenDataSet(n, src);
+				}
 			}
 		}
 	}
 
-	public Node parseVectorOrMatrix(TokenStream stream) {
+	public TokenDataSet parseVectorOrMatrix(TokenStream stream) {
 		Node node = new VectorNode();
+		String src = "";
 		Node matrixNode = null;
 
 		if (!stream.next().value.equals("["))
 			throw new Error("missing [");
+		src += "[";
 
 		while (true) {
 			if (stream.done())
 				break;
 
 			ExpressionNode exp = new ExpressionNode();
-			parseExpression(stream, exp);
+			src += parseExpression(stream, exp);
 			node.addChild(exp);
 
 			if (stream.peek().value.equals(",")) {
+				src += ",";
 				stream.next();
 			} else if (stream.peek().value.equals("]")) {
+				src += "]";
 				stream.next();
 				break;
 			} else if (stream.peek().value.equals("|") || stream.peek().value.equals(";")) {
+				src += "|";
 				// is a matrix / new line
 				if (matrixNode == null)
 					matrixNode = new MatrixNode();
@@ -188,9 +213,19 @@ public class TokenStream {
 			mrn.setChildren(node.getChildren());
 			node.setChildren(new ArrayList<Node>());
 			matrixNode.addChild(mrn);
-			return matrixNode;
+			return new TokenDataSet(matrixNode, src);
 		}
-		return node;
+		return new TokenDataSet(node, src);
+	}
+
+	class TokenDataSet {
+		public String src;
+		public Node node;
+
+		public TokenDataSet(Node node, String src) {
+			this.node = node;
+			this.src = src;
+		}
 	}
 
 }

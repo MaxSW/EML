@@ -69,8 +69,10 @@ public class ParseAnalyser extends Application {
 		sb.append("<html><body contentEditable=\"false\">");
 		sb.append("<style>");
 		
-		sb.append(".token-7{color:red;}");
-		
+		sb.append(".token-11{color:red;}");
+		sb.append(".token-12{color:blue;}");
+		sb.append(".token-13{color:green;}");
+
 		
 		sb.append("</style>");
 

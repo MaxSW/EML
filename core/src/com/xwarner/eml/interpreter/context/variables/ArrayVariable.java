@@ -55,7 +55,6 @@ public class ArrayVariable extends Variable {
 	public void setVariable(ReferenceNode ref, int level, Bundle bundle, Object object) {
 		ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level);
 		int i = ((BigDecimal) node.invoke2(bundle)).intValue();
-		System.out.println("!");
 		if (object instanceof NumericVariable)
 			values.put(i, (NumericVariable) object);
 		else if (object instanceof BigDecimal)

@@ -68,4 +68,15 @@ public class Variable {
 		this.definition = definition;
 	}
 
+	public Variable getVariable(ReferenceNode ref, int level, Bundle bundle) {
+		return null;
+	}
+
+	public void setVariable(ReferenceNode ref, int level, Bundle bundle, Object object) {
+	}
+
+	public Object runFunction(ReferenceNode ref, ArrayList<Object> args, Bundle bundle, int level) {
+		return null;
+	}
+
 }
