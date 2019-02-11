@@ -28,4 +28,8 @@ public class BooleanVariable extends Variable {
 		value = (Boolean) obj;
 	}
 
+	public String toString() {
+		return Boolean.toString(value);
+	}
+
 }

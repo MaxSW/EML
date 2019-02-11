@@ -78,7 +78,8 @@ public class TokenStream2 extends TokenStream {
 							exp.addChild(parseReference(tt).node);
 						else if (tt.type == Token.OPERATOR || tt.value.equals("(") || tt.value.equals(")")) {
 							exp.addChild(new OperatorNode(tt.value));
-						}
+						}else
+							break;
 					}
 					amn.addChild(exp);
 					t.node.addChild(amn);

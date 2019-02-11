@@ -9,10 +9,8 @@ import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.interpreter.context.objects.EClass;
 import com.xwarner.eml.interpreter.context.objects.EObject;
 import com.xwarner.eml.interpreter.context.variables.ArrayVariable;
-import com.xwarner.eml.interpreter.context.variables.BooleanVariable;
 import com.xwarner.eml.interpreter.context.variables.MatrixVariable;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
-import com.xwarner.eml.interpreter.context.variables.StringVariable;
 import com.xwarner.eml.interpreter.context.variables.Variable;
 import com.xwarner.eml.interpreter.context.variables.VectorVariable;
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
@@ -45,23 +43,17 @@ public class SubContext {
 	 * @param name
 	 * @param object
 	 */
-	public void createVariable(String name, Object object) {
-		if (object instanceof Variable) {
+	public void createVariable(String name, Object object, Bundle bundle) {
+		if (object instanceof Variable)
 			vars.put(name, (Variable) object);
-		}
-
-		else if (object instanceof BigDecimal)
-			vars.put(name, new NumericVariable((BigDecimal) object));
-		else if (object instanceof String)
-			vars.put(name, new StringVariable((String) object));
-		else if (object instanceof Boolean)
-			vars.put(name, new BooleanVariable((Boolean) object));
+		else
+			vars.put(name, bundle.vars.generateVariable(object));
 	}
 
 	public void createVariable(ReferenceNode ref, Object object, int level, Bundle bundle) {
 		VariableReferenceNode vrn = (VariableReferenceNode) ref.getChildren().get(level);
 		if (ref.getChildren().size() == level + 1) {
-			createVariable(vrn.name, object);
+			createVariable(vrn.name, object, bundle);
 		} else {
 			if (vars.containsKey(vrn.name)) {
 				Variable var2 = vars.get(vrn.name);

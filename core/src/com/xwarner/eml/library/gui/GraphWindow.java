@@ -44,11 +44,11 @@ public class GraphWindow extends Application {
 
 	public void setData() {
 
-		xAxis.setLabel(var.getReference().getName());
+		xAxis.setLabel(var.getReference().getName(bundle));
 
 		for (NumericVariable def : defs) {
 			Series<Number, Number> series = new Series<Number, Number>();
-			series.setName(def.getReference().getName());
+			series.setName(def.getReference().getName(bundle));
 
 			for (int i = 0; i < n + 1; i++) {
 				double x = a + i * ((b - a) / n);

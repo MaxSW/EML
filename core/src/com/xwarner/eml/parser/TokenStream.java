@@ -12,6 +12,7 @@ import com.xwarner.eml.nodes.values.NumberNode;
 import com.xwarner.eml.nodes.values.OperatorNode;
 import com.xwarner.eml.nodes.values.StringNode;
 import com.xwarner.eml.nodes.values.VectorNode;
+import com.xwarner.eml.nodes.variables.DeclarationNode;
 import com.xwarner.eml.parser.tokens.Token;
 
 public class TokenStream {
@@ -168,6 +169,8 @@ public class TokenStream {
 					src += ")";
 					return new TokenDataSet(n, src);
 				}
+
+				System.out.println("stuck");
 			}
 		}
 	}
@@ -189,6 +192,12 @@ public class TokenStream {
 			src += parseExpression(stream, exp);
 			node.addChild(exp);
 
+			if (stream.peek().type == Token.KEYWORD) {
+				Token t = stream.next();
+				src += t.value;
+				node.addChild(new DeclarationNode(t.value));
+			}
+
 			if (stream.peek().value.equals(",")) {
 				src += ",";
 				stream.next();
@@ -207,6 +216,7 @@ public class TokenStream {
 				matrixNode.addChild(mrn);
 				stream.next();
 			}
+
 		}
 		if (matrixNode != null) {
 			MatrixRowNode mrn = new MatrixRowNode();

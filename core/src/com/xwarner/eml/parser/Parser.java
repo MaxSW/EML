@@ -48,8 +48,7 @@ public class Parser extends TokenStream {
 			return nextNode();
 
 		if (t.type == Token.KEYWORD) {
-			if (t.value.equals("const") || t.value.equals("var") || t.value.equals("bool")
-					|| t.value.equals("str"))
+			if (t.value.equals("const") || t.value.equals("var") || t.value.equals("bool") || t.value.equals("str"))
 				return parseDeclaration(t.value);
 			else if (t.value.equals("arr"))
 				return parseArrayCreation();
@@ -147,11 +146,16 @@ public class Parser extends TokenStream {
 		ReferenceNode ref = (ReferenceNode) stream.next().node;
 		if (stream.next().type != Token.ASSIGNMENT)
 			ErrorHandler.error("missing = ", stream.peek());
-//		System.out.println(stream.next().type);
-		if (stream.next().type != Token.EXPRESSION)
+		if (stream.peek().type != Token.EXPRESSION)
 			ErrorHandler.error("missing []", stream.peek());
+
 		Node n = new DeclarationNode("arr");
 		n.addChild(ref);
+
+		Token tt = stream.next();
+		if (tt.node.getChildren().get(0).getChildren().size() != 1)
+			n.addChild(tt.node.getChildren().get(0).getChildren().get(1));
+
 		return n;
 	}
 

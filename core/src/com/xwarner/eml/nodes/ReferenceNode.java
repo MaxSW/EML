@@ -5,6 +5,7 @@ import com.xwarner.eml.interpreter.context.variables.BooleanVariable;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
 import com.xwarner.eml.interpreter.context.variables.StringVariable;
 import com.xwarner.eml.interpreter.context.variables.Variable;
+import com.xwarner.eml.nodes.variables.ArrayMemberNode;
 import com.xwarner.eml.nodes.variables.VariableReferenceNode;
 
 public class ReferenceNode extends Node {
@@ -47,8 +48,13 @@ public class ReferenceNode extends Node {
 		flag = split.length > 2;
 	}
 
-	public String getName() {
-		return ((VariableReferenceNode) (getChildren().get(getChildren().size() - 1))).name;
+	public String getName(Bundle bundle) {
+		Node node = getChildren().get(getChildren().size() - 1);
+		if (node instanceof VariableReferenceNode)
+			return ((VariableReferenceNode) node).name;
+		else if (node instanceof ArrayMemberNode)
+			return ((ArrayMemberNode) node).invoke2(bundle).toString();
+		return "unknown";
 	}
 
 }

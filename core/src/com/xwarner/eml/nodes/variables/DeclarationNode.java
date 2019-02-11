@@ -83,6 +83,9 @@ public class DeclarationNode extends Node {
 				} else if (children.get(1) instanceof InvocationNode) {
 					EObject obj = (EObject) children.get(1).invoke2(bundle);
 					bundle.context.createVariable(ref, obj, 0, bundle);
+				} else if (varType.equals("arr")) {
+					DeclarationNode n = (DeclarationNode) children.get(1);
+					bundle.context.createVariable(ref, new ArrayVariable(n.varType), 0, bundle);
 				}
 			} else {
 				if (varType.equals("obj") && children.size() == 1) {
@@ -90,7 +93,7 @@ public class DeclarationNode extends Node {
 					obj.instantiate(bundle);
 					bundle.context.createVariable(ref, obj, 0, bundle);
 				} else if (varType.equals("arr")) {
-					bundle.context.createVariable(ref, new ArrayVariable(), 0, bundle);
+					bundle.context.createVariable(ref, new ArrayVariable("var"), 0, bundle);
 				}
 			}
 

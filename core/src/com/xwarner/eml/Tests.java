@@ -128,8 +128,8 @@ public class Tests {
 		}
 	}
 
-	static String ref = "== 1 ==\n" + "5.0\n" + "97.50\n" + "98.50\n" + "97.50\n" + "102.50\n" + "92.50\n" + "185.000\n"
-			+ "1\n" + "== 2 ==\n" + "ten\n" + "ten 5 ten\n" + "eleven\n" + "true\n" + "false\n" + "false\n" + "true\n"
+	static String ref = "== 1 ==\n" + "5.0\n" + "97.500000000000000\n" + "98.500000000000000\n" + "97.500000000000000\n" + "102.500000000000000\n" + "92.500000000000000\n" + "185.0000000000000000\n"
+			+ "1.000000000000000\n" + "== 2 ==\n" + "ten\n" + "ten 5 ten\n" + "eleven\n" + "true\n" + "false\n" + "false\n" + "true\n"
 			+ "true\n" + "false\n" + "false\n" + "false\n" + "true\n" + "false\n" + "true\n" + "false\n" + "false\n"
 			+ "true\n" + "false\n" + "true\n" + "true\n" + "==3==\n" + "a!\n" + "9.0\n" + "yes no\n" + "false\n"
 			+ "hello\n" + "5.0\n" + "15.0\n" + "yes\n" + "7.0\n" + "==4==\n" + "5.0\n" + "3.0\n" + "==5==\n" + "1\n"

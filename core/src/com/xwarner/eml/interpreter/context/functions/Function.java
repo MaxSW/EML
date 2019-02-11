@@ -29,7 +29,7 @@ public class Function extends Variable {
 		if (args2 == null && args.size() != 0) {
 			for (int i = 0; i < args.size(); i++) {
 				FunctionArgumentNode node = args.get(i);
-				bundle.context.createVariable(node.name, new NullVariable());
+				bundle.context.createVariable(node.name, new NullVariable(), bundle);
 			}
 		} else {
 
@@ -52,7 +52,7 @@ public class Function extends Variable {
 					var = new NullVariable();
 				}
 
-				bundle.context.createVariable(node.name, var);
+				bundle.context.createVariable(node.name, var, bundle);
 			}
 		}
 		ArrayList<Node> children = body.getChildren();

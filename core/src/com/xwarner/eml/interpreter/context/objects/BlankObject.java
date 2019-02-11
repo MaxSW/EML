@@ -31,7 +31,7 @@ public class BlankObject extends EObject {
 	public void instantiate(Bundle bundle) {
 		bundle.context.enter(this);
 		for (String s : vars.keySet())
-			bundle.context.createVariable(s, vars.get(s));
+			bundle.context.createVariable(s, vars.get(s), bundle);
 		for (String s : funcs.keySet())
 			bundle.context.setFunction(s, funcs.get(s));
 		bundle.context.exit();

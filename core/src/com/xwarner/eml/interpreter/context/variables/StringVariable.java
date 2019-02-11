@@ -63,4 +63,8 @@ public class StringVariable extends Variable {
 		return null;
 	}
 
+	public String toString() {
+		return value;
+	}
+
 }

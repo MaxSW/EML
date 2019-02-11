@@ -33,8 +33,8 @@ public class Context {
 
 	/** Interface functions **/
 
-	public void createVariable(String name, Object obj) {
-		current.createVariable(name, obj);
+	public void createVariable(String name, Object obj, Bundle bundle) {
+		current.createVariable(name, obj, bundle);
 	}
 
 	public void createVariable(ReferenceNode ref, Object obj, int level, Bundle bundle) {
