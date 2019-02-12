@@ -20,4 +20,8 @@ public class EObject extends Variable {
 		bundle.context.exit();
 	}
 
+	public String toString() {
+		return "object";
+	}
+
 }

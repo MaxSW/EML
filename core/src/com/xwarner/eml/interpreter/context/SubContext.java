@@ -154,6 +154,10 @@ public class SubContext {
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
 					return children.get(obj).runFunction(ref, args, bundle, level + 1);
+				} else if (var2 instanceof ArrayVariable) {
+					ArrayVariable var3 = (ArrayVariable) var2;
+					Variable var = var3.getVariable(ref, level + 1, bundle);
+					return children.get(var).runFunction(ref, args, bundle, level + 2);
 				} else if (var2 instanceof Variable) {
 					return ((Variable) var2).runFunction(ref, args, bundle, level + 1);
 				}

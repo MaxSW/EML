@@ -42,8 +42,9 @@ public class ArrayVariable extends Variable {
 			int i = ((BigDecimal) node.invoke2(bundle)).intValue();
 			if (i + 1 > length)
 				length = i + 1;
-			if (!values.containsKey(i))
+			if (!values.containsKey(i)) {
 				values.put(i, bundle.vars.blankVariable(type));
+			}
 			return values.get(i);
 		} else {
 			VariableReferenceNode node = (VariableReferenceNode) ref.getChildren().get(level);

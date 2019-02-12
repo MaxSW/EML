@@ -2,6 +2,7 @@ package com.xwarner.eml.interpreter.tools;
 
 import java.math.BigDecimal;
 
+import com.xwarner.eml.interpreter.context.objects.BlankObject;
 import com.xwarner.eml.interpreter.context.variables.BooleanVariable;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
 import com.xwarner.eml.interpreter.context.variables.StringVariable;
@@ -18,6 +19,8 @@ public class VariableTools {
 			return new StringVariable("");
 		case "bool":
 			return new BooleanVariable(false);
+		case "obj":
+			return new BlankObject();
 		default:
 			return new Variable();
 		}

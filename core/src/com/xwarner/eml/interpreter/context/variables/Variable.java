@@ -46,7 +46,6 @@ public class Variable {
 		// switching back to standard mode
 		if (equation)
 			equation = false;
-
 	}
 
 	public boolean isEquation() {
@@ -76,13 +75,16 @@ public class Variable {
 	}
 
 	public Variable getVariable(ReferenceNode ref, int level, Bundle bundle) {
+		System.err.println("this should not be called 1 (Variable.java)!");
 		return null;
 	}
 
 	public void setVariable(ReferenceNode ref, int level, Bundle bundle, Object object) {
+		System.err.println("this should not be called 2 (Variable.java)!");
 	}
 
 	public Object runFunction(ReferenceNode ref, ArrayList<Object> args, Bundle bundle, int level) {
+		System.err.println("this should not be called 3 (Variable.java)!");
 		return null;
 	}
 

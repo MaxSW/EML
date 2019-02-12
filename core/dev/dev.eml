@@ -1,4 +1,4 @@
-arr a = [var]
+/*arr a = [var]
 arr b = []
 arr c = [str]
 arr d = [bool]
@@ -16,4 +16,25 @@ print(c)
 d[0] = true
 print(d)
 
-print(c.length)
+print(c.length) */
+
+arr e = [obj]
+
+class o = (){
+	
+	func test = (var aa){
+		print("it works " + aa)
+	}
+}
+
+e[0] = new o()
+obj ob = new o()
+ob.test(1)
+
+e[0].test(2)
+e[1] = new o()
+e[1].test(55)
+e[0] = new o()
+e[0].test(100)
+print(e)
+print(e.length)
