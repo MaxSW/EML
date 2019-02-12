@@ -1,40 +1,9 @@
-/*arr a = [var]
-arr b = []
-arr c = [str]
-arr d = [bool]
-
-a[0] = 5
-a[1] = 100
-
-print(a)
-
-c[0] = "test"
-c[1] = "???"
-
-print(c)
-
-d[0] = true
-print(d)
-
-print(c.length) */
-
-arr e = [obj]
-
-class o = (){
-	
-	func test = (var aa){
-		print("it works " + aa)
-	}
+func test = (var a){
+	return test2(2) + a + 5 + 2 - a
 }
 
-e[0] = new o()
-obj ob = new o()
-ob.test(1)
+func test2 = (){
+	return 10
+}
 
-e[0].test(2)
-e[1] = new o()
-e[1].test(55)
-e[0] = new o()
-e[0].test(100)
-print(e)
-print(e.length)
+print(test(5))

@@ -19,6 +19,7 @@ public class TokenStream4 extends TokenStream {
 
 	private boolean lastAssignment;
 	private boolean lastSemiColon;
+	private boolean lastReturn;
 
 	public TokenStream4(TokenStream3 stream) {
 		this.stream = stream;
@@ -43,7 +44,7 @@ public class TokenStream4 extends TokenStream {
 					TokenDataSet set = parseInvocation(stream, token);
 					t.node = set.node;
 					t.src = set.src;
- 					return t;
+					return t;
 				} else {
 					return tt;
 				}
@@ -51,13 +52,14 @@ public class TokenStream4 extends TokenStream {
 		}
 
 		lastAssignment = token.type == Token.ASSIGNMENT;
+		lastReturn = token.value.equals("return");
 		lastSemiColon = token.value.equals(";");
 		return stream.next();
 	}
 
 	private boolean shouldParseExpression(Token token) {
 		if (token.type == Token.NUMBER || token.type == Token.OPERATOR
-				|| (token.type == Token.REFERENCE && lastAssignment) || token.value.equals("(")
+				|| (token.type == Token.REFERENCE && (lastAssignment || lastReturn)) || token.value.equals("(")
 				|| token.type == Token.VECTOR)
 			return true;
 		// get the for loop
