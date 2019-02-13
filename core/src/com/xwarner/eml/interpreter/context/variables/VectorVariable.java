@@ -1,6 +1,6 @@
 package com.xwarner.eml.interpreter.context.variables;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.definitions.Definition;
 import com.xwarner.eml.interpreter.context.variables.values.Vector;
 

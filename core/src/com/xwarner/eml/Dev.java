@@ -12,6 +12,7 @@ import com.xwarner.eml.parser.TokenStream2;
 import com.xwarner.eml.parser.TokenStream3;
 import com.xwarner.eml.parser.TokenStream4;
 import com.xwarner.eml.parser.Tree;
+import com.xwarner.eml.performance.Optimiser;
 import com.xwarner.eml.util.IOManager;
 
 public class Dev {
@@ -49,7 +50,19 @@ public class Dev {
 		System.out.println("==============================");
 		System.out.println("");
 
-		Interpreter interpreter = new Interpreter(tree);
+		Optimiser optimiser = new Optimiser();
+		Tree tree2 = optimiser.optimise(tree);
+
+		Interpreter interpreter = new Interpreter(tree2);
+
+		/*
+		 * long sum = 0; long sum2 = 0; for (int i = 0; i < 100; i++) { long f =
+		 * System.currentTimeMillis(); interpreter.run(); long g =
+		 * System.currentTimeMillis(); sum += g - f; if (i < 5) sum2 += g - f; }
+		 * System.out.println("first five speed:" + (sum2 / 5) + "ms");
+		 * System.out.println("average speed: " + sum / 100 + "ms");
+		 */
+
 		interpreter.run();
 	}
 

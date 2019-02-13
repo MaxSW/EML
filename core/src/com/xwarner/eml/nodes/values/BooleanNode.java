@@ -1,6 +1,6 @@
 package com.xwarner.eml.nodes.values;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.nodes.Node;
 
 public class BooleanNode extends Node {

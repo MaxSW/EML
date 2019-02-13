@@ -1,9 +1,7 @@
-func test = (var a){
-	return test2(2) + a + 5 + 2 - a
+var sum = 0
+var b = 17
+for(var i = 0; i < 10000; i++){
+	var a = ln(7) * i + b
+	sum += (i * 6/13) ^ 2 - a
 }
-
-func test2 = (){
-	return 10
-}
-
-print(test(5))
+print(sum)

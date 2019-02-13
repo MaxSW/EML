@@ -1,10 +1,10 @@
-package com.xwarner.eml.interpreter.tools.operators.numeric;
+package com.xwarner.eml.interpreter.evaluator.operators.numeric;
 
 import java.math.BigDecimal;
 
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
 import com.xwarner.eml.interpreter.context.variables.values.Vector;
-import com.xwarner.eml.interpreter.tools.operators.Operator;
+import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 
 public class MultiplyOperator extends Operator {
 

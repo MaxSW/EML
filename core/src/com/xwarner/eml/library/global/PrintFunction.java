@@ -2,7 +2,7 @@ package com.xwarner.eml.library.global;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.util.ErrorHandler;
 

@@ -2,7 +2,7 @@ package com.xwarner.eml.interpreter.context.variables.definitions;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.Variable;
 import com.xwarner.eml.interpreter.context.variables.VariableListener;
 import com.xwarner.eml.nodes.ExpressionNode;

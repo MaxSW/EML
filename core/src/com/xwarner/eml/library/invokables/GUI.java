@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.NullVariable;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
 import com.xwarner.eml.library.Invokable;

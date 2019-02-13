@@ -1,6 +1,6 @@
-package com.xwarner.eml.interpreter.tools.operators.bool;
+package com.xwarner.eml.interpreter.evaluator.operators.bool;
 
-import com.xwarner.eml.interpreter.tools.operators.Operator;
+import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 
 public class OrOperator extends Operator {
 

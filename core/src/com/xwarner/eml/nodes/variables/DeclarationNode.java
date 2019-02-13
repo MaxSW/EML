@@ -3,7 +3,7 @@ package com.xwarner.eml.nodes.variables;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.objects.BlankObject;
 import com.xwarner.eml.interpreter.context.objects.EObject;
 import com.xwarner.eml.interpreter.context.variables.ArrayVariable;

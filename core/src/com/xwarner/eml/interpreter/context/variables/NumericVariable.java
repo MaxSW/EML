@@ -2,7 +2,7 @@ package com.xwarner.eml.interpreter.context.variables;
 
 import java.math.BigDecimal;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.definitions.Definition;
 
 public class NumericVariable extends Variable {

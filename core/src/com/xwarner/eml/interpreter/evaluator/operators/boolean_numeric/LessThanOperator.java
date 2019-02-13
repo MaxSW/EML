@@ -1,8 +1,8 @@
-package com.xwarner.eml.interpreter.tools.operators.boolean_numeric;
+package com.xwarner.eml.interpreter.evaluator.operators.boolean_numeric;
 
 import java.math.BigDecimal;
 
-import com.xwarner.eml.interpreter.tools.operators.Operator;
+import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 
 public class LessThanOperator extends Operator {
 

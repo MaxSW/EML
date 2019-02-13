@@ -2,23 +2,23 @@ package com.xwarner.eml.nodes.values;
 
 import java.util.HashMap;
 
-import com.xwarner.eml.interpreter.Bundle;
-import com.xwarner.eml.interpreter.tools.operators.EqualityOperator;
-import com.xwarner.eml.interpreter.tools.operators.InequalityOperator;
-import com.xwarner.eml.interpreter.tools.operators.LeftBracketOperator;
-import com.xwarner.eml.interpreter.tools.operators.Operator;
-import com.xwarner.eml.interpreter.tools.operators.RightBracketOperator;
-import com.xwarner.eml.interpreter.tools.operators.bool.AndOperator;
-import com.xwarner.eml.interpreter.tools.operators.bool.OrOperator;
-import com.xwarner.eml.interpreter.tools.operators.boolean_numeric.GreaterThanEqualOperator;
-import com.xwarner.eml.interpreter.tools.operators.boolean_numeric.GreaterThanOperator;
-import com.xwarner.eml.interpreter.tools.operators.boolean_numeric.LessThanEqualOperator;
-import com.xwarner.eml.interpreter.tools.operators.boolean_numeric.LessThanOperator;
-import com.xwarner.eml.interpreter.tools.operators.numeric.AddOperator;
-import com.xwarner.eml.interpreter.tools.operators.numeric.DivideOperator;
-import com.xwarner.eml.interpreter.tools.operators.numeric.MultiplyOperator;
-import com.xwarner.eml.interpreter.tools.operators.numeric.PowerOperator;
-import com.xwarner.eml.interpreter.tools.operators.numeric.SubtractOperator;
+import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.interpreter.evaluator.operators.EqualityOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.InequalityOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.LeftBracketOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.Operator;
+import com.xwarner.eml.interpreter.evaluator.operators.RightBracketOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.bool.AndOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.bool.OrOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.boolean_numeric.GreaterThanEqualOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.boolean_numeric.GreaterThanOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.boolean_numeric.LessThanEqualOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.boolean_numeric.LessThanOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.numeric.AddOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.numeric.DivideOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.numeric.MultiplyOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.numeric.PowerOperator;
+import com.xwarner.eml.interpreter.evaluator.operators.numeric.SubtractOperator;
 import com.xwarner.eml.nodes.Node;
 
 public class OperatorNode extends Node {

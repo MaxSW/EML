@@ -2,7 +2,7 @@ package com.xwarner.eml.nodes;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 
 public class Node {
 

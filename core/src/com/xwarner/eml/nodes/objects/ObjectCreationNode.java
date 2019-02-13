@@ -1,6 +1,6 @@
 package com.xwarner.eml.nodes.objects;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.objects.EClass;
 import com.xwarner.eml.interpreter.context.objects.EObject;
 import com.xwarner.eml.nodes.Node;

@@ -1,8 +1,8 @@
-package com.xwarner.eml.interpreter.tools.operators.numeric;
+package com.xwarner.eml.interpreter.evaluator.operators.numeric;
 
 import java.math.BigDecimal;
 
-import com.xwarner.eml.interpreter.tools.operators.Operator;
+import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 
 public class PowerOperator extends Operator {
 

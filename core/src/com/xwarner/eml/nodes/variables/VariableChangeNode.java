@@ -2,9 +2,9 @@ package com.xwarner.eml.nodes.variables;
 
 import java.math.BigDecimal;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
-import com.xwarner.eml.interpreter.tools.operators.Operator;
+import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.ReferenceNode;

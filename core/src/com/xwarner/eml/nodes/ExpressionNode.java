@@ -3,15 +3,15 @@ package com.xwarner.eml.nodes;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.MatrixVariable;
 import com.xwarner.eml.interpreter.context.variables.Variable;
 import com.xwarner.eml.interpreter.context.variables.VectorVariable;
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
 import com.xwarner.eml.interpreter.context.variables.values.Vector;
-import com.xwarner.eml.interpreter.tools.ExpressionEntry;
-import com.xwarner.eml.interpreter.tools.operators.Operator;
-import com.xwarner.eml.interpreter.tools.operators.numeric.MultiplyOperator;
+import com.xwarner.eml.interpreter.evaluator.ExpressionEntry;
+import com.xwarner.eml.interpreter.evaluator.operators.Operator;
+import com.xwarner.eml.interpreter.evaluator.operators.numeric.MultiplyOperator;
 
 public class ExpressionNode extends Node {
 

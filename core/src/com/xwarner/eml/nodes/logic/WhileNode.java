@@ -2,7 +2,7 @@ package com.xwarner.eml.nodes.logic;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.flags.BreakFlag;
 import com.xwarner.eml.interpreter.flags.ContinueFlag;
 import com.xwarner.eml.interpreter.flags.ReturnFlag;

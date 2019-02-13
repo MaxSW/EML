@@ -1,4 +1,4 @@
-package com.xwarner.eml.interpreter.tools;
+package com.xwarner.eml.interpreter.bundle;
 
 import java.math.BigDecimal;
 

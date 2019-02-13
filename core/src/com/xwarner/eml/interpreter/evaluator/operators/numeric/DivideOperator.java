@@ -1,9 +1,9 @@
-package com.xwarner.eml.interpreter.tools.operators.numeric;
+package com.xwarner.eml.interpreter.evaluator.operators.numeric;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import com.xwarner.eml.interpreter.tools.operators.Operator;
+import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 
 public class DivideOperator extends Operator {
 

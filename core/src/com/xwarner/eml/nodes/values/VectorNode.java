@@ -2,7 +2,7 @@ package com.xwarner.eml.nodes.values;
 
 import java.math.BigDecimal;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.VectorVariable;
 import com.xwarner.eml.interpreter.context.variables.values.Vector;
 import com.xwarner.eml.nodes.Node;

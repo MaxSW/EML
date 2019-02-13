@@ -1,5 +1,6 @@
 package com.xwarner.eml.interpreter;
 
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.parser.Tree;
 

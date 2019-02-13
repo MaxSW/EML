@@ -1,6 +1,6 @@
 package com.xwarner.eml.interpreter.context.objects;
 
-import com.xwarner.eml.interpreter.Bundle;
+import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.Variable;
 
 public class EObject extends Variable {
