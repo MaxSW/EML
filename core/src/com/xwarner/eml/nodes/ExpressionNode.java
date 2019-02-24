@@ -20,7 +20,6 @@ public class ExpressionNode extends Node {
 	}
 
 	/** Evaluate the expression **/
-
 	public Object invoke2(Bundle bundle) {
 		ArrayList<ExpressionEntry> vals = new ArrayList<ExpressionEntry>();
 

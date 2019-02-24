@@ -42,13 +42,13 @@ public class Dev {
 		Parser parser = new Parser(new TokenStream4(new TokenStream3(new TokenStream2(ts))));
 		Tree tree = parser.parse();
 
-		for (Node n : tree.getChildren()) {
-			printNode(n, 0);
-		}
+//		for (Node n : tree.getChildren()) {
+//			printNode(n, 0);
+//		}
 
-		System.out.println("");
-		System.out.println("==============================");
-		System.out.println("");
+//		System.out.println("");
+//		System.out.println("==============================");
+//		System.out.println("");
 
 		Optimiser optimiser = new Optimiser();
 		Tree tree2 = optimiser.optimise(tree);
