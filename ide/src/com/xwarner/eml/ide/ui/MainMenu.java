@@ -14,31 +14,26 @@ public class MainMenu extends MenuBar {
 		MenuItem fileNewProject = new MenuItem("New Project");
 		fileNewProject.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				// Events.newModel();
 			}
 		});
 		MenuItem fileOpenProject = new MenuItem("Open Project");
 		fileOpenProject.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				// Events.openModel();
 			}
 		});
 		MenuItem fileNewFile = new MenuItem("New File");
 		fileNewFile.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				// Events.newModel();
 			}
 		});
 		MenuItem fileOpenFile = new MenuItem("Open File");
 		fileOpenFile.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				// Events.openModel();
 			}
 		});
 		MenuItem fileSaveFile = new MenuItem("Save File");
 		fileSaveFile.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				// Events.saveModel();
 			}
 		});
 		menuFile.getItems().addAll(fileNewProject, fileOpenProject, new SeparatorMenuItem(), fileNewFile, fileOpenFile,
@@ -54,7 +49,6 @@ public class MainMenu extends MenuBar {
 		helpAbout.setOnAction(new EventHandler<ActionEvent>() {
 
 			public void handle(ActionEvent e) {
-				// new AboutWindow();
 			}
 		});
 		menuHelp.getItems().addAll(helpGuide, helpAbout);

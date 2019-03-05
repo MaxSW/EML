@@ -20,5 +20,9 @@ public class EditTab extends Tab {
 		codeArea.replaceText(0, 0, file.getText());
 		setContent(codeArea);
 	}
+	
+	public String getSource() {
+		return codeArea.getText();
+	}
 
 }
