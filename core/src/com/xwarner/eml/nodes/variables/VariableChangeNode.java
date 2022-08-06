@@ -40,8 +40,4 @@ public class VariableChangeNode extends Node {
 		}
 		return null;
 	}
-
-	public String toSaveString() {
-		return "20";
-	}
 }

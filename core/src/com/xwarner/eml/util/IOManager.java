@@ -8,7 +8,8 @@ import java.nio.file.Paths;
 
 public class IOManager {
 
-	public static String root = "", libRoot = "/home/max/Dropbox/Workspace/Programming/Projects/eml/core/lib/";
+	// TODO make this a program parameter
+	public static String root = "", libRoot = "D:\\Dropbox\\Personal Workspace\\Projects\\eml\\core\\lib\\";
 
 	public static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(root + path));

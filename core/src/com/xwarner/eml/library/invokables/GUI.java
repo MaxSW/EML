@@ -62,7 +62,7 @@ public class GUI {
 
 				String s = (String) JOptionPane.showInputDialog(null, text, title, JOptionPane.PLAIN_MESSAGE, null,
 						null, null);
-				
+
 				if (type.equals("number")) {
 					if (s == null || s.equals(""))
 						return BigDecimal.ZERO;
@@ -75,9 +75,11 @@ public class GUI {
 				}
 			}
 		});
-		
+
 		map.put("gui.graph", new Invokable() {
-			public Object run(ArrayList<Object> args, Bundle bundle) {
+			public Object run(ArrayList<Object> args, Bundle bundle) {				
+				System.out.println("graphing");
+
 				NumericVariable var = (NumericVariable) args.get(1);
 
 				GraphWindow.defs = new ArrayList<NumericVariable>();

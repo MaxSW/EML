@@ -46,8 +46,4 @@ public class IfNode extends Node {
 
 		return null;
 	}
-
-	public String toSaveString() {
-		return "8";
-	}
 }

@@ -24,10 +24,6 @@ public class BooleanNode extends Node {
 		return value;
 	}
 
-	public String toSaveString() {
-		return "12 " + value;
-	}
-	
 	public void fromSaveString(String[] split, String str) {
 		value = Boolean.parseBoolean(split[2]);
 	}

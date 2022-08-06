@@ -10,10 +10,6 @@ public class BodyNode extends Node {
 		return "body";
 	}
 
-	public String toSaveString() {
-		return "3";
-	}
-
 	public Object invoke1(Bundle bundle) {
 		for (Node node : getChildren())
 			node.invoke1(bundle);

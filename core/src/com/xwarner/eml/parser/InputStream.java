@@ -20,7 +20,7 @@ public class InputStream {
 			return ' ';
 		char c = source.charAt(pos);
 		pos++;
-		if (c == '\n') {
+		if (c == '\n' || c == '\r') {
 			line++;
 		}
 		return c;

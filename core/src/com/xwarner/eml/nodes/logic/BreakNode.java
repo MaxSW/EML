@@ -10,10 +10,6 @@ public class BreakNode extends Node {
 		return "break";
 	}
 
-	public String toSaveString() {
-		return "23";
-	}
-
 	public Object invoke2(Bundle bundle) {
 		return new BreakFlag();
 	}

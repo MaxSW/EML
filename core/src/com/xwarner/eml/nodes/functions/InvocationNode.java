@@ -29,7 +29,4 @@ public class InvocationNode extends Node {
 		}
 	}
 
-	public String toSaveString() {
-		return "6";
-	}
 }

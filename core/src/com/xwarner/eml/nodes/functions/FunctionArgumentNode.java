@@ -21,10 +21,6 @@ public class FunctionArgumentNode extends Node {
 		return "argument - type: " + type + "; name: " + name;
 	}
 
-	public String toSaveString() {
-		return "4 " + type + " " + name;
-	}
-
 	public void fromSaveString(String[] split, String str) {
 		type = split[2];
 		name = split[3];

@@ -37,17 +37,6 @@ public class ReferenceNode extends Node {
 		}
 	}
 
-	public String toSaveString() {
-		if (flag)
-			return "1 f";
-		else
-			return "1";
-	}
-
-	public void fromSaveString(String[] split, String str) {
-		flag = split.length > 2;
-	}
-
 	public String getName(Bundle bundle) {
 		Node node = getChildren().get(getChildren().size() - 1);
 		if (node instanceof VariableReferenceNode)

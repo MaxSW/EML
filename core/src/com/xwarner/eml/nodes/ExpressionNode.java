@@ -134,7 +134,4 @@ public class ExpressionNode extends Node {
 
 	}
 
-	public String toSaveString() {
-		return "2";
-	}
 }

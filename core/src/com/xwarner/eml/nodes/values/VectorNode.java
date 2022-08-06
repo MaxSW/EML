@@ -13,10 +13,6 @@ public class VectorNode extends Node {
 		return "vector";
 	}
 
-	public String toSaveString() {
-		return "24";
-	}
-
 	public Object invoke2(Bundle bundle) {
 		VectorVariable var = new VectorVariable(getChildren().size());
 		Vector v = new Vector(getChildren().size());

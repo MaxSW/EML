@@ -34,12 +34,4 @@ public class NumberNode extends Node {
 		return cache;
 	}
 
-	public String toSaveString() {
-		return "13 " + invoke2(null);
-	}
-	
-	public void fromSaveString(String[] split, String str) {
-		value = Float.parseFloat(split[2]);
-	}
-
 }

@@ -101,12 +101,4 @@ public class DeclarationNode extends Node {
 		return null;
 	}
 
-	public String toSaveString() {
-		return "19 " + varType;
-	}
-
-	public void fromSaveString(String[] split, String str) {
-		varType = split[2];
-	}
-
 }

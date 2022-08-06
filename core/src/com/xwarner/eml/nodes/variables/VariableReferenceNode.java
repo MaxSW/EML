@@ -19,12 +19,4 @@ public class VariableReferenceNode extends Node {
 		return "variable reference - name: " + name;
 	}
 
-	public String toSaveString() {
-		return "21 " + name;
-	}
-
-	public void fromSaveString(String[] split, String str) {
-		name = split[2];
-	}
-
 }

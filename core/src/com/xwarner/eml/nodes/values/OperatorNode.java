@@ -56,7 +56,7 @@ public class OperatorNode extends Node {
 	public static Operator get(String str) {
 		return operators.get(str);
 	}
-	
+
 	public OperatorNode(String operator) {
 		super();
 		this.operator = operator;
@@ -74,14 +74,6 @@ public class OperatorNode extends Node {
 		if (cache == null)
 			cache = operators.get(operator);
 		return cache;
-	}
-
-	public String toSaveString() {
-		return "14 " + operator;
-	}
-	
-	public void fromSaveString(String[] split, String str) {
-		operator = split[2];
 	}
 
 }

@@ -8,8 +8,4 @@ public class MatrixRowNode extends Node {
 		return "matrix row";
 	}
 
-	public String toSaveString() {
-		return "26";
-	}
-
 }

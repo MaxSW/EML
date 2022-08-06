@@ -38,10 +38,6 @@ public class FunctionNode extends Node {
 		return null;
 	}
 
-	public String toSaveString() {
-		return "5 " + name;
-	}
-	
 	public void fromSaveString(String[] split, String str) {
 		name = split[2];
 	}

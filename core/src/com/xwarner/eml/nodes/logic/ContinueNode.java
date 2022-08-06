@@ -10,10 +10,6 @@ public class ContinueNode extends Node {
 		return "continue";
 	}
 
-	public String toSaveString() {
-		return "22";
-	}
-
 	public Object invoke2(Bundle bundle) {
 		return new ContinueFlag();
 	}

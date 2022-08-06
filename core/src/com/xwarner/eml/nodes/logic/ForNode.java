@@ -16,10 +16,6 @@ public class ForNode extends Node {
 		return "for";
 	}
 
-	public String toSaveString() {
-		return "7";
-	}
-
 	public Object invoke2(Bundle bundle) {
 		DeclarationNode n1 = (DeclarationNode) getChildren().get(0);
 		ExpressionNode n2 = (ExpressionNode) getChildren().get(1);

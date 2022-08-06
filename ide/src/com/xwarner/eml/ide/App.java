@@ -66,7 +66,7 @@ public class App extends Application {
 	}
 
 	public void startup() {
-		controller.openFile(new File("/home/max/Dropbox/Workspace/Programming/Projects/eml/ide/dev/dev.eml"));
+		controller.openFile(new File("D:\\Dropbox\\Personal Workspace\\Projects\\eml\\ide\\dev\\dev.eml"));
 	}
 
 	public static void main(String[] args) {

@@ -34,7 +34,4 @@ public class AssignmentNode extends Node {
 		return null;
 	}
 
-	public String toSaveString() {
-		return "18";
-	}
 }

@@ -14,10 +14,6 @@ public class WhileNode extends Node {
 		return "while";
 	}
 
-	public String toSaveString() {
-		return "9";
-	}
-
 	public Object invoke2(Bundle bundle) {
 		ArrayList<Node> children = getChildren();
 		while ((boolean) children.get(0).invoke2(bundle)) {

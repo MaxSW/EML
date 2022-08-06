@@ -25,17 +25,9 @@ public class ClassNode extends Node {
 		return "class - name: " + name;
 	}
 
-	public String toSaveString() {
-		return "10 " + name;
-	}
-
-	public void fromSaveString(String[] split, String str) {
-		name = split[2];
-	}
-
 	public Object invoke1(Bundle bundle) {
 		EClass cls = new EClass();
-		
+
 		ArrayList<Node> children = getChildren();
 		for (Node node : children) {
 			if (node instanceof BodyNode)

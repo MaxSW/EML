@@ -29,6 +29,7 @@ public class TokenStream1 extends TokenStream {
 		if (input.done())
 			return null;
 		char c = input.peek();
+		// deal with comments and divison
 		if (c == '/') {
 			input.next();
 			char c2 = input.peek();
@@ -221,7 +222,7 @@ public class TokenStream1 extends TokenStream {
 	};
 	private TokenMatcher isNewline = new TokenMatcher() {
 		public boolean match(char c) {
-			return "\n".indexOf(c) >= 0;
+			return "\n\r".indexOf(c) >= 0;
 		}
 	};
 

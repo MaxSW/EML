@@ -13,10 +13,6 @@ public class ObjectCreationNode extends Node {
 		return "object creation";
 	}
 
-	public String toSaveString() {
-		return "11";
-	}
-
 	public Object invoke2(Bundle bundle) {
 		InvocationNode node = (InvocationNode) getChildren().get(0);
 		EClass cls = bundle.context.getClass((ReferenceNode) node.getChildren().get(0), 0);

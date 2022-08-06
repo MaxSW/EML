@@ -17,7 +17,4 @@ public class ReturnNode extends Node {
 		return new ReturnFlag(o);
 	}
 
-	public String toSaveString() {
-		return "15";
-	}
 }

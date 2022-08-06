@@ -14,10 +14,6 @@ public class MatrixNode extends Node {
 		return "matrix";
 	}
 
-	public String toSaveString() {
-		return "25";
-	}
-
 	public Object invoke2(Bundle bundle) {
 		ArrayList<Node> rows = getChildren();
 

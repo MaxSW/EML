@@ -29,17 +29,4 @@ public class StringNode extends Node {
 		return "string - value: " + value;
 	}
 
-	public String toSaveString() {
-		return "16 \"" + value + "\"";
-	}
-
-	public void fromSaveString(String[] split, String str) {
-		// handles the possibilities of spaces in strings
-		List<String> list = new ArrayList<String>();
-		Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(str);
-		while (m.find())
-			list.add(m.group(1));
-		value = list.get(2).substring(1, list.get(2).length() - 1);
-	}
-
 }
