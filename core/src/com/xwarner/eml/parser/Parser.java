@@ -20,14 +20,35 @@ import com.xwarner.eml.nodes.variables.VariableChangeNode;
 import com.xwarner.eml.parser.tokens.Token;
 import com.xwarner.eml.util.ErrorHandler;
 
+/**
+ * Converts the final TokenStream into a Tree of Nodes. Most of the `grammar'
+ * rules of EML are applied here
+ * 
+ * TODO much better error handling
+ * 
+ * TODO some sort of custom token regex to make rules more clearly defined
+ * 
+ * @author Max Warner
+ *
+ */
 public class Parser extends TokenStream {
 
-	private TokenStream4 stream;
+	private TokenStream4 stream; // the input stream
 
+	/**
+	 * Creates the parser with the given input TokenStream
+	 * 
+	 * @param stream
+	 */
 	public Parser(TokenStream4 stream) {
 		this.stream = stream;
 	}
 
+	/**
+	 * Parse the stream and produce a Tree
+	 * 
+	 * @return
+	 */
 	public Tree parse() {
 		Tree tree = new Tree();
 		while (!stream.done()) {
@@ -38,12 +59,18 @@ public class Parser extends TokenStream {
 		return tree;
 	}
 
+	/**
+	 * Return the next Node
+	 * 
+	 * @return
+	 */
 	public Node nextNode() {
 		Token t = stream.next();
 
 		if (t == null)
 			return null;
 
+		// skip new lines
 		if (t.type == Token.NEWLINE)
 			return nextNode();
 
@@ -55,11 +82,11 @@ public class Parser extends TokenStream {
 			else if (t.value.equals("obj"))
 				return parseObjectCreation();
 			else if (t.value.equals("vec"))
-				return parseVector();
+				return parseVectorCreation();
 			else if (t.value.equals("mat"))
-				return parseMatrix();
+				return parseMatrixCreation();
 			else if (t.value.equals("func"))
-				return parseFunction();
+				return parseFunctionCreation();
 			else if (t.value.equals("if"))
 				return parseIf();
 			else if (t.value.equals("while"))
@@ -69,7 +96,7 @@ public class Parser extends TokenStream {
 			else if (t.value.equals("return"))
 				return parseReturn();
 			else if (t.value.equals("class"))
-				return parseClass();
+				return parseClassCreation();
 			else if (t.value.equals("continue")) {
 				stream.next();
 				return new ContinueNode();
@@ -92,6 +119,12 @@ public class Parser extends TokenStream {
 		return null;
 	}
 
+	/**
+	 * Parse a declaration
+	 * 
+	 * @param type
+	 * @return
+	 */
 	public Node parseDeclaration(String type) {
 		Token token = stream.next();
 		if (token.type != Token.REFERENCE)
@@ -106,6 +139,11 @@ public class Parser extends TokenStream {
 		return node;
 	}
 
+	/**
+	 * Parse an object creation
+	 * 
+	 * @return
+	 */
 	public Node parseObjectCreation() {
 		Token token = stream.next();
 		if (token.type != Token.REFERENCE)
@@ -140,6 +178,11 @@ public class Parser extends TokenStream {
 		return node;
 	}
 
+	/**
+	 * Parse an array creation
+	 * 
+	 * @return
+	 */
 	public Node parseArrayCreation() {
 		if (stream.peek().type != Token.REFERENCE)
 			ErrorHandler.error("invalid variable name", stream.peek());
@@ -159,7 +202,12 @@ public class Parser extends TokenStream {
 		return n;
 	}
 
-	public Node parseVector() {
+	/**
+	 * Parse a vector creation
+	 * 
+	 * @return
+	 */
+	public Node parseVectorCreation() {
 		Node n = new DeclarationNode("vec");
 		ReferenceNode ref = (ReferenceNode) stream.next().node;
 		n.addChild(ref);
@@ -174,7 +222,12 @@ public class Parser extends TokenStream {
 		return n;
 	}
 
-	public Node parseMatrix() {
+	/**
+	 * Parse a matrix creation
+	 * 
+	 * @return
+	 */
+	public Node parseMatrixCreation() {
 		Node n = new DeclarationNode("mat");
 		ReferenceNode ref = (ReferenceNode) stream.next().node;
 		n.addChild(ref);
@@ -189,6 +242,12 @@ public class Parser extends TokenStream {
 		return n;
 	}
 
+	/**
+	 * Parse an assignment
+	 * 
+	 * @param ref
+	 * @return
+	 */
 	public Node parseAssignment(Token ref) {
 		stream.next(); // consume the =
 		Node n = new AssignmentNode();
@@ -209,6 +268,12 @@ public class Parser extends TokenStream {
 		return n;
 	}
 
+	/**
+	 * Parse a variable change
+	 * 
+	 * @param ref
+	 * @return
+	 */
 	public Node parseVariableChange(Token ref) {
 		VariableChangeNode n = new VariableChangeNode();
 		n.addChild(ref.node);
@@ -216,7 +281,12 @@ public class Parser extends TokenStream {
 		return n;
 	}
 
-	public Node parseFunction() {
+	/**
+	 * Parse a function creation
+	 * 
+	 * @return
+	 */
+	public Node parseFunctionCreation() {
 		FunctionNode node = new FunctionNode(stream.next().value);
 		if (stream.next().type != Token.ASSIGNMENT)
 			ErrorHandler.error("missing = in function declaration", stream.peek());
@@ -242,7 +312,12 @@ public class Parser extends TokenStream {
 		return node;
 	}
 
-	public Node parseClass() {
+	/**
+	 * Parse a class creation
+	 * 
+	 * @return
+	 */
+	public Node parseClassCreation() {
 		ClassNode node = new ClassNode(stream.next().value);
 		if (stream.next().type != Token.ASSIGNMENT)
 			ErrorHandler.error("missing = in function declaration", stream.peek());
@@ -270,6 +345,11 @@ public class Parser extends TokenStream {
 		return node;
 	}
 
+	/**
+	 * Parse an if statement
+	 * 
+	 * @return
+	 */
 	public Node parseIf() {
 		IfNode n = new IfNode();
 		n.addChild(stream.next().node);
@@ -292,6 +372,11 @@ public class Parser extends TokenStream {
 		return n;
 	}
 
+	/**
+	 * Parse a while loop
+	 * 
+	 * @return
+	 */
 	public Node parseWhile() {
 		WhileNode n = new WhileNode();
 		n.addChild(stream.next().node);
@@ -299,6 +384,11 @@ public class Parser extends TokenStream {
 		return n;
 	}
 
+	/**
+	 * Parse a for loop
+	 * 
+	 * @return
+	 */
 	public Node parseFor() {
 		ForNode n = new ForNode();
 		stream.next();
@@ -323,6 +413,11 @@ public class Parser extends TokenStream {
 		return n;
 	}
 
+	/**
+	 * Parse a return statement
+	 * 
+	 * @return
+	 */
 	public Node parseReturn() {
 		ReturnNode n = new ReturnNode();
 		if (stream.peek().type == Token.EXPRESSION)
@@ -330,6 +425,11 @@ public class Parser extends TokenStream {
 		return n;
 	}
 
+	/**
+	 * Parse the body of a function or other construction
+	 * 
+	 * @return
+	 */
 	public BodyNode parseBody() {
 		BodyNode body = new BodyNode();
 

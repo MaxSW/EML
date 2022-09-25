@@ -21,6 +21,7 @@ public class Dev {
 		}
 		String path = args[0];
 
+		// TODO better way of doing this
 		String[] split = path.split("/");
 
 		String file = split[split.length - 1];

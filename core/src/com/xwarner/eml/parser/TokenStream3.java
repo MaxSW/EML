@@ -3,6 +3,13 @@ package com.xwarner.eml.parser;
 import com.xwarner.eml.parser.tokens.Token;
 import com.xwarner.eml.util.ErrorHandler;
 
+/**
+ * Converts the stream of tokens into a new stream of tokens with matrices and
+ * vectors having been parsed
+ * 
+ * @author Max Warner
+ *
+ */
 public class TokenStream3 extends TokenStream {
 
 	private TokenStream2 stream;
@@ -22,9 +29,7 @@ public class TokenStream3 extends TokenStream {
 
 		if (token.value.equals("[")) {
 			Token t = new Token(Token.VECTOR, "", token.line, "");
-			TokenDataSet set = parseVectorOrMatrix(stream);
-			t.node = set.node;
-			t.src = set.src;
+			parseVectorOrMatrix(stream).populate(t);
 			return t;
 		}
 

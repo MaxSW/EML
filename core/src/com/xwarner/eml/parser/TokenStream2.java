@@ -13,30 +13,45 @@ import com.xwarner.eml.util.ErrorHandler;
  * Converts the stream of tokens into a new stream of tokens with variable
  * references having been parsed
  * 
- * @author max
+ * @author Max Warner
  *
  */
 
 public class TokenStream2 extends TokenStream {
 
-	private TokenStream1 stream;
-	public ErrorHandler error;
+	private TokenStream1 stream; // the input TokenStream
+	public ErrorHandler error; // the error handler
 
+	/**
+	 * Creates a new TokenStream using the previous TokenStream as input
+	 * 
+	 * @param stream
+	 */
 	public TokenStream2(TokenStream1 stream) {
 		this.stream = stream;
 		this.error = stream.error;
 	}
 
+	/**
+	 * Read the next Token
+	 */
 	protected Token readNext() {
 		Token token = stream.next();
 		if (token == null)
 			return null;
+		// a reference must be started by a name or a reference indicator
 		if (token.type == Token.NAME || token.value.equals(":")) {
 			return parseReference(token);
 		}
 		return token;
 	}
 
+	/**
+	 * Parse a reference
+	 * 
+	 * @param token
+	 * @return
+	 */
 	private Token parseReference(Token token) {
 		Token t = new Token(Token.REFERENCE, "", token.line, "");
 		ReferenceNode node = new ReferenceNode();
@@ -78,7 +93,7 @@ public class TokenStream2 extends TokenStream {
 							exp.addChild(parseReference(tt).node);
 						else if (tt.type == Token.OPERATOR || tt.value.equals("(") || tt.value.equals(")")) {
 							exp.addChild(new OperatorNode(tt.value));
-						}else
+						} else
 							break;
 					}
 					amn.addChild(exp);

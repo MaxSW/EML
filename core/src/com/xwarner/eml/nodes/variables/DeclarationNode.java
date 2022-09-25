@@ -3,6 +3,8 @@ package com.xwarner.eml.nodes.variables;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.objects.BlankObject;
 import com.xwarner.eml.interpreter.context.objects.EObject;
@@ -100,5 +102,16 @@ public class DeclarationNode extends Node {
 		}
 		return null;
 	}
+	
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("a", getClass().getSimpleName());
+		obj.put("type", varType);
+		for (Node n : getChildren()) {
+			obj.accumulate("z", n.toJSON());
+		}
+		return obj;
+	}
+
 
 }

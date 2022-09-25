@@ -1,5 +1,7 @@
 package com.xwarner.eml.nodes.variables;
 
+import org.json.JSONObject;
+
 import com.xwarner.eml.nodes.Node;
 
 public class VariableReferenceNode extends Node {
@@ -17,6 +19,16 @@ public class VariableReferenceNode extends Node {
 
 	public String toString() {
 		return "variable reference - name: " + name;
+	}
+
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("a", getClass().getSimpleName());
+		obj.put("name", name);
+		for (Node n : getChildren()) {
+			obj.accumulate("z", n.toJSON());
+		}
+		return obj;
 	}
 
 }

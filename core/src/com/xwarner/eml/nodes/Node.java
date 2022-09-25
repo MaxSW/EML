@@ -2,14 +2,14 @@ package com.xwarner.eml.nodes;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import com.xwarner.eml.interpreter.bundle.Bundle;
 
 public class Node {
 
 	private ArrayList<Node> children;
 	public Node parent;
-
-	public int type;
 
 	public Node() {
 		children = new ArrayList<Node>();
@@ -57,6 +57,15 @@ public class Node {
 	 */
 	public Object invoke2(Bundle bundle) {
 		return null;
+	}
+
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("a", getClass().getSimpleName());
+		for (Node n : children) {
+			obj.accumulate("z", n.toJSON());
+		}
+		return obj;
 	}
 
 }

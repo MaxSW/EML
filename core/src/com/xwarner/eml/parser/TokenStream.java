@@ -14,18 +14,36 @@ import com.xwarner.eml.nodes.values.StringNode;
 import com.xwarner.eml.nodes.values.VectorNode;
 import com.xwarner.eml.nodes.variables.DeclarationNode;
 import com.xwarner.eml.parser.tokens.Token;
+import com.xwarner.eml.parser.tokens.TokenDataSet;
 
+/**
+ * Defines the structure of a token stream and provides a number of utility
+ * methods used by all four token streams
+ * 
+ * @author Max Warner
+ *
+ */
 public class TokenStream {
 
-	protected Token current; // cache
-	protected Token last;
+	protected Token current; // the current token
+	protected Token last; // the last token, probably should avoid using this if possible
 
+	/**
+	 * Returns the next token in the stream, without moving ahead
+	 * 
+	 * @return the next token in the stream
+	 */
 	public Token peek() {
 		if (current == null)
 			current = readNext();
 		return current;
 	}
 
+	/**
+	 * Returns the next token in the stream, and advances the stream
+	 * 
+	 * @return the next token in the stream
+	 */
 	public Token next() {
 		Token token = current;
 		if (current == null)
@@ -36,50 +54,68 @@ public class TokenStream {
 		return token;
 	}
 
+	/**
+	 * 
+	 * @return has the stream finished
+	 */
 	public boolean done() {
 		return peek() == null;
 	}
 
+	/**
+	 * Read the next token, implemented by each TokenStream
+	 * 
+	 * @return the next token
+	 */
 	protected Token readNext() {
 		return null;
 	}
 
-	protected String parseExpression(TokenStream stream, Node node) {
+	/**
+	 * Parses an expression
+	 * 
+	 * @param stream
+	 * @param node
+	 * @return TokenDataSet of the expression
+	 */
+	protected TokenDataSet parseExpression(TokenStream stream) {
+		Node node = new ExpressionNode();
 		String src = "";
+		// the number of unclosed brackets that remain
 		int count = 0, sCount = 0;
 		while (true) {
 			if (stream.done())
 				break;
 			Token t = stream.peek();
 
-			// System.out.println(t.value);
+			// things that end the expression
 
+			// any new line
 			if (t.type == Token.NEWLINE)
-				return src;
-			if (t.value.equals("}"))
-				return src;
-			if (t.value.equals("{"))
-				return src;
-			if (t.value.equals(","))
-				return src;
-			if (t.value.equals(")") && count == 0)
-				return src;
-			if (t.value.equals(";"))
-				return src;
-			if (t.value.equals("]") && sCount == 0)
-				return src;
-			if (t.value.equals("|"))
-				return src;
+				return new TokenDataSet(node, src);
 
+			// any punctuation that signify the end of an expression
+			if ("{},;|".indexOf(t.src) > -1)
+				return new TokenDataSet(node, src);
+
+			// any closing brackets that don't close brackets within the expression
+			if (t.value.equals(")") && count == 0)
+				return new TokenDataSet(node, src);
+			if (t.value.equals("]") && sCount == 0)
+				return new TokenDataSet(node, src);
+
+			// keywords that aren't booleans
 			if (t.type == Token.KEYWORD && !(t.value.equals("true") || t.value.equals("false")))
-				return src;
+				return new TokenDataSet(node, src);
 
 			t = stream.next();
 			Node n = null;
 			if (t.type == Token.REFERENCE) {
+				// parse any reference
 				src += t.src;
 				if (!stream.done()) {
 					if (stream.peek().value.equals("(")) {
+						// if a function call
 						TokenDataSet set = parseInvocation(stream, t);
 						n = set.node;
 						src += set.src;
@@ -90,9 +126,11 @@ public class TokenStream {
 					n = t.node;
 				}
 			} else if (t.type == Token.NUMBER) {
+				// a number
 				src += t.src;
 				n = new NumberNode(Float.parseFloat(t.value));
 			} else if (t.type == Token.OPERATOR || t.value.equals("(") || t.value.equals(")")) {
+				// an operator or bracket
 				src += t.src;
 				if (t.value.equals("("))
 					count++;
@@ -100,13 +138,14 @@ public class TokenStream {
 					count--;
 
 				if (stream.done())
-					return src;
+					return new TokenDataSet(node, src);
 
 				if (stream.peek().value.equals("=")) {
 					n = new OperatorNode(t.value + "=");
 					stream.next();
-				} else
+				} else {
 					n = new OperatorNode(t.value);
+				}
 
 			} else if (t.type == Token.STRING) {
 				src += t.src;
@@ -140,9 +179,16 @@ public class TokenStream {
 			node.addChild(n);
 
 		}
-		return src;
+		return new TokenDataSet(node, src);
 	}
 
+	/**
+	 * Parses an invocation
+	 * 
+	 * @param stream
+	 * @param ref
+	 * @return TokenDataSet of the invocation
+	 */
 	protected TokenDataSet parseInvocation(TokenStream stream, Token ref) {
 		Node n = new InvocationNode();
 		String src = "";
@@ -159,9 +205,9 @@ public class TokenStream {
 			return new TokenDataSet(n, src);
 		} else {
 			while (true) {
-				ExpressionNode an = new ExpressionNode();
-				src += parseExpression(stream, an);
-				n.addChild(an);
+				TokenDataSet tds = parseExpression(stream);
+				src += tds.src;
+				n.addChild(tds.node);
 				if (stream.done())
 					return new TokenDataSet(n, src);
 				Token t = stream.next();
@@ -175,6 +221,12 @@ public class TokenStream {
 		}
 	}
 
+	/**
+	 * Parses a vector or matrix
+	 * 
+	 * @param stream
+	 * @return TokenDataSet of the vector or matrix
+	 */
 	public TokenDataSet parseVectorOrMatrix(TokenStream stream) {
 		Node node = new VectorNode();
 		String src = "";
@@ -188,9 +240,9 @@ public class TokenStream {
 			if (stream.done())
 				break;
 
-			ExpressionNode exp = new ExpressionNode();
-			src += parseExpression(stream, exp);
-			node.addChild(exp);
+			TokenDataSet tds = parseExpression(stream);
+			src += tds.src;
+			node.addChild(tds.node);
 
 			if (stream.peek().type == Token.KEYWORD) {
 				Token t = stream.next();
@@ -226,16 +278,6 @@ public class TokenStream {
 			return new TokenDataSet(matrixNode, src);
 		}
 		return new TokenDataSet(node, src);
-	}
-
-	class TokenDataSet {
-		public String src;
-		public Node node;
-
-		public TokenDataSet(Node node, String src) {
-			this.node = node;
-			this.src = src;
-		}
 	}
 
 }

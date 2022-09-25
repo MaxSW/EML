@@ -5,23 +5,33 @@ import com.xwarner.eml.parser.tokens.TokenMatcher;
 import com.xwarner.eml.util.ErrorHandler;
 
 /**
- * Converts the input stream into a stream of tokens
+ * Converts the input stream into a stream of basic tokens
  * 
- * @author max
+ * @author Max Warner
  *
  */
 
 public class TokenStream1 extends TokenStream {
 
-	private InputStream input;
+	private InputStream input; // the input stream
 
-	public ErrorHandler error;
+	public ErrorHandler error; // the error handler
 
+	/**
+	 * Create a new TokenStream using the given InputStream
+	 * 
+	 * @param input
+	 */
 	public TokenStream1(InputStream input) {
 		this.input = input;
 		this.error = input.error;
 	}
 
+	/**
+	 * Read the next token
+	 * 
+	 * @return
+	 */
 	protected Token readNext() {
 		// skip any whitespace
 		readWhile(isWhitespace);
@@ -29,7 +39,10 @@ public class TokenStream1 extends TokenStream {
 		if (input.done())
 			return null;
 		char c = input.peek();
-		// deal with comments and divison
+		// the order of the following if statement matters
+		// TODO: would be cleaner if we didn't rely on the ordering and just had
+		// explicit rules for each token
+		// deal with comments and division
 		if (c == '/') {
 			input.next();
 			char c2 = input.peek();
@@ -67,24 +80,33 @@ public class TokenStream1 extends TokenStream {
 			input.next();
 			char cc = input.peek();
 			if (isAssignment.match(cc)) {
+				// equality operator
 				input.next();
 				return new Token(Token.OPERATOR, "==", input.line(), "==");
-			} else
+			} else {
+				// assignment operator
 				return new Token(Token.ASSIGNMENT, "=", input.line(), "=");
+			}
 		} else if (isDigit.match(c)) {
+			// number
 			String num = readNumber();
 			return new Token(Token.NUMBER, num, input.line(), num);
 		} else if (isNameStart.match(c)) {
+			// name
 			return readName();
 		} else if (isPunctuation.match(c)) {
+			// punctuation mark
 			String s = Character.toString(input.next());
 			return new Token(Token.PUNCTUATION, s, input.line(), s);
 		} else if (isOperator.match(c)) {
+			// operator
 			String op = readWhile(isOperator);
 			return new Token(Token.OPERATOR, op, input.line(), op);
 		} else if (c == '"') {
+			// start of a string
 			return readString();
 		} else if (isNewline.match(c)) {
+			// new line
 			input.next();
 			// skip multiple last lines
 			if (last != null && last.type != Token.NEWLINE)
@@ -92,10 +114,15 @@ public class TokenStream1 extends TokenStream {
 			else
 				return readNext();
 		}
-
 		return null;
 	}
 
+	/**
+	 * Read until the given condition no longer holds
+	 * 
+	 * @param matcher
+	 * @return
+	 */
 	private String readWhile(TokenMatcher matcher) {
 		String str = "";
 		while (!input.done() && matcher.match(input.peek())) {
@@ -104,6 +131,11 @@ public class TokenStream1 extends TokenStream {
 		return str;
 	}
 
+	/**
+	 * Read a number
+	 * 
+	 * @return
+	 */
 	private String readNumber() {
 		boolean decimal = false;
 		String str = "";
@@ -124,12 +156,22 @@ public class TokenStream1 extends TokenStream {
 		return str;
 	}
 
+	/**
+	 * Read a name
+	 * 
+	 * @return
+	 */
 	private Token readName() {
 		String id = readWhile(isName);
 		int type = isKeyword(id) ? Token.KEYWORD : Token.NAME;
 		return new Token(type, id, input.line(), id);
 	}
 
+	/**
+	 * Read a string
+	 * 
+	 * @return
+	 */
 	private Token readString() {
 		boolean escaped = false;
 		String str = "";
@@ -202,7 +244,7 @@ public class TokenStream1 extends TokenStream {
 
 	private TokenMatcher isntNewline = new TokenMatcher() {
 		public boolean match(char c) {
-			return c != '\n';
+			return c != '\n' && c != '\r';
 		}
 	};
 

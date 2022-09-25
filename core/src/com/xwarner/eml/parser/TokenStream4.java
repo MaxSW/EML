@@ -1,14 +1,14 @@
 package com.xwarner.eml.parser;
 
-import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.parser.tokens.Token;
+import com.xwarner.eml.parser.tokens.TokenDataSet;
 import com.xwarner.eml.util.ErrorHandler;
 
 /**
  * Converts the stream of tokens into a new stream of tokens with expressions
  * and invocations having been parsed
  * 
- * @author max
+ * @author Max Warner
  *
  */
 
@@ -33,8 +33,7 @@ public class TokenStream4 extends TokenStream {
 
 		if (shouldParseExpression(token)) {
 			Token t = new Token(Token.EXPRESSION, "", token.line, "");
-			t.node = new ExpressionNode();
-			t.src = parseExpression(stream, t.node);
+			parseExpression(stream).populate(t);
 			return t;
 		} else if (token.type == Token.REFERENCE) {
 			if (!stream.done()) {
@@ -57,6 +56,12 @@ public class TokenStream4 extends TokenStream {
 		return stream.next();
 	}
 
+	/**
+	 * Decides whether we should parse an expression, based on the first token
+	 * 
+	 * @param token
+	 * @return
+	 */
 	private boolean shouldParseExpression(Token token) {
 		if (token.type == Token.NUMBER || token.type == Token.OPERATOR
 				|| (token.type == Token.REFERENCE && (lastAssignment || lastReturn)) || token.value.equals("(")

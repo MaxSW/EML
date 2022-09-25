@@ -2,6 +2,8 @@ package com.xwarner.eml.nodes.values;
 
 import java.util.HashMap;
 
+import org.json.JSONObject;
+
 import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.evaluator.operators.EqualityOperator;
 import com.xwarner.eml.interpreter.evaluator.operators.InequalityOperator;
@@ -76,4 +78,15 @@ public class OperatorNode extends Node {
 		return cache;
 	}
 
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("a", getClass().getSimpleName());
+		obj.put("operator", operator);
+		for (Node n : getChildren()) {
+			obj.accumulate("z", n.toJSON());
+		}
+		return obj;
+	}
+
+	
 }

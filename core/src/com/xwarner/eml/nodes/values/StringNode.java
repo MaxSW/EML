@@ -1,9 +1,6 @@
 package com.xwarner.eml.nodes.values;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.json.JSONObject;
 
 import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.nodes.Node;
@@ -28,5 +25,16 @@ public class StringNode extends Node {
 	public String toString() {
 		return "string - value: " + value;
 	}
+	
+	public JSONObject toJSON() {
+		JSONObject obj = new JSONObject();
+		obj.put("a", getClass().getSimpleName());
+		obj.put("value", value);
+		for (Node n : getChildren()) {
+			obj.accumulate("z", n.toJSON());
+		}
+		return obj;
+	}
+
 
 }
