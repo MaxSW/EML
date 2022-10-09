@@ -1,5 +1,7 @@
 package com.xwarner.eml.parser;
 
+import java.util.ArrayList;
+
 import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.ReferenceNode;
@@ -18,6 +20,7 @@ import com.xwarner.eml.nodes.variables.AssignmentNode;
 import com.xwarner.eml.nodes.variables.DeclarationNode;
 import com.xwarner.eml.nodes.variables.VariableChangeNode;
 import com.xwarner.eml.parser.tokens.Token;
+import com.xwarner.eml.parser.tokens.TokenRule;
 import com.xwarner.eml.util.ErrorHandler;
 
 /**
@@ -33,14 +36,16 @@ import com.xwarner.eml.util.ErrorHandler;
  */
 public class Parser extends TokenStream {
 
-	private TokenStream4 stream; // the input stream
+	private TokenStream5 stream; // the input stream
+
+	private TokenRule declarationRule, assignmentExpressionRule, variableChangeRule, assignmentInvocationRule;
 
 	/**
 	 * Creates the parser with the given input TokenStream
 	 * 
 	 * @param stream
 	 */
-	public Parser(TokenStream4 stream) {
+	public Parser(TokenStream5 stream) {
 		this.stream = stream;
 	}
 
@@ -50,13 +55,25 @@ public class Parser extends TokenStream {
 	 * @return
 	 */
 	public Tree parse() {
+		defineRules();
 		Tree tree = new Tree();
 		while (!stream.done()) {
-			Node node = nextNode();
-			if (node != null)
-				tree.addChild(node);
+			Node n = nextNode();
+			if (n != null)
+				tree.addChild(n);
 		}
 		return tree;
+	}
+
+	public void defineRules() {
+		declarationRule = new TokenRule().either(Token.KEYWORD, "const", "var", "bool", "str", "vec", "mat")
+				.require(Token.REFERENCE).require(Token.ASSIGNMENT).any();
+		assignmentExpressionRule = new TokenRule().require(Token.REFERENCE).require(Token.ASSIGNMENT)
+				.either(new int[] { Token.EXPRESSION, Token.VECTOR }, new String[] { "", "" });
+		variableChangeRule = new TokenRule().require(Token.REFERENCE).require(Token.EXPRESSION);
+		assignmentInvocationRule = new TokenRule().require(Token.REFERENCE).require(Token.ASSIGNMENT)
+				.require(Token.KEYWORD, "new").require(Token.INVOCATION);
+
 	}
 
 	/**
@@ -65,6 +82,19 @@ public class Parser extends TokenStream {
 	 * @return
 	 */
 	public Node nextNode() {
+
+		if (declarationRule.matches(stream))
+			return declarationRule.extract((tokens) -> parseDeclaration(tokens));
+
+		if (assignmentExpressionRule.matches(stream))
+			return assignmentExpressionRule.extract((tokens) -> parseAssignmentExpression(tokens));
+
+		if (variableChangeRule.matches(stream))
+			return variableChangeRule.extract((tokens) -> parseVariableChange(tokens));
+
+		if (assignmentInvocationRule.matches(stream))
+			return assignmentInvocationRule.extract((tokens) -> parseAssignmentInvocation(tokens));
+
 		Token t = stream.next();
 
 		if (t == null)
@@ -75,16 +105,10 @@ public class Parser extends TokenStream {
 			return nextNode();
 
 		if (t.type == Token.KEYWORD) {
-			if (t.value.equals("const") || t.value.equals("var") || t.value.equals("bool") || t.value.equals("str"))
-				return parseDeclaration(t.value);
-			else if (t.value.equals("arr"))
+			if (t.value.equals("arr"))
 				return parseArrayCreation();
 			else if (t.value.equals("obj"))
 				return parseObjectCreation();
-			else if (t.value.equals("vec"))
-				return parseVectorCreation();
-			else if (t.value.equals("mat"))
-				return parseMatrixCreation();
 			else if (t.value.equals("func"))
 				return parseFunctionCreation();
 			else if (t.value.equals("if"))
@@ -104,19 +128,47 @@ public class Parser extends TokenStream {
 				stream.next();
 				return new BreakNode();
 			}
-		} else if (t.type == Token.REFERENCE) {
-			Token t2 = stream.peek();
-			if (t2.type == Token.ASSIGNMENT) {
-				return parseAssignment(t);
-			} else if (t2.type == Token.EXPRESSION) {
-				return parseVariableChange(t);
-			}
 		} else if (t.type == Token.INVOCATION) {
 			return t.node;
 		}
 
 		ErrorHandler.error("unknown token \"" + t.value + "\"", t);
 		return null;
+
+		// TODO if nothing matches we can do really nice error handling by reporting
+		// what worked the closest (in order) and what was unexpected
+		// we can detect this by looking at whether the tree has grown over this
+		// function call
+	}
+
+	public Node parseDeclaration(ArrayList<Token> tokens) {
+		Node node = new DeclarationNode(tokens.get(0).value);
+		node.addChild(tokens.get(1).node);
+		node.addChild(tokens.get(3).node);
+		return node;
+	}
+
+	public Node parseAssignmentExpression(ArrayList<Token> tokens) {
+		Node node = new AssignmentNode();
+		node.addChild(tokens.get(0).node);
+		node.addChild(tokens.get(2).node);
+		return node;
+	}
+
+	public Node parseVariableChange(ArrayList<Token> tokens) {
+		Node node = new VariableChangeNode();
+		node.addChild(tokens.get(0).node);
+		node.addChild(tokens.get(1).node);
+		return node;
+	}
+
+	// TODO write tests once parsed object creation
+	public Node parseAssignmentInvocation(ArrayList<Token> tokens) {
+		Node node = new AssignmentNode();
+		Node node2 = new ObjectCreationNode();
+		node2.addChild(tokens.get(3).node);
+		node.addChild(node2);
+		return node;
 	}
 
 	/**
@@ -125,7 +177,7 @@ public class Parser extends TokenStream {
 	 * @param type
 	 * @return
 	 */
-	public Node parseDeclaration(String type) {
+	public Node parseDeclarationOld(String type) {
 		Token token = stream.next();
 		if (token.type != Token.REFERENCE)
 			ErrorHandler.error("invalid variable name", token);
@@ -199,85 +251,6 @@ public class Parser extends TokenStream {
 		if (tt.node.getChildren().get(0).getChildren().size() != 1)
 			n.addChild(tt.node.getChildren().get(0).getChildren().get(1));
 
-		return n;
-	}
-
-	/**
-	 * Parse a vector creation
-	 * 
-	 * @return
-	 */
-	public Node parseVectorCreation() {
-		Node n = new DeclarationNode("vec");
-		ReferenceNode ref = (ReferenceNode) stream.next().node;
-		n.addChild(ref);
-		if (stream.next().type != Token.ASSIGNMENT)
-			ErrorHandler.error("missing = ", stream.peek());
-
-		Token t = stream.next();
-		if (t.type != Token.EXPRESSION)
-			ErrorHandler.error("missing vector", t);
-		n.addChild(t.node);
-
-		return n;
-	}
-
-	/**
-	 * Parse a matrix creation
-	 * 
-	 * @return
-	 */
-	public Node parseMatrixCreation() {
-		Node n = new DeclarationNode("mat");
-		ReferenceNode ref = (ReferenceNode) stream.next().node;
-		n.addChild(ref);
-		if (stream.next().type != Token.ASSIGNMENT)
-			ErrorHandler.error("missing = ", stream.peek());
-
-		Token t = stream.next();
-		if (t.type != Token.EXPRESSION)
-			ErrorHandler.error("missing matrix", t);
-		n.addChild(t.node);
-
-		return n;
-	}
-
-	/**
-	 * Parse an assignment
-	 * 
-	 * @param ref
-	 * @return
-	 */
-	public Node parseAssignment(Token ref) {
-		stream.next(); // consume the =
-		Node n = new AssignmentNode();
-		n.addChild(ref.node);
-		Token t = stream.next();
-		if (t.type == Token.EXPRESSION) {
-			n.addChild(t.node);
-		} else if (t.value.equals("new")) {
-			Token t2 = stream.next();
-			if (t2.type != Token.INVOCATION)
-				ErrorHandler.error("invalid object creation", t2);
-			Node n2 = new ObjectCreationNode();
-			n2.addChild(t2.node);
-			n.addChild(n2);
-		} else if (t.type == Token.VECTOR) {
-			n.addChild(t.node);
-		}
-		return n;
-	}
-
-	/**
-	 * Parse a variable change
-	 * 
-	 * @param ref
-	 * @return
-	 */
-	public Node parseVariableChange(Token ref) {
-		VariableChangeNode n = new VariableChangeNode();
-		n.addChild(ref.node);
-		n.addChild(stream.next().node);
 		return n;
 	}
 
@@ -392,7 +365,7 @@ public class Parser extends TokenStream {
 	public Node parseFor() {
 		ForNode n = new ForNode();
 		stream.next();
-		n.addChild(parseDeclaration(stream.next().value));
+		n.addChild(parseDeclarationOld(stream.next().value));
 		stream.next();
 		n.addChild(stream.next().node);
 		stream.next();

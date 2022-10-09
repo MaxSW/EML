@@ -6,6 +6,7 @@ import com.xwarner.eml.parser.TokenStream1;
 import com.xwarner.eml.parser.TokenStream2;
 import com.xwarner.eml.parser.TokenStream3;
 import com.xwarner.eml.parser.TokenStream4;
+import com.xwarner.eml.parser.TokenStream5;
 import com.xwarner.eml.parser.Tree;
 
 /**
@@ -24,8 +25,8 @@ public class ParsingTests {
 	}
 
 	private static void runTest(int id, String code, String compareJSON) {
-		Tree genTree = new Parser(
-				new TokenStream4(new TokenStream3(new TokenStream2(new TokenStream1(new InputStream(code)))))).parse();
+		Tree genTree = new Parser(new TokenStream5(
+				new TokenStream4(new TokenStream3(new TokenStream2(new TokenStream1(new InputStream(code))))))).parse();
 
 		boolean pass = genTree.toJSON().toString().equalsIgnoreCase(compareJSON);
 

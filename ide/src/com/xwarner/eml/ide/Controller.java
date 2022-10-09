@@ -12,8 +12,8 @@ import com.xwarner.eml.parser.TokenStream1;
 import com.xwarner.eml.parser.TokenStream2;
 import com.xwarner.eml.parser.TokenStream3;
 import com.xwarner.eml.parser.TokenStream4;
+import com.xwarner.eml.parser.TokenStream5;
 import com.xwarner.eml.parser.Tree;
-import com.xwarner.eml.performance.Optimiser;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.control.Tab;
@@ -56,11 +56,9 @@ public class Controller {
 		EditTab currentFile = getCurrentFile();
 
 		TokenStream1 ts = new TokenStream1(new InputStream(currentFile.getSource()));
-		Parser parser = new Parser(new TokenStream4(new TokenStream3(new TokenStream2(ts))));
+		Parser parser = new Parser(new TokenStream5(new TokenStream4(new TokenStream3(new TokenStream2(ts)))));
 		Tree tree = parser.parse();
-		Optimiser optimiser = new Optimiser();
-		Tree tree2 = optimiser.optimise(tree);
-		Interpreter interpreter = new Interpreter(tree2);
+		Interpreter interpreter = new Interpreter(tree);
 		interpreter.bundle.output = app.console.listener;
 		interpreter.run();
 	}

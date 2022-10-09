@@ -9,6 +9,7 @@ import com.xwarner.eml.parser.TokenStream1;
 import com.xwarner.eml.parser.TokenStream2;
 import com.xwarner.eml.parser.TokenStream3;
 import com.xwarner.eml.parser.TokenStream4;
+import com.xwarner.eml.parser.TokenStream5;
 import com.xwarner.eml.parser.Tree;
 import com.xwarner.eml.util.IOManager;
 
@@ -50,7 +51,7 @@ public class Visualiser extends Application {
 			e.printStackTrace();
 		}
 		TokenStream1 ts = new TokenStream1(new InputStream(src));
-		Parser parser = new Parser(new TokenStream4(new TokenStream3(new TokenStream2(ts))));
+		Parser parser = new Parser(new TokenStream5(new TokenStream4(new TokenStream3(new TokenStream2(ts)))));
 		Tree tree = parser.parse();
 		Interpreter interpreter = new Interpreter(tree);
 		interpreter.run();
