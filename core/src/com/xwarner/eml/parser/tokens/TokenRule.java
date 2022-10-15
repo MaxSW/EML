@@ -33,6 +33,11 @@ public class TokenRule {
 		return this;
 	}
 
+	public TokenRule require(TokenRule rule) {
+		rules.add(new TokenRuleData(rule, TokenRuleData.MODE_REQUIRE));
+		return this;
+	}
+
 	public TokenRule optional(int type, String value) {
 		rules.add(new TokenRuleData(new int[] { type }, new String[] { value }, TokenRuleData.MODE_OPTIONAL));
 		return this;
@@ -65,21 +70,31 @@ public class TokenRule {
 		tokens = new ArrayList<Token>();
 
 		for (TokenRuleData rule : rules) {
-			Token token = stream.next();
-			tokens.add(token);
-			if (token == null) {
-				// TODO check if there are later token requirements
-				if (rule.mode != TokenRuleData.MODE_ANY & rule.mode != TokenRuleData.MODE_OPTIONAL) {
+
+			if (!rule.chain) {
+				Token token = stream.next();
+				tokens.add(token);
+				if (token == null) {
+					// TODO check if there are later token requirements
+					if (rule.mode != TokenRuleData.MODE_ANY & rule.mode != TokenRuleData.MODE_OPTIONAL) {
+						stream.setPos(startPos);
+						return false;
+					}
+				}
+				if (rule.mode == TokenRuleData.MODE_ANY)
+					continue;
+				boolean matches = rule.matches(token);
+				if (!matches & rule.mode != TokenRuleData.MODE_OPTIONAL) {
 					stream.setPos(startPos);
 					return false;
 				}
-			}
-			if (rule.mode == TokenRuleData.MODE_ANY)
-				continue;
-			boolean matches = rule.matches(token);
-			if (!matches & rule.mode != TokenRuleData.MODE_OPTIONAL) {
-				stream.setPos(startPos);
-				return false;
+			} else {
+				// chain rules together
+				if (!rule.rule.matches(stream)) {
+					stream.setPos(startPos);
+					return false;
+				}
+				tokens.addAll(rule.rule.getTokens());
 			}
 		}
 		// if matches, we don't reset the stream position
@@ -96,17 +111,29 @@ public class TokenRule {
 		return response.run(tokens);
 	}
 
+	public ArrayList<Token> getTokens() {
+		return tokens;
+	}
+
 	private class TokenRuleData {
 		public static final int MODE_REQUIRE = 1, MODE_OPTIONAL = 2, MODE_ANY = 3;
 
 		public int[] types;
 		public String[] values;
 		public int mode;
+		public TokenRule rule;
+		public boolean chain = false;
 
 		public TokenRuleData(int[] types, String[] values, int mode) {
 			this.types = types;
 			this.values = values;
 			this.mode = mode;
+		}
+
+		public TokenRuleData(TokenRule rule, int mode) {
+			this.rule = rule;
+			this.mode = mode;
+			this.chain = true;
 		}
 
 		public boolean matches(Token token) {

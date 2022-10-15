@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.nodes.Node;
-import com.xwarner.eml.nodes.ReferenceNode;
 import com.xwarner.eml.nodes.functions.BodyNode;
 import com.xwarner.eml.nodes.functions.FunctionArgumentNode;
 import com.xwarner.eml.nodes.functions.FunctionNode;
@@ -38,7 +37,9 @@ public class Parser extends TokenStream {
 
 	private TokenStream5 stream; // the input stream
 
-	private TokenRule declarationRule, assignmentExpressionRule, variableChangeRule, assignmentInvocationRule;
+	private TokenRule declarationRule, objNewDeclarationRule, assignmentExpressionRule, variableChangeRule,
+			assignmentInvocationRule;
+	private TokenRule whileRule, ifRule, forRule;
 
 	/**
 	 * Creates the parser with the given input TokenStream
@@ -66,14 +67,22 @@ public class Parser extends TokenStream {
 	}
 
 	public void defineRules() {
-		declarationRule = new TokenRule().either(Token.KEYWORD, "const", "var", "bool", "str", "vec", "mat")
+		declarationRule = new TokenRule().either(Token.KEYWORD, "const", "var", "bool", "str", "vec", "mat", "arr")
 				.require(Token.REFERENCE).require(Token.ASSIGNMENT).any();
+		objNewDeclarationRule = new TokenRule().require(Token.KEYWORD, "obj").require(Token.REFERENCE)
+				.require(Token.ASSIGNMENT).require(Token.KEYWORD, "new").require(Token.INVOCATION);
 		assignmentExpressionRule = new TokenRule().require(Token.REFERENCE).require(Token.ASSIGNMENT)
 				.either(new int[] { Token.EXPRESSION, Token.VECTOR }, new String[] { "", "" });
 		variableChangeRule = new TokenRule().require(Token.REFERENCE).require(Token.EXPRESSION);
 		assignmentInvocationRule = new TokenRule().require(Token.REFERENCE).require(Token.ASSIGNMENT)
 				.require(Token.KEYWORD, "new").require(Token.INVOCATION);
 
+		whileRule = new TokenRule().require(Token.KEYWORD, "while").require(Token.EXPRESSION);
+		ifRule = new TokenRule().require(Token.KEYWORD, "if").require(Token.EXPRESSION);
+		// TODO specify expressions should only be (
+		forRule = new TokenRule().require(Token.KEYWORD, "for").require(Token.EXPRESSION).require(declarationRule)
+				.require(Token.PUNCTUATION, ";").require(Token.EXPRESSION).require(Token.PUNCTUATION, ";")
+				.require(Token.EXPRESSION).require(Token.PUNCTUATION, ")");
 	}
 
 	/**
@@ -83,17 +92,25 @@ public class Parser extends TokenStream {
 	 */
 	public Node nextNode() {
 
+		/* Variable declaration or assignment */
 		if (declarationRule.matches(stream))
 			return declarationRule.extract((tokens) -> parseDeclaration(tokens));
-
+		if (objNewDeclarationRule.matches(stream))
+			return objNewDeclarationRule.extract((tokens) -> parseNewObjectDeclaration(tokens));
 		if (assignmentExpressionRule.matches(stream))
 			return assignmentExpressionRule.extract((tokens) -> parseAssignmentExpression(tokens));
-
 		if (variableChangeRule.matches(stream))
 			return variableChangeRule.extract((tokens) -> parseVariableChange(tokens));
-
 		if (assignmentInvocationRule.matches(stream))
 			return assignmentInvocationRule.extract((tokens) -> parseAssignmentInvocation(tokens));
+
+		/* Logic */
+		if (whileRule.matches(stream))
+			return whileRule.extract((tokens) -> parseWhile(tokens));
+		if (ifRule.matches(stream))
+			return ifRule.extract((tokens) -> parseIf(tokens));
+		if (forRule.matches(stream))
+			return forRule.extract((tokens) -> parseFor(tokens));
 
 		Token t = stream.next();
 
@@ -105,18 +122,10 @@ public class Parser extends TokenStream {
 			return nextNode();
 
 		if (t.type == Token.KEYWORD) {
-			if (t.value.equals("arr"))
-				return parseArrayCreation();
-			else if (t.value.equals("obj"))
+			if (t.value.equals("obj"))
 				return parseObjectCreation();
 			else if (t.value.equals("func"))
 				return parseFunctionCreation();
-			else if (t.value.equals("if"))
-				return parseIf();
-			else if (t.value.equals("while"))
-				return parseWhile();
-			else if (t.value.equals("for"))
-				return parseFor();
 			else if (t.value.equals("return"))
 				return parseReturn();
 			else if (t.value.equals("class"))
@@ -141,10 +150,22 @@ public class Parser extends TokenStream {
 		// function call
 	}
 
+	// TODO rewrite earlier parsers to distinguish between vectors (no commas) and
+	// arrays (commas)
 	public Node parseDeclaration(ArrayList<Token> tokens) {
 		Node node = new DeclarationNode(tokens.get(0).value);
 		node.addChild(tokens.get(1).node);
 		node.addChild(tokens.get(3).node);
+		return node;
+	}
+
+	// TODO write tests once parsed object creation
+	public Node parseNewObjectDeclaration(ArrayList<Token> tokens) {
+		Node node = new DeclarationNode("obj");
+		node.addChild(tokens.get(1).node);
+		Node node2 = new ObjectCreationNode();
+		node2.addChild(tokens.get(4).node);
+		node.addChild(node2);
 		return node;
 	}
 
@@ -171,31 +192,58 @@ public class Parser extends TokenStream {
 		return node;
 	}
 
-	/**
-	 * Parse a declaration
-	 * 
-	 * @param type
-	 * @return
-	 */
-	public Node parseDeclarationOld(String type) {
-		Token token = stream.next();
-		if (token.type != Token.REFERENCE)
-			ErrorHandler.error("invalid variable name", token);
-		Token token2 = stream.next();
-		if (token2.type != Token.ASSIGNMENT)
-			ErrorHandler.error("missing = in variable assignment", token2);
-		Node node = new DeclarationNode(type);
-		node.addChild(token.node);
-		Token token3 = stream.next();
-		node.addChild(token3.node);
+	// TODO remove opening and closing brackets from expressions in while, if, for
+	public Node parseWhile(ArrayList<Token> tokens) {
+		WhileNode node = new WhileNode();
+		node.addChild(tokens.get(1).node);
+		node.addChild(parseBody());
 		return node;
 	}
 
-	/**
-	 * Parse an object creation
-	 * 
-	 * @return
-	 */
+	public Node parseIf(ArrayList<Token> tokens) {
+		IfNode node = new IfNode();
+		node.addChild(tokens.get(1).node);
+		node.addChild(parseBody());
+		while (true) {
+			if (stream.done())
+				break;
+			if (!stream.peek().value.equals("else"))
+				break;
+			stream.next(); // consume the else
+			if (stream.peek().value.equals("if")) {
+				stream.next(); // consume the if
+				node.addChild(stream.next().node);
+				node.addChild(parseBody());
+			} else {
+				node.addChild(parseBody());
+				return node; // can only have one else statement
+			}
+		}
+		return node;
+	}
+
+	public Node parseFor(ArrayList<Token> tokens) {
+		ForNode node = new ForNode();
+		node.addChild(parseDeclaration(new ArrayList<Token>(tokens.subList(2, 6))));
+		node.addChild(tokens.get(7).node);
+
+		// convert the expression node into a standard variable change node
+		// TODO is there better way of doing this?
+		ExpressionNode exp = (ExpressionNode) tokens.get(9).node;
+		VariableChangeNode adj = new VariableChangeNode();
+		adj.addChild(exp.getChildren().get(0));
+		ExpressionNode exp2 = new ExpressionNode();
+		for (int i = 1; i < exp.getChildren().size(); i++) {
+			exp2.addChild(exp.getChildren().get(i));
+		}
+		adj.addChild(exp2);
+		node.addChild(adj);
+		node.addChild(parseBody());
+		return node;
+	}
+
+	/** OLD FUNCTIONS **/
+
 	public Node parseObjectCreation() {
 		Token token = stream.next();
 		if (token.type != Token.REFERENCE)
@@ -206,17 +254,8 @@ public class Parser extends TokenStream {
 		Node node = new DeclarationNode("obj");
 		node.addChild(token.node);
 
-		if (stream.peek().value.equals("new")) {
-			// an instantiation
-			stream.next(); // consume the new
-			Token token2 = stream.next();
-			if (token2.type != Token.INVOCATION)
-				ErrorHandler.error("invalid class", token2);
-
-			Node node2 = new ObjectCreationNode();
-			node2.addChild(token2.node);
-			node.addChild(node2);
-		} else if (stream.peek().value.equals("{")) {
+		// empty object
+		if (stream.peek().value.equals("{")) {
 			stream.next();
 			if (!stream.next().value.equals("}"))
 				ErrorHandler.error("missing }", token);
@@ -228,30 +267,6 @@ public class Parser extends TokenStream {
 			node.addChild(token2.node.getChildren().get(0));
 		}
 		return node;
-	}
-
-	/**
-	 * Parse an array creation
-	 * 
-	 * @return
-	 */
-	public Node parseArrayCreation() {
-		if (stream.peek().type != Token.REFERENCE)
-			ErrorHandler.error("invalid variable name", stream.peek());
-		ReferenceNode ref = (ReferenceNode) stream.next().node;
-		if (stream.next().type != Token.ASSIGNMENT)
-			ErrorHandler.error("missing = ", stream.peek());
-		if (stream.peek().type != Token.EXPRESSION)
-			ErrorHandler.error("missing []", stream.peek());
-
-		Node n = new DeclarationNode("arr");
-		n.addChild(ref);
-
-		Token tt = stream.next();
-		if (tt.node.getChildren().get(0).getChildren().size() != 1)
-			n.addChild(tt.node.getChildren().get(0).getChildren().get(1));
-
-		return n;
 	}
 
 	/**
@@ -316,74 +331,6 @@ public class Parser extends TokenStream {
 
 		node.addChild(parseBody());
 		return node;
-	}
-
-	/**
-	 * Parse an if statement
-	 * 
-	 * @return
-	 */
-	public Node parseIf() {
-		IfNode n = new IfNode();
-		n.addChild(stream.next().node);
-		n.addChild(parseBody());
-		while (true) {
-			if (stream.done())
-				break;
-			if (!stream.peek().value.equals("else"))
-				break;
-			stream.next(); // consume the else
-			if (stream.peek().value.equals("if")) {
-				stream.next(); // consume the if
-				n.addChild(stream.next().node);
-				n.addChild(parseBody());
-			} else {
-				n.addChild(parseBody());
-				return n; // can only have one else statement
-			}
-		}
-		return n;
-	}
-
-	/**
-	 * Parse a while loop
-	 * 
-	 * @return
-	 */
-	public Node parseWhile() {
-		WhileNode n = new WhileNode();
-		n.addChild(stream.next().node);
-		n.addChild(parseBody());
-		return n;
-	}
-
-	/**
-	 * Parse a for loop
-	 * 
-	 * @return
-	 */
-	public Node parseFor() {
-		ForNode n = new ForNode();
-		stream.next();
-		n.addChild(parseDeclarationOld(stream.next().value));
-		stream.next();
-		n.addChild(stream.next().node);
-		stream.next();
-
-		// convert the expression node into a standard variable change node
-		ExpressionNode exp = (ExpressionNode) stream.next().node;
-		VariableChangeNode adj = new VariableChangeNode();
-		adj.addChild(exp.getChildren().get(0));
-		ExpressionNode exp2 = new ExpressionNode();
-		for (int i = 1; i < exp.getChildren().size(); i++) {
-			exp2.addChild(exp.getChildren().get(i));
-		}
-		adj.addChild(exp2);
-		n.addChild(adj);
-		stream.next();
-
-		n.addChild(parseBody());
-		return n;
 	}
 
 	/**

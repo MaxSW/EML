@@ -7,6 +7,8 @@ import com.xwarner.eml.util.ErrorHandler;
  * Converts the stream of tokens into a new stream of tokens with matrices and
  * vectors having been parsed
  * 
+ * TODO parse arrays here too
+ * 
  * @author Max Warner
  *
  */

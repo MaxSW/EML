@@ -222,7 +222,7 @@ public class TokenStream {
 	}
 
 	/**
-	 * Parses a vector or matrix
+	 * Parses a vector or matrix TODO parse arrays here too
 	 * 
 	 * @param stream
 	 * @return TokenDataSet of the vector or matrix
