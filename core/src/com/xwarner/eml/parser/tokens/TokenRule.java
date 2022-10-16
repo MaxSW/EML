@@ -43,6 +43,11 @@ public class TokenRule {
 		return this;
 	}
 
+	public TokenRule optional(int type) {
+		rules.add(new TokenRuleData(new int[] { type }, new String[] { "" }, TokenRuleData.MODE_OPTIONAL));
+		return this;
+	}
+
 	public TokenRule either(int[] types, String[] values) {
 		rules.add(new TokenRuleData(types, values, TokenRuleData.MODE_REQUIRE));
 		return this;

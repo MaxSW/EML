@@ -28,8 +28,6 @@ import com.xwarner.eml.util.ErrorHandler;
  * 
  * TODO much better error handling
  * 
- * TODO some sort of custom token regex to make rules more clearly defined
- * 
  * @author Max Warner
  *
  */
@@ -37,9 +35,11 @@ public class Parser extends TokenStream {
 
 	private TokenStream5 stream; // the input stream
 
-	private TokenRule declarationRule, objNewDeclarationRule, assignmentExpressionRule, variableChangeRule,
-			assignmentInvocationRule;
+	private TokenRule declarationRule, assignmentExpressionRule, variableChangeRule, assignmentInvocationRule;
+	private TokenRule objNewDeclarationRule, objFuncDeclarationRule, objEmptyDeclarationRule, funcCreationRule,
+			classCreationRule, returnRule;
 	private TokenRule whileRule, ifRule, forRule;
+	private TokenRule argumentRule;
 
 	/**
 	 * Creates the parser with the given input TokenStream
@@ -69,20 +69,36 @@ public class Parser extends TokenStream {
 	public void defineRules() {
 		declarationRule = new TokenRule().either(Token.KEYWORD, "const", "var", "bool", "str", "vec", "mat", "arr")
 				.require(Token.REFERENCE).require(Token.ASSIGNMENT).any();
-		objNewDeclarationRule = new TokenRule().require(Token.KEYWORD, "obj").require(Token.REFERENCE)
-				.require(Token.ASSIGNMENT).require(Token.KEYWORD, "new").require(Token.INVOCATION);
 		assignmentExpressionRule = new TokenRule().require(Token.REFERENCE).require(Token.ASSIGNMENT)
 				.either(new int[] { Token.EXPRESSION, Token.VECTOR }, new String[] { "", "" });
 		variableChangeRule = new TokenRule().require(Token.REFERENCE).require(Token.EXPRESSION);
 		assignmentInvocationRule = new TokenRule().require(Token.REFERENCE).require(Token.ASSIGNMENT)
 				.require(Token.KEYWORD, "new").require(Token.INVOCATION);
 
+		objNewDeclarationRule = new TokenRule().require(Token.KEYWORD, "obj").require(Token.REFERENCE)
+				.require(Token.ASSIGNMENT).require(Token.KEYWORD, "new").require(Token.INVOCATION);
+		objFuncDeclarationRule = new TokenRule().require(Token.KEYWORD, "obj").require(Token.REFERENCE)
+				.require(Token.ASSIGNMENT).require(Token.EXPRESSION);
+		objEmptyDeclarationRule = new TokenRule().require(Token.KEYWORD, "obj").require(Token.REFERENCE)
+				.require(Token.ASSIGNMENT).require(Token.PUNCTUATION, "{").require(Token.PUNCTUATION, "}");
+		// TODO specify expressions should only be ( - ideally re-parse so it is
+		// punctuation
+		funcCreationRule = new TokenRule().require(Token.KEYWORD, "func").require(Token.REFERENCE)
+				.require(Token.ASSIGNMENT).require(Token.EXPRESSION);
+		classCreationRule = new TokenRule().require(Token.KEYWORD, "class").require(Token.REFERENCE)
+				.require(Token.ASSIGNMENT).require(Token.EXPRESSION);
+		returnRule = new TokenRule().require(Token.KEYWORD, "return").optional(Token.EXPRESSION);
+
 		whileRule = new TokenRule().require(Token.KEYWORD, "while").require(Token.EXPRESSION);
 		ifRule = new TokenRule().require(Token.KEYWORD, "if").require(Token.EXPRESSION);
-		// TODO specify expressions should only be (
+		// TODO specify expressions should only be ( - ideally re-parse so it is
+		// punctuation
 		forRule = new TokenRule().require(Token.KEYWORD, "for").require(Token.EXPRESSION).require(declarationRule)
 				.require(Token.PUNCTUATION, ";").require(Token.EXPRESSION).require(Token.PUNCTUATION, ";")
 				.require(Token.EXPRESSION).require(Token.PUNCTUATION, ")");
+
+		argumentRule = new TokenRule().either(Token.KEYWORD, "var", "bool", "str", "vec", "mat", "arr", "obj")
+				.require(Token.REFERENCE);
 	}
 
 	/**
@@ -95,14 +111,26 @@ public class Parser extends TokenStream {
 		/* Variable declaration or assignment */
 		if (declarationRule.matches(stream))
 			return declarationRule.extract((tokens) -> parseDeclaration(tokens));
-		if (objNewDeclarationRule.matches(stream))
-			return objNewDeclarationRule.extract((tokens) -> parseNewObjectDeclaration(tokens));
 		if (assignmentExpressionRule.matches(stream))
 			return assignmentExpressionRule.extract((tokens) -> parseAssignmentExpression(tokens));
 		if (variableChangeRule.matches(stream))
 			return variableChangeRule.extract((tokens) -> parseVariableChange(tokens));
 		if (assignmentInvocationRule.matches(stream))
 			return assignmentInvocationRule.extract((tokens) -> parseAssignmentInvocation(tokens));
+
+		/* Classes, functions and objects */
+		if (objNewDeclarationRule.matches(stream))
+			return objNewDeclarationRule.extract((tokens) -> parseNewObjectDeclaration(tokens));
+		if (objFuncDeclarationRule.matches(stream))
+			return objFuncDeclarationRule.extract((tokens) -> parseFuncObjectDeclaration(tokens));
+		if (objEmptyDeclarationRule.matches(stream))
+			return objEmptyDeclarationRule.extract((tokens) -> parseEmptyObjectDeclaration(tokens));
+		if (funcCreationRule.matches(stream))
+			return funcCreationRule.extract((tokens) -> parseFunctionCreation(tokens));
+		if (classCreationRule.matches(stream))
+			return classCreationRule.extract((tokens) -> parseClassCreation(tokens));
+		if (returnRule.matches(stream))
+			return returnRule.extract((tokens) -> parseReturn(tokens));
 
 		/* Logic */
 		if (whileRule.matches(stream))
@@ -121,16 +149,9 @@ public class Parser extends TokenStream {
 		if (t.type == Token.NEWLINE)
 			return nextNode();
 
+		// some simple nodes
 		if (t.type == Token.KEYWORD) {
-			if (t.value.equals("obj"))
-				return parseObjectCreation();
-			else if (t.value.equals("func"))
-				return parseFunctionCreation();
-			else if (t.value.equals("return"))
-				return parseReturn();
-			else if (t.value.equals("class"))
-				return parseClassCreation();
-			else if (t.value.equals("continue")) {
+			if (t.value.equals("continue")) {
 				stream.next();
 				return new ContinueNode();
 			} else if (t.value.equals("break")) {
@@ -159,13 +180,27 @@ public class Parser extends TokenStream {
 		return node;
 	}
 
-	// TODO write tests once parsed object creation
 	public Node parseNewObjectDeclaration(ArrayList<Token> tokens) {
 		Node node = new DeclarationNode("obj");
 		node.addChild(tokens.get(1).node);
 		Node node2 = new ObjectCreationNode();
 		node2.addChild(tokens.get(4).node);
 		node.addChild(node2);
+		return node;
+	}
+
+	public Node parseFuncObjectDeclaration(ArrayList<Token> tokens) {
+		Node node = new DeclarationNode("obj");
+		node.addChild(tokens.get(1).node);
+		Node node2 = new ObjectCreationNode();
+		node2.addChild(tokens.get(3).node.getChildren().get(0));
+		node.addChild(node2);
+		return node;
+	}
+
+	public Node parseEmptyObjectDeclaration(ArrayList<Token> tokens) {
+		Node node = new DeclarationNode("obj");
+		node.addChild(tokens.get(1).node);
 		return node;
 	}
 
@@ -242,107 +277,49 @@ public class Parser extends TokenStream {
 		return node;
 	}
 
-	/** OLD FUNCTIONS **/
-
-	public Node parseObjectCreation() {
-		Token token = stream.next();
-		if (token.type != Token.REFERENCE)
-			ErrorHandler.error("invalid variable name", token);
-		if (stream.next().type != Token.ASSIGNMENT)
-			ErrorHandler.error("missing = in variable assignment", token);
-
-		Node node = new DeclarationNode("obj");
-		node.addChild(token.node);
-
-		// empty object
-		if (stream.peek().value.equals("{")) {
-			stream.next();
-			if (!stream.next().value.equals("}"))
-				ErrorHandler.error("missing }", token);
-		} else {
-			// else a function call
-			Token token2 = stream.next();
-			if (token2.type != Token.EXPRESSION)
-				ErrorHandler.error("invalid object declaration", token);
-			node.addChild(token2.node.getChildren().get(0));
-		}
-		return node;
-	}
-
-	/**
-	 * Parse a function creation
-	 * 
-	 * @return
-	 */
-	public Node parseFunctionCreation() {
-		FunctionNode node = new FunctionNode(stream.next().value);
-		if (stream.next().type != Token.ASSIGNMENT)
-			ErrorHandler.error("missing = in function declaration", stream.peek());
-		stream.next();
-		Token t = stream.peek();
-		if (!t.value.equals("{")) {
+	public Node parseFunctionCreation(ArrayList<Token> tokens) {
+		FunctionNode node = new FunctionNode(tokens.get(1).value);
+		Token token = stream.peek();
+		if (!token.value.equals("{")) {
 			while (true) {
-				Token t1 = stream.next();
-				if (t1.type != Token.KEYWORD)
-					ErrorHandler.error("incorrect argument definition 1", t1);
-				String type = t1.value;
-				Token t2 = stream.next();
-				if (t2.type != Token.REFERENCE)
-					ErrorHandler.error("incorrect argument definition 2", t2);
-				String var = t2.value;
-				node.addChild(new FunctionArgumentNode(type, var));
+				if (argumentRule.matches(stream)) {
+					ArrayList<Token> tokens2 = argumentRule.getTokens();
+					node.addChild(new FunctionArgumentNode(tokens2.get(0).value, tokens2.get(1).value));
+				} else {
+					ErrorHandler.error("incorrect argument definition 1");
+				}
 				if (stream.next().value.equals(")"))
 					break;
 			}
 		}
-
 		node.addChild(parseBody());
 		return node;
 	}
 
-	/**
-	 * Parse a class creation
-	 * 
-	 * @return
-	 */
-	public Node parseClassCreation() {
-		ClassNode node = new ClassNode(stream.next().value);
-		if (stream.next().type != Token.ASSIGNMENT)
-			ErrorHandler.error("missing = in function declaration", stream.peek());
-		stream.next(); // TODO? workaround because the opening ( is being interpreted as an expression
-		// if (!stream.next().value.equals("("))
-		// throw new Error("misisng ( in function declaration");
-		Token t = stream.peek();
-		if (!t.value.equals("{")) {
+	public Node parseClassCreation(ArrayList<Token> tokens) {
+		ClassNode node = new ClassNode(tokens.get(1).value);
+		Token token = stream.peek();
+		if (!token.value.equals("{")) {
 			while (true) {
-				Token t1 = stream.next();
-				if (t1.type != Token.KEYWORD)
-					ErrorHandler.error("incorrect argument definition 1", t1);
-				String type = t1.value;
-				Token t2 = stream.next();
-				if (t2.type != Token.REFERENCE)
-					ErrorHandler.error("incorrect argument definition 2", t2);
-				String var = t2.value;
-				node.addChild(new FunctionArgumentNode(type, var));
+				if (argumentRule.matches(stream)) {
+					ArrayList<Token> tokens2 = argumentRule.getTokens();
+					node.addChild(new FunctionArgumentNode(tokens2.get(0).value, tokens2.get(1).value));
+				} else {
+					ErrorHandler.error("incorrect argument definition 1");
+				}
 				if (stream.next().value.equals(")"))
 					break;
 			}
 		}
-
 		node.addChild(parseBody());
 		return node;
 	}
 
-	/**
-	 * Parse a return statement
-	 * 
-	 * @return
-	 */
-	public Node parseReturn() {
-		ReturnNode n = new ReturnNode();
-		if (stream.peek().type == Token.EXPRESSION)
-			n.addChild(stream.next().node);
-		return n;
+	public Node parseReturn(ArrayList<Token> tokens) {
+		ReturnNode node = new ReturnNode();
+		if (tokens.size() > 1)
+			node.addChild(tokens.get(1).node);
+		return node;
 	}
 
 	/**
