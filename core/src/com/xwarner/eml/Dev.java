@@ -38,8 +38,7 @@ public class Dev {
 			e.printStackTrace();
 		}
 
-		TokenStream1 ts = new TokenStream1(new InputStream(src));
-		Parser parser = new Parser(new TokenStream5(new TokenStream4(new TokenStream3(new TokenStream2(ts)))));
+		Parser parser = new Parser(src);
 		Tree tree = parser.parse();
 
 		System.out.println("");

@@ -18,6 +18,7 @@ import com.xwarner.eml.nodes.objects.ObjectCreationNode;
 import com.xwarner.eml.nodes.variables.AssignmentNode;
 import com.xwarner.eml.nodes.variables.DeclarationNode;
 import com.xwarner.eml.nodes.variables.VariableChangeNode;
+import com.xwarner.eml.optimiser.TreeOptimiser;
 import com.xwarner.eml.parser.tokens.Token;
 import com.xwarner.eml.parser.tokens.TokenRule;
 import com.xwarner.eml.util.ErrorHandler;
@@ -42,6 +43,14 @@ public class Parser extends TokenStream {
 	private TokenRule argumentRule;
 
 	/**
+	 * Creates the parser with the given source
+	 */
+	public Parser(String src) {
+		this(new TokenStream5(
+				new TokenStream4(new TokenStream3(new TokenStream2(new TokenStream1(new InputStream(src)))))));
+	}
+
+	/**
 	 * Creates the parser with the given input TokenStream
 	 * 
 	 * @param stream
@@ -63,7 +72,8 @@ public class Parser extends TokenStream {
 			if (n != null)
 				tree.addChild(n);
 		}
-		return tree;
+		TreeOptimiser optimiser = new TreeOptimiser();
+		return optimiser.optimise(tree);
 	}
 
 	public void defineRules() {

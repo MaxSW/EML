@@ -9,8 +9,6 @@ import com.xwarner.eml.parser.TokenStream5;
  * Simple regex for tokens. Not to be confused with TokenMatcher, which matches
  * strings for Tokens
  * 
- * TODO implement!
- * 
  * @author Max Warner
  *
  */
@@ -79,6 +77,7 @@ public class TokenRule {
 			if (!rule.chain) {
 				Token token = stream.next();
 				tokens.add(token);
+
 				if (token == null) {
 					// TODO check if there are later token requirements
 					if (rule.mode != TokenRuleData.MODE_ANY & rule.mode != TokenRuleData.MODE_OPTIONAL) {
@@ -86,6 +85,7 @@ public class TokenRule {
 						return false;
 					}
 				}
+
 				if (rule.mode == TokenRuleData.MODE_ANY)
 					continue;
 				boolean matches = rule.matches(token);
