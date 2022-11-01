@@ -12,6 +12,8 @@ import com.xwarner.eml.interpreter.context.variables.values.Vector;
 import com.xwarner.eml.interpreter.evaluator.ExpressionEntry;
 import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 import com.xwarner.eml.interpreter.evaluator.operators.numeric.MultiplyOperator;
+import com.xwarner.eml.nodes.functions.InvocationNode;
+import com.xwarner.eml.nodes.values.NumberNode;
 
 public class ExpressionNode extends Node {
 
@@ -21,6 +23,7 @@ public class ExpressionNode extends Node {
 
 	/** Evaluate the expression **/
 	public Object invoke2(Bundle bundle) {
+		// TODO we could pre-do a lot of this
 		ArrayList<ExpressionEntry> vals = new ArrayList<ExpressionEntry>();
 
 		Object last = null;
@@ -131,7 +134,27 @@ public class ExpressionNode extends Node {
 				loopVars(vars, n, bundle);
 			}
 		}
+	}
 
+	private boolean hasDependencies(Node node) {
+		if (node instanceof ReferenceNode || node instanceof InvocationNode)
+			return true;
+		for (Node n : node.getChildren())
+			if (hasDependencies(n))
+				return true;
+		return false;
+	}
+
+	public void optimise(Bundle bundle) {
+		// simplest rule - if there are no invocations, pre-evaluate
+		if (!hasDependencies(this)) {
+			Object result = invoke2(bundle);
+			if (result instanceof Number) {
+				getChildren().clear();
+				getChildren().add(new NumberNode(((Number) result).floatValue()));
+			}
+			// TODO other types
+		}
 	}
 
 }

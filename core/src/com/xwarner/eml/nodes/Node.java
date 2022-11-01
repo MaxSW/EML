@@ -68,4 +68,8 @@ public class Node {
 		return obj;
 	}
 
+	public void optimise(Bundle bundle) {
+
+	}
+
 }

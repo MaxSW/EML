@@ -18,7 +18,6 @@ import com.xwarner.eml.nodes.objects.ObjectCreationNode;
 import com.xwarner.eml.nodes.variables.AssignmentNode;
 import com.xwarner.eml.nodes.variables.DeclarationNode;
 import com.xwarner.eml.nodes.variables.VariableChangeNode;
-import com.xwarner.eml.optimiser.TreeOptimiser;
 import com.xwarner.eml.parser.tokens.Token;
 import com.xwarner.eml.parser.tokens.TokenRule;
 import com.xwarner.eml.util.ErrorHandler;
