@@ -16,14 +16,14 @@ public class ForNode extends Node {
 		return "for";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		DeclarationNode n1 = (DeclarationNode) getChildren().get(0);
 		ExpressionNode n2 = (ExpressionNode) getChildren().get(1);
 		VariableChangeNode n3 = (VariableChangeNode) getChildren().get(2);
 		BodyNode n4 = (BodyNode) getChildren().get(3);
 
-		for (n1.invoke2(bundle); (boolean) n2.invoke2(bundle); n3.invoke2(bundle)) {
-			Object o = n4.invoke2(bundle);
+		for (n1.invoke(bundle); (boolean) n2.invoke(bundle); n3.invoke(bundle)) {
+			Object o = n4.invoke(bundle);
 			if (o instanceof ReturnFlag)
 				return o;
 			if (o instanceof BreakFlag)

@@ -3,8 +3,6 @@ package com.xwarner.eml.nodes.variables;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import org.json.JSONObject;
-
 import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.objects.BlankObject;
 import com.xwarner.eml.interpreter.context.objects.EObject;
@@ -39,7 +37,7 @@ public class DeclarationNode extends Node {
 		return "declaration - type: " + varType;
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		ArrayList<Node> children = getChildren();
 		ReferenceNode ref = (ReferenceNode) children.get(0);
 		if (ref.flag) {
@@ -62,28 +60,28 @@ public class DeclarationNode extends Node {
 				if (children.get(1) instanceof ExpressionNode) {
 					ExpressionNode exp = (ExpressionNode) children.get(1);
 					if (varType.equals("bool")) {
-						bundle.context.createVariable(ref, new BooleanVariable((boolean) exp.invoke2(bundle)), 0,
+						bundle.context.createVariable(ref, new BooleanVariable((boolean) exp.invoke(bundle)), 0,
 								bundle);
 					} else if (varType.equals("str")) {
-						bundle.context.createVariable(ref, new StringVariable((String) exp.invoke2(bundle)), 0, bundle);
+						bundle.context.createVariable(ref, new StringVariable((String) exp.invoke(bundle)), 0, bundle);
 					} else if (varType.equals("var")) {
 						NumericVariable var;
 						// if (varType.equals("def"))
-						// var = new DefVariable(exp, (BigDecimal) exp.invoke2(bundle));
+						// var = new DefVariable(exp, (BigDecimal) exp.invoke(bundle));
 						// else
-						var = new NumericVariable((BigDecimal) exp.invoke2(bundle));
+						var = new NumericVariable((BigDecimal) exp.invoke(bundle));
 						bundle.context.createVariable(ref, var, 0, bundle);
 					} else if (varType.equals("vec")) {
-						bundle.context.createVariable(ref, new VectorVariable((Vector) exp.invoke2(bundle)), 0, bundle);
+						bundle.context.createVariable(ref, new VectorVariable((Vector) exp.invoke(bundle)), 0, bundle);
 					} else if (varType.equals("mat")) {
-						bundle.context.createVariable(ref, new MatrixVariable((Matrix) exp.invoke2(bundle)), 0, bundle);
+						bundle.context.createVariable(ref, new MatrixVariable((Matrix) exp.invoke(bundle)), 0, bundle);
 					}
 				} else if (children.get(1) instanceof ObjectCreationNode) {
-					EObject obj = (EObject) children.get(1).invoke2(bundle);
+					EObject obj = (EObject) children.get(1).invoke(bundle);
 					bundle.context.createVariable(ref, obj, 0, bundle);
 
 				} else if (children.get(1) instanceof InvocationNode) {
-					EObject obj = (EObject) children.get(1).invoke2(bundle);
+					EObject obj = (EObject) children.get(1).invoke(bundle);
 					bundle.context.createVariable(ref, obj, 0, bundle);
 				} else if (varType.equals("arr")) {
 					DeclarationNode n = (DeclarationNode) children.get(1);
@@ -102,16 +100,4 @@ public class DeclarationNode extends Node {
 		}
 		return null;
 	}
-	
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("a", getClass().getSimpleName());
-		obj.put("type", varType);
-		for (Node n : getChildren()) {
-			obj.accumulate("z", n.toJSON());
-		}
-		return obj;
-	}
-
-
 }

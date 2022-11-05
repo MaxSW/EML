@@ -43,7 +43,7 @@ public class Node {
 	 * @param bundle
 	 * @return
 	 */
-	public Object invoke1(Bundle bundle) {
+	public Object pre_invoke(Bundle bundle) {
 		return null;
 	}
 
@@ -55,17 +55,8 @@ public class Node {
 	 * @param bundle
 	 * @return
 	 */
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		return null;
-	}
-
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("a", getClass().getSimpleName());
-		for (Node n : children) {
-			obj.accumulate("z", n.toJSON());
-		}
-		return obj;
 	}
 
 	public void optimise(Bundle bundle) {

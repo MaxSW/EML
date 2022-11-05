@@ -4,13 +4,7 @@ import java.io.IOException;
 
 import com.xwarner.eml.interpreter.Interpreter;
 import com.xwarner.eml.nodes.Node;
-import com.xwarner.eml.parser.InputStream;
 import com.xwarner.eml.parser.Parser;
-import com.xwarner.eml.parser.TokenStream1;
-import com.xwarner.eml.parser.TokenStream2;
-import com.xwarner.eml.parser.TokenStream3;
-import com.xwarner.eml.parser.TokenStream4;
-import com.xwarner.eml.parser.TokenStream5;
 import com.xwarner.eml.parser.Tree;
 import com.xwarner.eml.util.IOManager;
 

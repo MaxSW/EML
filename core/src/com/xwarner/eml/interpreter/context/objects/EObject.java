@@ -14,8 +14,8 @@ public class EObject extends Variable {
 	public void instantiate(Bundle bundle) {
 		bundle.context.enter(this);
 		if (cls != null) {
-			cls.getBody().invoke1(bundle);
-			cls.getBody().invoke2(bundle);
+			cls.getBody().pre_invoke(bundle);
+			cls.getBody().invoke(bundle);
 		}
 		bundle.context.exit();
 	}

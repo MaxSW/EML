@@ -2,8 +2,6 @@ package com.xwarner.eml.nodes.objects;
 
 import java.util.ArrayList;
 
-import org.json.JSONObject;
-
 import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.objects.EClass;
 import com.xwarner.eml.nodes.Node;
@@ -27,7 +25,7 @@ public class ClassNode extends Node {
 		return "class - name: " + name;
 	}
 
-	public Object invoke1(Bundle bundle) {
+	public Object pre_invoke(Bundle bundle) {
 		EClass cls = new EClass();
 
 		ArrayList<Node> children = getChildren();
@@ -41,16 +39,5 @@ public class ClassNode extends Node {
 		bundle.context.setClass(name, cls);
 		return null;
 	}
-	
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("a", getClass().getSimpleName());
-		obj.put("name", name);
-		for (Node n : getChildren()) {
-			obj.accumulate("z", n.toJSON());
-		}
-		return obj;
-	}
-
 
 }

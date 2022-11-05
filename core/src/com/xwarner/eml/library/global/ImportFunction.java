@@ -52,9 +52,9 @@ public class ImportFunction extends Function {
 
 		bundle.context.enter(obj);
 		for (Node node : tree.getChildren())
-			node.invoke1(bundle);
+			node.pre_invoke(bundle);
 		for (Node node : tree.getChildren())
-			node.invoke2(bundle);
+			node.invoke(bundle);
 		bundle.context.exit();
 
 		return obj;

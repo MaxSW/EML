@@ -10,15 +10,15 @@ public class BodyNode extends Node {
 		return "body";
 	}
 
-	public Object invoke1(Bundle bundle) {
+	public Object pre_invoke(Bundle bundle) {
 		for (Node node : getChildren())
-			node.invoke1(bundle);
+			node.pre_invoke(bundle);
 		return null;
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		for (Node node : getChildren()) {
-			Object o = node.invoke2(bundle);
+			Object o = node.invoke(bundle);
 			if (o instanceof Flag)
 				return o;
 		}

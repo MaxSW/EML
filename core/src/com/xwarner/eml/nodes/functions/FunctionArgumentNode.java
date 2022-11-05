@@ -23,20 +23,4 @@ public class FunctionArgumentNode extends Node {
 		return "argument - type: " + type + "; name: " + name;
 	}
 
-	public void fromSaveString(String[] split, String str) {
-		type = split[2];
-		name = split[3];
-	}
-
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("a", getClass().getSimpleName());
-		obj.put("type", type);
-		obj.put("name", name);
-		for (Node n : getChildren()) {
-			obj.accumulate("z", n.toJSON());
-		}
-		return obj;
-	}
-
 }

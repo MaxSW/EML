@@ -39,7 +39,7 @@ public class ArrayVariable extends Variable {
 	public Variable getVariable(ReferenceNode ref, int level, Bundle bundle) {
 		if (ref.getChildren().get(level) instanceof ArrayMemberNode) {
 			ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level);
-			int i = ((BigDecimal) node.invoke2(bundle)).intValue();
+			int i = ((BigDecimal) node.invoke(bundle)).intValue();
 			if (i + 1 > length)
 				length = i + 1;
 			if (!values.containsKey(i)) {
@@ -57,7 +57,7 @@ public class ArrayVariable extends Variable {
 
 	public void setVariable(ReferenceNode ref, int level, Bundle bundle, Object object) {
 		ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level);
-		int i = ((BigDecimal) node.invoke2(bundle)).intValue();
+		int i = ((BigDecimal) node.invoke(bundle)).intValue();
 		values.put(i, (Variable) object);
 	}
 

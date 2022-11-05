@@ -2,8 +2,6 @@ package com.xwarner.eml.nodes.values;
 
 import java.math.BigDecimal;
 
-import org.json.JSONObject;
-
 import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.nodes.Node;
 
@@ -30,21 +28,10 @@ public class NumberNode extends Node {
 		return "number - value: " + value;
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		if (cache == null)
 			cache = BigDecimal.valueOf(value);
 		return cache;
 	}
-	
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("a", getClass().getSimpleName());
-		obj.put("value", value);
-		for (Node n : getChildren()) {
-			obj.accumulate("z", n.toJSON());
-		}
-		return obj;
-	}
-
 
 }

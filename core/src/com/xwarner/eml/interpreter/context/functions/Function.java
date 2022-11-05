@@ -58,7 +58,7 @@ public class Function extends Variable {
 		ArrayList<Node> children = body.getChildren();
 		for (int i = 0; i < children.size(); i++) {
 			Node node = children.get(i);
-			Object o = node.invoke2(bundle);
+			Object o = node.invoke(bundle);
 			if (o instanceof ReturnFlag) {
 				bundle.context.exit();
 				return ((ReturnFlag) o).obj;

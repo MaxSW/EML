@@ -103,16 +103,16 @@ public class SubContext {
 				} else if (var2 instanceof VectorVariable) {
 					VectorVariable vec = (VectorVariable) var2;
 					ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level + 1);
-					int i = ((BigDecimal) node.invoke2(bundle)).intValue();
+					int i = ((BigDecimal) node.invoke(bundle)).intValue();
 					Vector vector = (Vector) vec.getValue(bundle);
 					var = new NumericVariable(vector.vals[i]);
 					var.setReference(ref);
 				} else if (var2 instanceof MatrixVariable) {
 					MatrixVariable mat = (MatrixVariable) var2;
 					ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level + 1);
-					int i = ((BigDecimal) node.invoke2(bundle)).intValue();
+					int i = ((BigDecimal) node.invoke(bundle)).intValue();
 					node = (ArrayMemberNode) ref.getChildren().get(level + 2);
-					int j = ((BigDecimal) node.invoke2(bundle)).intValue();
+					int j = ((BigDecimal) node.invoke(bundle)).intValue();
 					Matrix matrix = (Matrix) mat.getValue(bundle);
 					var = new NumericVariable(matrix.vals[i][j]);
 					var.setReference(ref);

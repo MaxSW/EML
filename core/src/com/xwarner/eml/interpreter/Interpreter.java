@@ -17,9 +17,9 @@ public class Interpreter {
 	public void run() {
 		bundle.init();
 		for (Node node : tree.getChildren())
-			node.invoke1(bundle);
+			node.pre_invoke(bundle);
 		for (Node node : tree.getChildren())
-			node.invoke2(bundle);
+			node.invoke(bundle);
 	}
 
 }

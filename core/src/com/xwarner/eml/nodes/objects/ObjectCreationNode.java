@@ -13,7 +13,7 @@ public class ObjectCreationNode extends Node {
 		return "object creation";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		InvocationNode node = (InvocationNode) getChildren().get(0);
 		EClass cls = bundle.context.getClass((ReferenceNode) node.getChildren().get(0), 0);
 		EObject obj = new EObject(cls);

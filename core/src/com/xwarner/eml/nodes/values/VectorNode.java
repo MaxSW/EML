@@ -13,11 +13,11 @@ public class VectorNode extends Node {
 		return "vector";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		VectorVariable var = new VectorVariable(getChildren().size());
 		Vector v = new Vector(getChildren().size());
 		for (int i = 0; i < getChildren().size(); i++) {
-			v.vals[i] = (BigDecimal) getChildren().get(i).invoke2(bundle);
+			v.vals[i] = (BigDecimal) getChildren().get(i).invoke(bundle);
 		}
 		var.setValue(v);
 		return var;

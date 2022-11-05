@@ -10,10 +10,10 @@ public class ReturnNode extends Node {
 		return "return";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		Object o = null;
 		if (getChildren().size() > 0)
-			o = getChildren().get(0).invoke2(bundle);
+			o = getChildren().get(0).invoke(bundle);
 		return new ReturnFlag(o);
 	}
 

@@ -10,7 +10,7 @@ public class ContinueNode extends Node {
 		return "continue";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		return new ContinueFlag();
 	}
 }

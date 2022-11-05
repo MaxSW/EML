@@ -22,13 +22,13 @@ public class ExpressionNode extends Node {
 	}
 
 	/** Evaluate the expression **/
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		// TODO we could pre-do a lot of this
 		ArrayList<ExpressionEntry> vals = new ArrayList<ExpressionEntry>();
 
 		Object last = null;
 		for (Node n : getChildren()) {
-			Object o = n.invoke2(bundle);
+			Object o = n.invoke(bundle);
 			if (o == null)
 				continue;
 			if (o instanceof BigDecimal) {
@@ -148,7 +148,7 @@ public class ExpressionNode extends Node {
 	public void optimise(Bundle bundle) {
 		// simplest rule - if there are no invocations, pre-evaluate
 		if (!hasDependencies(this)) {
-			Object result = invoke2(bundle);
+			Object result = invoke(bundle);
 			if (result instanceof Number) {
 				getChildren().clear();
 				getChildren().add(new NumberNode(((Number) result).floatValue()));

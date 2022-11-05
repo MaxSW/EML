@@ -14,10 +14,10 @@ public class WhileNode extends Node {
 		return "while";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		ArrayList<Node> children = getChildren();
-		while ((boolean) children.get(0).invoke2(bundle)) {
-			Object o = children.get(1).invoke2(bundle);
+		while ((boolean) children.get(0).invoke(bundle)) {
+			Object o = children.get(1).invoke(bundle);
 			if (o instanceof ReturnFlag)
 				return o;
 			if (o instanceof BreakFlag)

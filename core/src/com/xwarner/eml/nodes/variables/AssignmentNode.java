@@ -14,7 +14,7 @@ public class AssignmentNode extends Node {
 		return "assignment";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		ReferenceNode ref = (ReferenceNode) this.getChildren().get(0);
 		Node n = this.getChildren().get(1);
 
@@ -26,10 +26,10 @@ public class AssignmentNode extends Node {
 				var.setEquation(true);
 				var.setDefinition(new Definition(exp, bundle));
 			} else {
-				var.setValue(exp.invoke2(bundle));
+				var.setValue(exp.invoke(bundle));
 			}
 		} else if (n instanceof ObjectCreationNode) {
-			bundle.context.createVariable(ref, ((ObjectCreationNode) n).invoke2(bundle), 0, bundle);
+			bundle.context.createVariable(ref, ((ObjectCreationNode) n).invoke(bundle), 0, bundle);
 		}
 		return null;
 	}

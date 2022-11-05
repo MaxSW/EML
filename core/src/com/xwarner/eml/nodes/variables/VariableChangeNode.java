@@ -16,7 +16,7 @@ public class VariableChangeNode extends Node {
 		return "variable change";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		ReferenceNode ref = (ReferenceNode) getChildren().get(0);
 		ExpressionNode exp = (ExpressionNode) getChildren().get(1);
 
@@ -33,7 +33,7 @@ public class VariableChangeNode extends Node {
 			for (int i = 1; i < exp.getChildren().size(); i++)
 				n.addChild(exp.getChildren().get(i));
 
-			BigDecimal val = (BigDecimal) n.invoke2(bundle);
+			BigDecimal val = (BigDecimal) n.invoke(bundle);
 			OperatorNode o = (OperatorNode) exp.getChildren().get(0);
 			Operator op = OperatorNode.get(o.operator.substring(0, 1));
 			var.setValue(op.evaluateNumeric((BigDecimal) var.getValue(bundle), val));

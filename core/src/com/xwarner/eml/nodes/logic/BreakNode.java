@@ -10,7 +10,7 @@ public class BreakNode extends Node {
 		return "break";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		return new BreakFlag();
 	}
 }

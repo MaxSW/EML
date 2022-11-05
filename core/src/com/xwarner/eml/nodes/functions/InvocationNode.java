@@ -13,7 +13,7 @@ public class InvocationNode extends Node {
 		return "invocation";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		ReferenceNode ref = (ReferenceNode) getChildren().get(0);
 		if (getChildren().size() == 1) {
 			return bundle.context.runFunction(ref, null, bundle, 0);
@@ -22,7 +22,7 @@ public class InvocationNode extends Node {
 			for (Node n : getChildren()) {
 				if (n instanceof ExpressionNode) {
 					ExpressionNode arg = (ExpressionNode) n;
-					objects.add(arg.invoke2(bundle));
+					objects.add(arg.invoke(bundle));
 				}
 			}
 			return bundle.context.runFunction(ref, objects, bundle, 0);

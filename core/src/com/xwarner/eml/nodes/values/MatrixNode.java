@@ -14,14 +14,14 @@ public class MatrixNode extends Node {
 		return "matrix";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		ArrayList<Node> rows = getChildren();
 
 		Matrix m = new Matrix(rows.size(), rows.get(0).getChildren().size());
 
 		for (int i = 0; i < m.h; i++) {
 			for (int j = 0; j < m.w; j++) {
-				m.vals[i][j] = (BigDecimal) rows.get(i).getChildren().get(j).invoke2(bundle);
+				m.vals[i][j] = (BigDecimal) rows.get(i).getChildren().get(j).invoke(bundle);
 			}
 		}
 		MatrixVariable var = new MatrixVariable(m);

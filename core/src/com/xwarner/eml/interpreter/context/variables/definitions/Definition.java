@@ -20,7 +20,7 @@ public class Definition implements VariableListener {
 
 	public Object evaluate(Bundle bundle) {
 		if (change || cache == null) {
-			cache = expression.invoke2(bundle);
+			cache = expression.invoke(bundle);
 			change = false;
 		}
 		return cache;

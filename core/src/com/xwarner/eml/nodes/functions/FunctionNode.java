@@ -24,7 +24,7 @@ public class FunctionNode extends Node {
 		return "function - name: " + name;
 	}
 
-	public Object invoke1(Bundle bundle) {
+	public Object pre_invoke(Bundle bundle) {
 		Function func = new Function();
 
 		ArrayList<Node> children = getChildren();
@@ -40,19 +40,4 @@ public class FunctionNode extends Node {
 		return null;
 	}
 
-	public void fromSaveString(String[] split, String str) {
-		name = split[2];
-	}
-
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("a", getClass().getSimpleName());
-		obj.put("name", name);
-		for (Node n : getChildren()) {
-			obj.accumulate("z", n.toJSON());
-		}
-		return obj;
-	}
-
-	
 }

@@ -13,7 +13,7 @@ public class IfNode extends Node {
 		return "if";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		ArrayList<Node> children = getChildren();
 
 		int i = 0;
@@ -24,8 +24,8 @@ public class IfNode extends Node {
 		while (i < size) {
 			Node node = children.get(i);
 			if (node instanceof ExpressionNode) {
-				if ((boolean) node.invoke2(bundle)) {
-					Object o = children.get(i + 1).invoke2(bundle);
+				if ((boolean) node.invoke(bundle)) {
+					Object o = children.get(i + 1).invoke(bundle);
 					if (o instanceof Flag)
 						return o;
 					return null;
@@ -38,7 +38,7 @@ public class IfNode extends Node {
 
 		// run the else
 		if (children.size() % 2 == 1) {
-			Object o = children.get(children.size() - 1).invoke2(bundle);
+			Object o = children.get(children.size() - 1).invoke(bundle);
 			if (o instanceof Flag)
 				return o;
 

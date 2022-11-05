@@ -1,7 +1,5 @@
 package com.xwarner.eml.nodes;
 
-import org.json.JSONObject;
-
 import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.BooleanVariable;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
@@ -21,7 +19,7 @@ public class ReferenceNode extends Node {
 			return "reference";
 	}
 
-	public Object invoke2(Bundle bundle) {
+	public Object invoke(Bundle bundle) {
 		Variable var = bundle.context.getVariable(this, 0, bundle);
 
 		if (flag)
@@ -44,18 +42,8 @@ public class ReferenceNode extends Node {
 		if (node instanceof VariableReferenceNode)
 			return ((VariableReferenceNode) node).name;
 		else if (node instanceof ArrayMemberNode)
-			return ((ArrayMemberNode) node).invoke2(bundle).toString();
+			return ((ArrayMemberNode) node).invoke(bundle).toString();
 		return "unknown";
-	}
-
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("a", getClass().getSimpleName());
-		obj.put("flag", flag);
-		for (Node n : getChildren()) {
-			obj.accumulate("z", n.toJSON());
-		}
-		return obj;
 	}
 
 }
