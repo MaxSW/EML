@@ -21,18 +21,22 @@ import com.xwarner.eml.nodes.variables.VariableReferenceNode;
 import com.xwarner.eml.util.ErrorHandler;
 
 public class SubContext {
-	private HashMap<String, Variable> vars;
 	private HashMap<String, Function> funcs;
 	private HashMap<String, EClass> classes;
+
+	private HashMap<String, Integer> map;
 
 	public SubContext parent;
 	public HashMap<Variable, SubContext> children;
 
-	public SubContext(SubContext parent) {
+	public DataStore store;
+
+	public SubContext(SubContext parent, DataStore store) {
 		this.parent = parent;
-		vars = new HashMap<String, Variable>();
+		this.store = store;
 		funcs = new HashMap<String, Function>();
 		classes = new HashMap<String, EClass>();
+		map = new HashMap<String, Integer>();
 		children = new HashMap<Variable, SubContext>();
 	}
 
@@ -45,9 +49,14 @@ public class SubContext {
 	 */
 	public void createVariable(String name, Object object, Bundle bundle) {
 		if (object instanceof Variable)
-			vars.put(name, (Variable) object);
+			map.put(name, store.put((Variable) object));
 		else
-			vars.put(name, bundle.vars.generateVariable(object));
+			map.put(name, store.put(bundle.vars.generateVariable(object)));
+
+		/*
+		 * if (object instanceof Variable) vars.put(name, (Variable) object); else
+		 * vars.put(name, bundle.vars.generateVariable(object));
+		 */
 	}
 
 	public void createVariable(ReferenceNode ref, Object object, int level, Bundle bundle) {
@@ -55,8 +64,8 @@ public class SubContext {
 		if (ref.getChildren().size() == level + 1) {
 			createVariable(vrn.name, object, bundle);
 		} else {
-			if (vars.containsKey(vrn.name)) {
-				Variable var2 = vars.get(vrn.name);
+			if (map.containsKey(vrn.name)) {
+				Variable var2 = store.get(map.get(vrn.name));
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
 					children.get(obj).createVariable(ref, object, level + 1, bundle);
@@ -72,8 +81,8 @@ public class SubContext {
 	}
 
 	public Variable getVariable(String name, ReferenceNode ref) {
-		if (vars.containsKey(name)) {
-			Variable var = vars.get(name);
+		if (map.containsKey(name)) {
+			Variable var = store.get(map.get(name));
 			var.setReference(ref);
 			return var;
 		} else if (parent != null)
@@ -89,8 +98,8 @@ public class SubContext {
 		if (ref.getChildren().size() == level + 1) {
 			return getVariable(vrn.name, ref);
 		} else {
-			if (vars.containsKey(vrn.name)) {
-				Variable var2 = vars.get(vrn.name);
+			if (map.containsKey(vrn.name)) {
+				Variable var2 = store.get(map.get(vrn.name));
 				Variable var = null;
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
@@ -149,8 +158,8 @@ public class SubContext {
 		if (ref.getChildren().size() == level + 1) {
 			return runFunction(vrn.name, args, bundle);
 		} else {
-			if (vars.containsKey(vrn.name)) {
-				Variable var2 = vars.get(vrn.name);
+			if (map.containsKey(vrn.name)) {
+				Variable var2 = store.get(map.get(vrn.name));
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
 					return children.get(obj).runFunction(ref, args, bundle, level + 1);
@@ -180,8 +189,8 @@ public class SubContext {
 		if (ref.getChildren().size() == level + 1) {
 			return getClass(vrn.name);
 		} else {
-			if (vars.containsKey(vrn.name)) {
-				Variable var2 = vars.get(vrn.name);
+			if (map.containsKey(vrn.name)) {
+				Variable var2 = store.get(map.get(vrn.name));
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
 					return children.get(obj).getClass(ref, level + 1);

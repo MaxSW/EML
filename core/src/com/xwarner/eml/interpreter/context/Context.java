@@ -11,14 +11,16 @@ import com.xwarner.eml.nodes.ReferenceNode;
 public class Context {
 
 	private SubContext current;
+	private DataStore store;
 
 	public Context() {
-		current = new SubContext(null);
+		store = new DataStore();
+		current = new SubContext(null, store);
 	}
 
 	public void enter(Variable var) {
 		if (!current.children.containsKey(var))
-			current.children.put(var, new SubContext(current));
+			current.children.put(var, new SubContext(current, store));
 		current = current.children.get(var);
 	}
 
