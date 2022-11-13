@@ -1,3 +1,0 @@
-func graph = (var :x, var :y, var from, var to){
-	___invoke("gui.graph", :x, :y, from, to)
-}

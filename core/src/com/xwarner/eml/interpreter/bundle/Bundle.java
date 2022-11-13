@@ -8,7 +8,6 @@ import com.xwarner.eml.interpreter.context.variables.NumericVariable;
 import com.xwarner.eml.interpreter.evaluator.Evaluator;
 import com.xwarner.eml.library.global.ExpFunction;
 import com.xwarner.eml.library.global.ImportFunction;
-import com.xwarner.eml.library.global.InvokeFunction;
 import com.xwarner.eml.library.global.LnFunction;
 import com.xwarner.eml.library.global.PrintFunction;
 
@@ -18,6 +17,7 @@ public class Bundle {
 	public Evaluator evaluator;
 	public PrintStream output;
 	public VariableTools vars;
+	// TODO should have an error handler here too
 
 	public Bundle() {
 		this.context = new Context();
@@ -27,8 +27,7 @@ public class Bundle {
 	}
 
 	public void init() {
-		// initialise global functions
-		context.setFunction("___invoke", new InvokeFunction());
+			// initialise global functions
 		context.setFunction("print", new PrintFunction());
 		context.setFunction("import", new ImportFunction());
 		context.setFunction("exp", new ExpFunction());
