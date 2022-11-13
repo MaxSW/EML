@@ -201,9 +201,7 @@ public class Parser extends TokenStream {
 	public Node parseFuncObjectDeclaration(ArrayList<Token> tokens) {
 		Node node = new DeclarationNode("obj");
 		node.addChild(tokens.get(1).node);
-		Node node2 = new ObjectCreationNode();
-		node2.addChild(tokens.get(3).node.getChildren().get(0));
-		node.addChild(node2);
+		node.addChild(tokens.get(3).node.getChildren().get(0));
 		return node;
 	}
 
