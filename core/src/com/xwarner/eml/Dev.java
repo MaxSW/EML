@@ -15,6 +15,8 @@ public class Dev {
 			return;
 		}
 		String path = args[0];
+		if (args.length == 2)
+			IOManager.libRoot = args[1];
 
 		// TODO better way of doing this
 		String[] split = path.split("/");

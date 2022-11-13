@@ -16,6 +16,8 @@ public class Bootstrap {
 			return;
 		}
 		String path = args[0];
+		if (args.length == 2)
+			IOManager.libRoot = args[1];
 
 		String[] split = path.split(File.separator);
 

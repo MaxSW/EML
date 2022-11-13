@@ -8,8 +8,7 @@ import java.nio.file.Paths;
 
 public class IOManager {
 
-	// TODO make this a program parameter
-	public static String root = "", libRoot = "D:\\Dropbox\\Personal Workspace\\Projects\\eml\\core\\lib\\";
+	public static String root = "", libRoot = "";
 
 	public static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(root + path));
@@ -17,6 +16,10 @@ public class IOManager {
 	}
 
 	public static String readLibrary(String path) throws IOException {
+		if (libRoot.equals("")) {
+			// TODO better error handling here
+			System.err.println("Need to specify library path");
+		}
 		byte[] encoded = Files.readAllBytes(Paths.get(libRoot + path));
 		return new String(encoded, Charset.defaultCharset());
 	}

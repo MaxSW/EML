@@ -7,13 +7,7 @@ import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.interpreter.context.objects.EObject;
 import com.xwarner.eml.nodes.Node;
-import com.xwarner.eml.parser.InputStream;
 import com.xwarner.eml.parser.Parser;
-import com.xwarner.eml.parser.TokenStream1;
-import com.xwarner.eml.parser.TokenStream2;
-import com.xwarner.eml.parser.TokenStream3;
-import com.xwarner.eml.parser.TokenStream4;
-import com.xwarner.eml.parser.TokenStream5;
 import com.xwarner.eml.parser.Tree;
 import com.xwarner.eml.util.IOManager;
 
@@ -47,8 +41,7 @@ public class ImportFunction extends Function {
 		}
 
 		EObject obj = new EObject(null);
-		Tree tree = new Parser(new TokenStream5(
-				new TokenStream4(new TokenStream3(new TokenStream2(new TokenStream1(new InputStream(src))))))).parse();
+		Tree tree = new Parser(src).parse();
 
 		bundle.context.enter(obj);
 		for (Node node : tree.getChildren())
