@@ -24,7 +24,7 @@ public class Function extends Variable {
 	}
 
 	public Object run(ArrayList<Object> args2, Bundle bundle) {
-		bundle.context.enter(this);
+		bundle.context.enterFunction();
 
 		if (args2 == null && args.size() != 0) {
 			for (int i = 0; i < args.size(); i++) {
@@ -60,12 +60,12 @@ public class Function extends Variable {
 			Node node = children.get(i);
 			Object o = node.invoke(bundle);
 			if (o instanceof ReturnFlag) {
-				bundle.context.exit();
+				bundle.context.exitFunction();
 				return ((ReturnFlag) o).obj;
 			}
 		}
 
-		bundle.context.exit();
+		bundle.context.exitFunction();
 		return null;
 	}
 

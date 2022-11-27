@@ -1,7 +1,5 @@
 package com.xwarner.eml.nodes.functions;
 
-import org.json.JSONObject;
-
 import com.xwarner.eml.nodes.Node;
 
 public class FunctionArgumentNode extends Node {

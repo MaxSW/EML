@@ -21,6 +21,9 @@ public class TokenStream5 {
 
 	public TokenStream5(TokenStream4 stream) {
 		tokens = new ArrayList<Token>();
+		if (stream.done())
+			System.out.println("Warning: empty stream 4");
+
 		while (!stream.done()) {
 			tokens.add(stream.next());
 		}
@@ -55,7 +58,7 @@ public class TokenStream5 {
 	 * @return has the stream finished
 	 */
 	public boolean done() {
-		return pos >= length - 1;
+		return pos >= length;
 	}
 
 	public int getPos() {

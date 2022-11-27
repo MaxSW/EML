@@ -66,6 +66,8 @@ public class Parser extends TokenStream {
 	public Tree parse() {
 		defineRules();
 		Tree tree = new Tree();
+		if (stream.done())
+			System.out.println("Warning: empty stream 5");
 		while (!stream.done()) {
 			Node n = nextNode();
 			if (n != null)

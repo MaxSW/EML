@@ -27,7 +27,7 @@ public class SubContext {
 	private HashMap<String, Integer> map;
 
 	public SubContext parent;
-	public HashMap<Variable, SubContext> children;
+//	public HashMap<Variable, SubContext> children;
 
 	public DataStore store;
 
@@ -37,7 +37,7 @@ public class SubContext {
 		funcs = new HashMap<String, Function>();
 		classes = new HashMap<String, EClass>();
 		map = new HashMap<String, Integer>();
-		children = new HashMap<Variable, SubContext>();
+//		children = new HashMap<Variable, SubContext>();
 	}
 
 	/**
@@ -52,11 +52,6 @@ public class SubContext {
 			map.put(name, store.put((Variable) object));
 		else
 			map.put(name, store.put(bundle.vars.generateVariable(object)));
-
-		/*
-		 * if (object instanceof Variable) vars.put(name, (Variable) object); else
-		 * vars.put(name, bundle.vars.generateVariable(object));
-		 */
 	}
 
 	public void createVariable(ReferenceNode ref, Object object, int level, Bundle bundle) {
@@ -68,7 +63,7 @@ public class SubContext {
 				Variable var2 = store.get(map.get(vrn.name));
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
-					children.get(obj).createVariable(ref, object, level + 1, bundle);
+					obj.context.createVariable(ref, object, level + 1, bundle);
 					return;
 				} else if (var2 instanceof ArrayVariable) {
 					ArrayVariable var3 = (ArrayVariable) var2;
@@ -103,7 +98,7 @@ public class SubContext {
 				Variable var = null;
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
-					var = children.get(obj).getVariable(ref, level + 1, bundle);
+					var = obj.context.getVariable(ref, level + 1, bundle);
 					var.setReference(ref);
 				} else if (var2 instanceof ArrayVariable) {
 					ArrayVariable var3 = (ArrayVariable) var2;
@@ -162,11 +157,11 @@ public class SubContext {
 				Variable var2 = store.get(map.get(vrn.name));
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
-					return children.get(obj).runFunction(ref, args, bundle, level + 1);
+					return obj.context.runFunction(ref, args, bundle, level + 1);
 				} else if (var2 instanceof ArrayVariable) {
 					ArrayVariable var3 = (ArrayVariable) var2;
-					Variable var = var3.getVariable(ref, level + 1, bundle);
-					return children.get(var).runFunction(ref, args, bundle, level + 2);
+					EObject obj = (EObject) var3.getVariable(ref, level + 1, bundle);
+					return obj.context.runFunction(ref, args, bundle, level + 2);
 				} else if (var2 instanceof Variable) {
 					return ((Variable) var2).runFunction(ref, args, bundle, level + 1);
 				}
@@ -193,12 +188,11 @@ public class SubContext {
 				Variable var2 = store.get(map.get(vrn.name));
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
-					return children.get(obj).getClass(ref, level + 1);
+					return obj.context.getClass(ref, level + 1);
 				}
 			}
 			ErrorHandler.error("unknown variable reference");
 			return null;
 		}
 	}
-
 }

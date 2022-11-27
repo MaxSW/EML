@@ -215,7 +215,8 @@ public class TokenStream {
 					src += ")";
 					return new TokenDataSet(n, src);
 				}
-
+				// TODO what causes this to be called? seems to happen when loading libraries
+				// for example
 				System.out.println("stuck");
 			}
 		}

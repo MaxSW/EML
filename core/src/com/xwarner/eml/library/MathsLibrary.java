@@ -1,5 +1,5 @@
 package com.xwarner.eml.library;
 
-public class Maths {
-
+public class MathsLibrary {
+	
 }

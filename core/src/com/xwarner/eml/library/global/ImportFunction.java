@@ -1,13 +1,16 @@
 package com.xwarner.eml.library.global;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.functions.Function;
+import com.xwarner.eml.interpreter.context.functions.NativeFunction;
 import com.xwarner.eml.interpreter.context.objects.EObject;
-import com.xwarner.eml.library.Maths;
+import com.xwarner.eml.library.MathsLibrary;
+import com.xwarner.eml.library.TestLibrary;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.parser.Parser;
 import com.xwarner.eml.parser.Tree;
@@ -19,7 +22,8 @@ public class ImportFunction extends Function {
 
 	public ImportFunction() {
 		nativeLibraries = new HashMap<String, Class>();
-		nativeLibraries.put("maths", Maths.class);
+		nativeLibraries.put("maths", MathsLibrary.class);
+		nativeLibraries.put("test", TestLibrary.class);
 	}
 
 	public Object run(ArrayList<Object> args, Bundle bundle) {
@@ -35,6 +39,19 @@ public class ImportFunction extends Function {
 		if (nativeLibraries.keySet().contains(str)) {
 			// Load a native library
 			EObject obj = new EObject(null);
+			// this sets up the context in a consistent way
+			bundle.context.enterObject(obj);
+			bundle.context.exitObject();
+
+			Class nativeClass = nativeLibraries.get(str);
+			Method[] methods = nativeClass.getDeclaredMethods();
+
+			for (int i = 0; i < methods.length; i++) {
+				Method method = methods[i];
+				// could exclude methods here if needed
+				NativeFunction function = new NativeFunction(method);
+				obj.context.setFunction(method.getName(), function);
+			}
 
 			// TODO instead of using invoke function so much, map libraries
 			// directly using class.getDeclaredMethods() then invoke method with null and
@@ -64,12 +81,12 @@ public class ImportFunction extends Function {
 			EObject obj = new EObject(null);
 			Tree tree = new Parser(src).parse();
 
-			bundle.context.enter(obj);
+			bundle.context.enterObject(obj);
 			for (Node node : tree.getChildren())
 				node.pre_invoke(bundle);
 			for (Node node : tree.getChildren())
 				node.invoke(bundle);
-			bundle.context.exit();
+			bundle.context.exitObject();
 
 			return obj;
 		}

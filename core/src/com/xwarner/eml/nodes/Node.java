@@ -2,8 +2,6 @@ package com.xwarner.eml.nodes;
 
 import java.util.ArrayList;
 
-import org.json.JSONObject;
-
 import com.xwarner.eml.interpreter.bundle.Bundle;
 
 public class Node {
