@@ -37,4 +37,6 @@ public class VariableTools {
 		return new Variable();
 	}
 
+	// TODO some functions for converting between Java vars and EML var
+
 }

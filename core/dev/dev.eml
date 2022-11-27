@@ -1,5 +1,3 @@
-obj lib = import("./test_lib.eml")
-lib.test()
-
-obj lib2 = import("test")
-lib2.test()
+obj maths = import("maths")
+print(maths.round(5.34))
+print(maths.round(5.34, 1))

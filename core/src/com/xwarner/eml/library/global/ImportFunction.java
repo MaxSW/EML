@@ -10,7 +10,6 @@ import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.interpreter.context.functions.NativeFunction;
 import com.xwarner.eml.interpreter.context.objects.EObject;
 import com.xwarner.eml.library.MathsLibrary;
-import com.xwarner.eml.library.TestLibrary;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.parser.Parser;
 import com.xwarner.eml.parser.Tree;
@@ -18,12 +17,13 @@ import com.xwarner.eml.util.IOManager;
 
 public class ImportFunction extends Function {
 
+	@SuppressWarnings("rawtypes")
 	public HashMap<String, Class> nativeLibraries;
 
+	@SuppressWarnings("rawtypes")
 	public ImportFunction() {
 		nativeLibraries = new HashMap<String, Class>();
 		nativeLibraries.put("maths", MathsLibrary.class);
-		nativeLibraries.put("test", TestLibrary.class);
 	}
 
 	public Object run(ArrayList<Object> args, Bundle bundle) {
@@ -43,6 +43,7 @@ public class ImportFunction extends Function {
 			bundle.context.enterObject(obj);
 			bundle.context.exitObject();
 
+			@SuppressWarnings("rawtypes")
 			Class nativeClass = nativeLibraries.get(str);
 			Method[] methods = nativeClass.getDeclaredMethods();
 
@@ -52,10 +53,6 @@ public class ImportFunction extends Function {
 				NativeFunction function = new NativeFunction(method);
 				obj.context.setFunction(method.getName(), function);
 			}
-
-			// TODO instead of using invoke function so much, map libraries
-			// directly using class.getDeclaredMethods() then invoke method with null and
-			// the given arguments
 
 			return obj;
 		} else {
