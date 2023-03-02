@@ -80,7 +80,6 @@ public class TokenStream2 extends TokenStream {
 					t.value += token.value;
 				} else if (token.value.equals("[") && !nextChild) {
 					stream.next();
-					ArrayMemberNode amn = new ArrayMemberNode();
 					ExpressionNode exp = new ExpressionNode();
 					while (true) {
 						Token tt = stream.next();
@@ -91,13 +90,15 @@ public class TokenStream2 extends TokenStream {
 							exp.addChild(new NumberNode(Float.parseFloat(tt.value)));
 						else if (tt.type == Token.NAME)
 							exp.addChild(parseReference(tt).node);
-						else if (tt.type == Token.OPERATOR || tt.value.equals("(") || tt.value.equals(")")) {
+						else if (tt.type == Token.OPERATOR || tt.value.equals("(") || tt.value.equals(")"))
 							exp.addChild(new OperatorNode(tt.value));
+						else if (tt.type == Token.PUNCTUATION && tt.value.equals(",")) {
+							t.node.addChild(exp);
+							exp = new ExpressionNode();
 						} else
 							break;
 					}
-					amn.addChild(exp);
-					t.node.addChild(amn);
+					t.node.addChild(exp);
 					t.value += token.value;
 				} else {
 					break;

@@ -15,6 +15,7 @@ import com.xwarner.eml.interpreter.context.variables.Variable;
 import com.xwarner.eml.interpreter.context.variables.VectorVariable;
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
 import com.xwarner.eml.interpreter.context.variables.values.Vector;
+import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.ReferenceNode;
 import com.xwarner.eml.nodes.variables.ArrayMemberNode;
 import com.xwarner.eml.nodes.variables.VariableReferenceNode;
@@ -100,25 +101,24 @@ public class SubContext {
 					EObject obj = (EObject) var2;
 					var = obj.context.getVariable(ref, level + 1, bundle);
 					var.setReference(ref);
-				} else if (var2 instanceof ArrayVariable) {
-					ArrayVariable var3 = (ArrayVariable) var2;
-					var = var3.getVariable(ref, level + 1, bundle);
-					var.setReference(ref);
-				} else if (var2 instanceof VectorVariable) {
-					VectorVariable vec = (VectorVariable) var2;
-					ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level + 1);
-					int i = ((BigDecimal) node.invoke(bundle)).intValue();
-					Vector vector = (Vector) vec.getValue(bundle);
-					var = new NumericVariable(vector.vals[i]);
-					var.setReference(ref);
+					/*
+					 * } else if (var2 instanceof ArrayVariable) { ArrayVariable var3 =
+					 * (ArrayVariable) var2; var = var3.getVariable(ref, level + 1, bundle);
+					 * var.setReference(ref); } else if (var2 instanceof VectorVariable) {
+					 * VectorVariable vec = (VectorVariable) var2; ArrayMemberNode node =
+					 * (ArrayMemberNode) ref.getChildren().get(level + 1); int i = ((BigDecimal)
+					 * node.invoke(bundle)).intValue(); Vector vector = (Vector)
+					 * vec.getValue(bundle); var = new NumericVariable(vector.vals[i]);
+					 * var.setReference(ref); }
+					 */
 				} else if (var2 instanceof MatrixVariable) {
 					MatrixVariable mat = (MatrixVariable) var2;
-					ArrayMemberNode node = (ArrayMemberNode) ref.getChildren().get(level + 1);
+					Node node = ref.getChildren().get(level + 1);
 					int i = ((BigDecimal) node.invoke(bundle)).intValue();
-					node = (ArrayMemberNode) ref.getChildren().get(level + 2);
+					node = ref.getChildren().get(level + 2);
 					int j = ((BigDecimal) node.invoke(bundle)).intValue();
 					Matrix matrix = (Matrix) mat.getValue(bundle);
-					var = new NumericVariable(matrix.vals[i][j]);
+					var = new NumericVariable(matrix.vals[j][i]);
 					var.setReference(ref);
 				} else {
 					var = var2.getVariable(ref, level + 1, bundle);
@@ -132,6 +132,7 @@ public class SubContext {
 			ErrorHandler.error("unknown variable reference " + vrn.name);
 			return null;
 		}
+
 	}
 
 	public void setFunction(String name, Function function) {

@@ -223,15 +223,16 @@ public class TokenStream {
 	}
 
 	/**
-	 * Parses a vector or matrix TODO parse arrays here too
+	 * Parses a matrix
 	 * 
 	 * @param stream
-	 * @return TokenDataSet of the vector or matrix
+	 * @return TokenDataSet of the matrix
 	 */
-	public TokenDataSet parseVectorOrMatrix(TokenStream stream) {
-		Node node = new VectorNode();
+	public TokenDataSet parseMatrix(TokenStream stream) {
+		Node rowNode = new MatrixRowNode();
+		Node matrixNode = new MatrixNode();
 		String src = "";
-		Node matrixNode = null;
+//		Node matrixNode = null;
 
 		if (!stream.next().value.equals("["))
 			throw new Error("missing [");
@@ -243,12 +244,12 @@ public class TokenStream {
 
 			TokenDataSet tds = parseExpression(stream);
 			src += tds.src;
-			node.addChild(tds.node);
+			rowNode.addChild(tds.node);
 
 			if (stream.peek().type == Token.KEYWORD) {
 				Token t = stream.next();
 				src += t.value;
-				node.addChild(new DeclarationNode(t.value));
+				rowNode.addChild(new DeclarationNode(t.value));
 			}
 
 			if (stream.peek().value.equals(",")) {
@@ -258,27 +259,16 @@ public class TokenStream {
 				src += "]";
 				stream.next();
 				break;
-			} else if (stream.peek().value.equals("|") || stream.peek().value.equals(";")) {
-				src += "|";
-				// is a matrix / new line
-				if (matrixNode == null)
-					matrixNode = new MatrixNode();
-				MatrixRowNode mrn = new MatrixRowNode();
-				mrn.setChildren(node.getChildren());
-				node.setChildren(new ArrayList<Node>());
-				matrixNode.addChild(mrn);
+			} else if (stream.peek().value.equals(";")) {
+				src += ";";
+				matrixNode.addChild(rowNode);
+				rowNode = new MatrixRowNode();
 				stream.next();
 			}
 
 		}
-		if (matrixNode != null) {
-			MatrixRowNode mrn = new MatrixRowNode();
-			mrn.setChildren(node.getChildren());
-			node.setChildren(new ArrayList<Node>());
-			matrixNode.addChild(mrn);
-			return new TokenDataSet(matrixNode, src);
-		}
-		return new TokenDataSet(node, src);
+		matrixNode.addChild(rowNode);
+		return new TokenDataSet(matrixNode, src);
 	}
 
 }

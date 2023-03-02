@@ -27,7 +27,7 @@ public class Bundle {
 	}
 
 	public void init() {
-			// initialise global functions
+		// initialise global functions
 		context.setFunction("print", new PrintFunction());
 		context.setFunction("import", new ImportFunction());
 		context.setFunction("exp", new ExpFunction());

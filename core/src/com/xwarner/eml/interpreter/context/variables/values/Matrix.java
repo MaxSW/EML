@@ -27,7 +27,7 @@ public class Matrix {
 					sb.append(", ");
 			}
 			if (i != h - 1)
-				sb.append(" | ");
+				sb.append(" ; ");
 		}
 		sb.append("]");
 		return sb.toString();

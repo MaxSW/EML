@@ -9,7 +9,10 @@ import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.interpreter.context.functions.NativeFunction;
 import com.xwarner.eml.interpreter.context.objects.EObject;
-import com.xwarner.eml.library.MathsLibrary;
+import com.xwarner.eml.library.maths.GraphLibrary;
+import com.xwarner.eml.library.maths.MathsLibrary;
+import com.xwarner.eml.library.maths.ProbabilityLibrary;
+import com.xwarner.eml.library.maths.StatsLibrary;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.parser.Parser;
 import com.xwarner.eml.parser.Tree;
@@ -24,6 +27,9 @@ public class ImportFunction extends Function {
 	public ImportFunction() {
 		nativeLibraries = new HashMap<String, Class>();
 		nativeLibraries.put("maths", MathsLibrary.class);
+		nativeLibraries.put("probability", ProbabilityLibrary.class);
+		nativeLibraries.put("stats", StatsLibrary.class);
+		nativeLibraries.put("graph", GraphLibrary.class);
 	}
 
 	public Object run(ArrayList<Object> args, Bundle bundle) {

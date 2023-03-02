@@ -1,4 +1,4 @@
-package com.xwarner.eml.library;
+package com.xwarner.eml.library.maths;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -37,6 +37,18 @@ public class MathsLibrary {
 
 	public static BigDecimal modulus(BigDecimal value1, BigDecimal value2) {
 		return value1.remainder(value2);
+	}
+
+	public static BigDecimal sin(BigDecimal value) {
+		return new BigDecimal(Math.sin(value.doubleValue()));
+	}
+
+	public static BigDecimal cos(BigDecimal value) {
+		return new BigDecimal(Math.cos(value.doubleValue()));
+	}
+
+	public static BigDecimal tan(BigDecimal value) {
+		return new BigDecimal(Math.tan(value.doubleValue()));
 	}
 
 }

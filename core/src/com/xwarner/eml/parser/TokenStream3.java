@@ -31,7 +31,7 @@ public class TokenStream3 extends TokenStream {
 
 		if (token.value.equals("[")) {
 			Token t = new Token(Token.VECTOR, "", token.line, "");
-			parseVectorOrMatrix(stream).populate(t);
+			parseMatrix(stream).populate(t);
 			return t;
 		}
 

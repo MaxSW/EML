@@ -27,6 +27,10 @@ public class TreeOptimiser {
 		for (Node node : tree.getChildren()) {
 			optimiseNode(node, bundle);
 		}
+
+		// TODO there may be other things we want to do that are more complex than doing
+		// it at the node level
+
 		return tree;
 	}
 

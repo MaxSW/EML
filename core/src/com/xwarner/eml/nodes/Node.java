@@ -57,6 +57,11 @@ public class Node {
 		return null;
 	}
 
+	/**
+	 * Make any optimisations to the node or its children
+	 * 
+	 * @param bundle
+	 */
 	public void optimise(Bundle bundle) {
 
 	}
