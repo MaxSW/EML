@@ -1,7 +1,5 @@
 package com.xwarner.eml.parser;
 
-import java.util.ArrayList;
-
 import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.functions.InvocationNode;
@@ -11,7 +9,6 @@ import com.xwarner.eml.nodes.values.MatrixRowNode;
 import com.xwarner.eml.nodes.values.NumberNode;
 import com.xwarner.eml.nodes.values.OperatorNode;
 import com.xwarner.eml.nodes.values.StringNode;
-import com.xwarner.eml.nodes.values.VectorNode;
 import com.xwarner.eml.nodes.variables.DeclarationNode;
 import com.xwarner.eml.parser.tokens.Token;
 import com.xwarner.eml.parser.tokens.TokenDataSet;

@@ -4,7 +4,6 @@ import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.nodes.ReferenceNode;
 import com.xwarner.eml.nodes.values.NumberNode;
 import com.xwarner.eml.nodes.values.OperatorNode;
-import com.xwarner.eml.nodes.variables.ArrayMemberNode;
 import com.xwarner.eml.nodes.variables.VariableReferenceNode;
 import com.xwarner.eml.parser.tokens.Token;
 import com.xwarner.eml.util.ErrorHandler;

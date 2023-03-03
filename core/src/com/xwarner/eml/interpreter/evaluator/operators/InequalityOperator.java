@@ -3,7 +3,6 @@ package com.xwarner.eml.interpreter.evaluator.operators;
 import java.math.BigDecimal;
 
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
-import com.xwarner.eml.interpreter.context.variables.values.Vector;
 import com.xwarner.eml.util.ErrorHandler;
 
 public class InequalityOperator extends Operator {
@@ -32,16 +31,6 @@ public class InequalityOperator extends Operator {
 				if (!a.vals[i][j].equals(b.vals[i][j]))
 					return true;
 			}
-		}
-		return false;
-	}
-
-	public boolean evaluateVectorBoolean(Vector a, Vector b) {
-		if (a.size != b.size)
-			ErrorHandler.error("vectors must be the same size");
-		for (int i = 0; i < a.size; i++) {
-			if (!a.vals[i].equals(b.vals[i]))
-				return true;
 		}
 		return false;
 	}

@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.MatrixVariable;
 import com.xwarner.eml.interpreter.context.variables.Variable;
-import com.xwarner.eml.interpreter.context.variables.VectorVariable;
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
-import com.xwarner.eml.interpreter.context.variables.values.Vector;
 import com.xwarner.eml.interpreter.evaluator.ExpressionEntry;
 import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 import com.xwarner.eml.interpreter.evaluator.operators.numeric.MultiplyOperator;
@@ -66,17 +64,6 @@ public class ExpressionNode extends Node {
 				ExpressionEntry e = new ExpressionEntry();
 				e.type = ExpressionEntry.TYPE_BOOL;
 				e.booleanValue = (boolean) o;
-				vals.add(e);
-			} else if (o instanceof VectorVariable) {
-				if (last instanceof BigDecimal) {
-					ExpressionEntry ee = new ExpressionEntry();
-					ee.type = ExpressionEntry.TYPE_OP;
-					ee.operator = new MultiplyOperator();
-					vals.add(ee);
-				}
-				ExpressionEntry e = new ExpressionEntry();
-				e.type = ExpressionEntry.TYPE_VEC;
-				e.vector = (Vector) ((VectorVariable) o).getValue(bundle);
 				vals.add(e);
 			} else if (o instanceof MatrixVariable) {
 				if (last instanceof BigDecimal) {

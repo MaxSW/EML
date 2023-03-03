@@ -8,16 +8,12 @@ import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.interpreter.context.objects.EClass;
 import com.xwarner.eml.interpreter.context.objects.EObject;
-import com.xwarner.eml.interpreter.context.variables.ArrayVariable;
 import com.xwarner.eml.interpreter.context.variables.MatrixVariable;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
 import com.xwarner.eml.interpreter.context.variables.Variable;
-import com.xwarner.eml.interpreter.context.variables.VectorVariable;
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
-import com.xwarner.eml.interpreter.context.variables.values.Vector;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.ReferenceNode;
-import com.xwarner.eml.nodes.variables.ArrayMemberNode;
 import com.xwarner.eml.nodes.variables.VariableReferenceNode;
 import com.xwarner.eml.util.ErrorHandler;
 
@@ -66,8 +62,8 @@ public class SubContext {
 					EObject obj = (EObject) var2;
 					obj.context.createVariable(ref, object, level + 1, bundle);
 					return;
-				} else if (var2 instanceof ArrayVariable) {
-					ArrayVariable var3 = (ArrayVariable) var2;
+				} else if (var2 instanceof MatrixVariable) {
+					MatrixVariable var3 = (MatrixVariable) var2;
 					var3.setVariable(ref, level + 1, bundle, object);
 					return;
 				}
@@ -159,8 +155,8 @@ public class SubContext {
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
 					return obj.context.runFunction(ref, args, bundle, level + 1);
-				} else if (var2 instanceof ArrayVariable) {
-					ArrayVariable var3 = (ArrayVariable) var2;
+				} else if (var2 instanceof MatrixVariable) {
+					MatrixVariable var3 = (MatrixVariable) var2;
 					EObject obj = (EObject) var3.getVariable(ref, level + 1, bundle);
 					return obj.context.runFunction(ref, args, bundle, level + 2);
 				} else if (var2 instanceof Variable) {

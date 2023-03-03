@@ -1,5 +1,7 @@
-vec a = [4, 3]
-mat b = [4, 3; 5, 4]
-arr c = [5, 4; 3, 2, 1]
+var x = 0
+x++
+print(x)
 
-print(c[1, 1])
+str y = "hello"
+y += " world"
+print(y)

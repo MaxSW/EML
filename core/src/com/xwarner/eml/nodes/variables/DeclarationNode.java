@@ -6,15 +6,12 @@ import java.util.ArrayList;
 import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.objects.BlankObject;
 import com.xwarner.eml.interpreter.context.objects.EObject;
-import com.xwarner.eml.interpreter.context.variables.ArrayVariable;
 import com.xwarner.eml.interpreter.context.variables.BooleanVariable;
 import com.xwarner.eml.interpreter.context.variables.MatrixVariable;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
 import com.xwarner.eml.interpreter.context.variables.StringVariable;
-import com.xwarner.eml.interpreter.context.variables.VectorVariable;
 import com.xwarner.eml.interpreter.context.variables.definitions.Definition;
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
-import com.xwarner.eml.interpreter.context.variables.values.Vector;
 import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.ReferenceNode;
@@ -50,9 +47,7 @@ public class DeclarationNode extends Node {
 					bundle.context.createVariable(ref, new StringVariable(def), 0, bundle);
 				else if (varType.equals("bool"))
 					bundle.context.createVariable(ref, new BooleanVariable(def), 0, bundle);
-				else if (varType.equals("vec"))
-					bundle.context.createVariable(ref, new VectorVariable(def), 0, bundle);
-				else if (varType.equals("mat"))
+				else if (varType.equals("mat") || varType.equals("vec"))
 					bundle.context.createVariable(ref, new MatrixVariable(def), 0, bundle);
 			}
 		} else {
@@ -81,18 +76,19 @@ public class DeclarationNode extends Node {
 				} else if (children.get(1) instanceof InvocationNode) {
 					EObject obj = (EObject) children.get(1).invoke(bundle);
 					bundle.context.createVariable(ref, obj, 0, bundle);
-				} 
-				/*else if (varType.equals("arr")) {
-					DeclarationNode n = (DeclarationNode) children.get(1);
-					bundle.context.createVariable(ref, new ArrayVariable(n.varType), 0, bundle);
-				}*/
+				}
+				/*
+				 * else if (varType.equals("arr")) { DeclarationNode n = (DeclarationNode)
+				 * children.get(1); bundle.context.createVariable(ref, new
+				 * ArrayVariable(n.varType), 0, bundle); }
+				 */
 			} else {
 				if (varType.equals("obj") && children.size() == 1) {
 					EObject obj = new BlankObject();
 					obj.instantiate(bundle);
 					bundle.context.createVariable(ref, obj, 0, bundle);
 				} else if (varType.equals("arr")) {
-					bundle.context.createVariable(ref, new ArrayVariable("var"), 0, bundle);
+					bundle.context.createVariable(ref, new MatrixVariable(0, 0), 0, bundle);
 				}
 			}
 

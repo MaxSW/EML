@@ -1,9 +1,9 @@
 package com.xwarner.eml.interpreter.evaluator;
 
 import java.math.BigDecimal;
+import java.util.Vector;
 
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
-import com.xwarner.eml.interpreter.context.variables.values.Vector;
 import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 
 public class ExpressionEntry {

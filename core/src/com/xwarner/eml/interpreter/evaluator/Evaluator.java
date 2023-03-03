@@ -73,9 +73,10 @@ public class Evaluator {
 			}
 		}
 		ExpressionEntry e = stack.pop();
-		if (e.type == ExpressionEntry.TYPE_VEC)
-			return e.vector;
-		else if (e.type == ExpressionEntry.TYPE_STRING)
+		// if (e.type == ExpressionEntry.TYPE_VEC)
+		// return e.vector;
+		// else
+		if (e.type == ExpressionEntry.TYPE_STRING)
 			return e.stringValue;
 		else if (e.type == ExpressionEntry.TYPE_BOOL)
 			return e.booleanValue;
@@ -98,12 +99,13 @@ public class Evaluator {
 					e.type = ExpressionEntry.TYPE_BOOL;
 					e.booleanValue = op.evaluateNumericBoolean(a.value, b.value);
 				}
-			} else if (b.type == ExpressionEntry.TYPE_VEC) {
-				e.type = ExpressionEntry.TYPE_VEC;
-				e.vector = op.evluateVector(a.value, b.vector);
+				/*
+				 * } else if (b.type == ExpressionEntry.TYPE_VEC) { e.type =
+				 * ExpressionEntry.TYPE_VEC; e.vector = op.evluateVector(a.value, b.vector);
+				 */
 			} else if (b.type == ExpressionEntry.TYPE_MAT) {
 				e.type = ExpressionEntry.TYPE_MAT;
-				e.matrix = op.evaluateMatrix(a.value, b.matrix);
+				e.matrix = op.evaluateNumericMatrix(a.value, b.matrix);
 			} else if (b.type == ExpressionEntry.TYPE_STRING) {
 				if (op.operator.equals("+")) {
 					e.type = ExpressionEntry.TYPE_STRING;
@@ -141,9 +143,6 @@ public class Evaluator {
 				if (b.type == ExpressionEntry.TYPE_NUM) {
 					e.type = ExpressionEntry.TYPE_STRING;
 					e.stringValue = a.stringValue + b.value.toString();
-				} else if (b.type == ExpressionEntry.TYPE_VEC) {
-					e.type = ExpressionEntry.TYPE_STRING;
-					e.stringValue = a.stringValue + b.vector;
 				} else if (b.type == ExpressionEntry.TYPE_BOOL) {
 					e.type = ExpressionEntry.TYPE_STRING;
 					e.stringValue = a.stringValue + b.booleanValue;
@@ -154,52 +153,39 @@ public class Evaluator {
 			} else {
 				ErrorHandler.error("unexpected operator");
 			}
-		} else if (a.type == ExpressionEntry.TYPE_VEC) {
-			if (b.type == ExpressionEntry.TYPE_NUM) {
-
-			} else if (b.type == ExpressionEntry.TYPE_VEC) {
-				if (op.type == Operator.TYPE_NUMERIC) {
-					e.type = ExpressionEntry.TYPE_VEC;
-					e.vector = op.evaluateVector(a.vector, b.vector);
-				} else if (op.type == Operator.TYPE_BOOLEAN) {
-					e.type = ExpressionEntry.TYPE_BOOL;
-					e.booleanValue = op.evaluateVectorBoolean(a.vector, b.vector);
-				}
-			} else if (b.type == ExpressionEntry.TYPE_MAT) {
-
-			} else if (b.type == ExpressionEntry.TYPE_STRING) {
-				if (op.operator.equals("+")) {
-					e.type = ExpressionEntry.TYPE_STRING;
-					e.stringValue = a.vector + b.stringValue;
-				} else {
-					ErrorHandler.error("unexpected operator");
-				}
-			} else {
-				ErrorHandler.error("unexpected variable type in operation");
-			}
+			/*
+			 * } else if (a.type == ExpressionEntry.TYPE_VEC) { if (b.type ==
+			 * ExpressionEntry.TYPE_NUM) {
+			 * 
+			 * } else if (b.type == ExpressionEntry.TYPE_VEC) { if (op.type ==
+			 * Operator.TYPE_NUMERIC) { e.type = ExpressionEntry.TYPE_VEC; e.vector =
+			 * op.evaluateVector(a.vector, b.vector); } else if (op.type ==
+			 * Operator.TYPE_BOOLEAN) { e.type = ExpressionEntry.TYPE_BOOL; e.booleanValue =
+			 * op.evaluateVectorBoolean(a.vector, b.vector); } } else if (b.type ==
+			 * ExpressionEntry.TYPE_MAT) {
+			 * 
+			 * } else if (b.type == ExpressionEntry.TYPE_STRING) { if
+			 * (op.operator.equals("+")) { e.type = ExpressionEntry.TYPE_STRING;
+			 * e.stringValue = a.vector + b.stringValue; } else {
+			 * ErrorHandler.error("unexpected operator"); } } else {
+			 * ErrorHandler.error("unexpected variable type in operation"); }
+			 */
 		} else if (a.type == ExpressionEntry.TYPE_MAT) {
-			if (b.type == ExpressionEntry.TYPE_NUM) {
-
-			} else if (b.type == ExpressionEntry.TYPE_VEC) {
-
-			} else if (b.type == ExpressionEntry.TYPE_MAT) {
-				if (op.type == Operator.TYPE_NUMERIC) {
-					e.type = ExpressionEntry.TYPE_MAT;
-					e.matrix = op.evaluateMatrix(a.matrix, b.matrix);
-				} else if (op.type == Operator.TYPE_BOOLEAN) {
-					e.type = ExpressionEntry.TYPE_BOOL;
-					e.booleanValue = op.evaluateMatrixBoolean(a.matrix, b.matrix);
-				}
-			} else if (b.type == ExpressionEntry.TYPE_STRING) {
-				if (op.operator.equals("+")) {
-					e.type = ExpressionEntry.TYPE_STRING;
-					e.stringValue = a.matrix + b.stringValue;
-				} else {
-					ErrorHandler.error("unexpected operator");
-				}
-			} else {
-				ErrorHandler.error("unexpected variable type in operation");
-			}
+			/*
+			 * if (b.type == ExpressionEntry.TYPE_NUM) {
+			 * 
+			 * } else if (b.type == ExpressionEntry.TYPE_VEC) {
+			 * 
+			 * } else if (b.type == ExpressionEntry.TYPE_MAT) { if (op.type ==
+			 * Operator.TYPE_NUMERIC) { e.type = ExpressionEntry.TYPE_MAT; e.matrix =
+			 * op.evaluateMatrix(a.matrix, b.matrix); } else if (op.type ==
+			 * Operator.TYPE_BOOLEAN) { e.type = ExpressionEntry.TYPE_BOOL; e.booleanValue =
+			 * op.evaluateMatrixBoolean(a.matrix, b.matrix); } } else if (b.type ==
+			 * ExpressionEntry.TYPE_STRING) { if (op.operator.equals("+")) { e.type =
+			 * ExpressionEntry.TYPE_STRING; e.stringValue = a.matrix + b.stringValue; } else
+			 * { ErrorHandler.error("unexpected operator"); } } else {
+			 * ErrorHandler.error("unexpected variable type in operation"); }
+			 */
 		}
 		return e;
 	}

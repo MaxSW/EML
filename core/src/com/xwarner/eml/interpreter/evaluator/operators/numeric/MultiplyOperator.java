@@ -3,7 +3,6 @@ package com.xwarner.eml.interpreter.evaluator.operators.numeric;
 import java.math.BigDecimal;
 
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
-import com.xwarner.eml.interpreter.context.variables.values.Vector;
 import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 
 public class MultiplyOperator extends Operator {
@@ -14,24 +13,6 @@ public class MultiplyOperator extends Operator {
 
 	public BigDecimal evaluateNumeric(BigDecimal a, BigDecimal b) {
 		return a.multiply(b);
-	}
-
-	public Vector evluateVector(BigDecimal a, Vector b) {
-		Vector v = new Vector(b.size);
-		for (int i = 0; i < b.size; i++) {
-			v.vals[i] = a.multiply(b.vals[i]);
-		}
-		return v;
-	}
-
-	public BigDecimal evaluateVector2(Vector a, Vector b) {
-		if (a.size != b.size)
-			throw new Error("vectors must be the same size");
-		BigDecimal v = BigDecimal.ZERO;
-		for (int i = 0; i < b.size; i++) {
-			v = v.add(a.vals[i].multiply(b.vals[i]));
-		}
-		return v;
 	}
 
 	public Matrix evaluateMatrix(Matrix a, Matrix b) {
