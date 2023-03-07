@@ -1,6 +1,5 @@
 package com.xwarner.eml.nodes.logic;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.flags.BreakFlag;
 import com.xwarner.eml.interpreter.flags.ContinueFlag;
 import com.xwarner.eml.interpreter.flags.ReturnFlag;
@@ -16,14 +15,14 @@ public class ForNode extends Node {
 		return "for";
 	}
 
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		DeclarationNode n1 = (DeclarationNode) getChildren().get(0);
 		ExpressionNode n2 = (ExpressionNode) getChildren().get(1);
 		VariableChangeNode n3 = (VariableChangeNode) getChildren().get(2);
 		BodyNode n4 = (BodyNode) getChildren().get(3);
 
-		for (n1.invoke(bundle); (boolean) n2.invoke(bundle); n3.invoke(bundle)) {
-			Object o = n4.invoke(bundle);
+		for (n1.invoke(); (boolean) n2.invoke(); n3.invoke()) {
+			Object o = n4.invoke();
 			if (o instanceof ReturnFlag)
 				return o;
 			if (o instanceof BreakFlag)

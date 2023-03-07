@@ -1,6 +1,5 @@
 package com.xwarner.eml.interpreter.context.variables;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.definitions.Definition;
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
 
@@ -21,9 +20,9 @@ public class MatrixVariable extends Variable {
 		setDefinition(definition);
 	}
 
-	public Object getValue(Bundle bundle) {
+	public Object getValue() {
 		if (isEquation())
-			matrix = (Matrix) definition.evaluate(bundle);
+			matrix = (Matrix) definition.evaluate();
 		return matrix;
 	}
 

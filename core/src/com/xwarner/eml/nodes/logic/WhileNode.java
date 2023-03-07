@@ -2,7 +2,6 @@ package com.xwarner.eml.nodes.logic;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.flags.BreakFlag;
 import com.xwarner.eml.interpreter.flags.ContinueFlag;
 import com.xwarner.eml.interpreter.flags.ReturnFlag;
@@ -14,10 +13,10 @@ public class WhileNode extends Node {
 		return "while";
 	}
 
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		ArrayList<Node> children = getChildren();
-		while ((boolean) children.get(0).invoke(bundle)) {
-			Object o = children.get(1).invoke(bundle);
+		while ((boolean) children.get(0).invoke()) {
+			Object o = children.get(1).invoke();
 			if (o instanceof ReturnFlag)
 				return o;
 			if (o instanceof BreakFlag)

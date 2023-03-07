@@ -2,7 +2,6 @@ package com.xwarner.eml.nodes.logic;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.flags.Flag;
 import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.nodes.Node;
@@ -13,7 +12,7 @@ public class IfNode extends Node {
 		return "if";
 	}
 
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		ArrayList<Node> children = getChildren();
 
 		int i = 0;
@@ -24,8 +23,8 @@ public class IfNode extends Node {
 		while (i < size) {
 			Node node = children.get(i);
 			if (node instanceof ExpressionNode) {
-				if ((boolean) node.invoke(bundle)) {
-					Object o = children.get(i + 1).invoke(bundle);
+				if ((boolean) node.invoke()) {
+					Object o = children.get(i + 1).invoke();
 					if (o instanceof Flag)
 						return o;
 					return null;
@@ -38,7 +37,7 @@ public class IfNode extends Node {
 
 		// run the else
 		if (children.size() % 2 == 1) {
-			Object o = children.get(children.size() - 1).invoke(bundle);
+			Object o = children.get(children.size() - 1).invoke();
 			if (o instanceof Flag)
 				return o;
 

@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.interpreter.context.functions.NativeFunction;
 import com.xwarner.eml.interpreter.context.objects.EObject;
@@ -16,7 +16,6 @@ import com.xwarner.eml.library.maths.StatsLibrary;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.parser.Parser;
 import com.xwarner.eml.parser.Tree;
-import com.xwarner.eml.util.IOManager;
 
 public class ImportFunction extends Function {
 
@@ -32,7 +31,7 @@ public class ImportFunction extends Function {
 		nativeLibraries.put("graph", GraphLibrary.class);
 	}
 
-	public Object run(ArrayList<Object> args, Bundle bundle) {
+	public Object run(ArrayList<Object> args) {
 		if (args == null)
 			throw new Error("missing which library to import");
 		Object o = args.get(0);
@@ -46,8 +45,8 @@ public class ImportFunction extends Function {
 			// Load a native library
 			EObject obj = new EObject(null);
 			// this sets up the context in a consistent way
-			bundle.context.enterObject(obj);
-			bundle.context.exitObject();
+			Core.context.enterObject(obj);
+			Core.context.exitObject();
 
 			@SuppressWarnings("rawtypes")
 			Class nativeClass = nativeLibraries.get(str);
@@ -67,7 +66,7 @@ public class ImportFunction extends Function {
 			if (str.startsWith("./")) {
 				String file = str.substring(2);
 				try {
-					src = IOManager.readFile(file);
+					src = Core.readFile(file);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -75,7 +74,7 @@ public class ImportFunction extends Function {
 			} else {
 				String file = str + ".eml";
 				try {
-					src = IOManager.readLibrary(file);
+					src = Core.readLibrary(file);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -84,12 +83,12 @@ public class ImportFunction extends Function {
 			EObject obj = new EObject(null);
 			Tree tree = new Parser(src).parse();
 
-			bundle.context.enterObject(obj);
+			Core.context.enterObject(obj);
 			for (Node node : tree.getChildren())
-				node.pre_invoke(bundle);
+				node.pre_invoke();
 			for (Node node : tree.getChildren())
-				node.invoke(bundle);
-			bundle.context.exitObject();
+				node.invoke();
+			Core.context.exitObject();
 
 			return obj;
 		}

@@ -1,6 +1,6 @@
 package com.xwarner.eml.interpreter.context.objects;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.context.SubContext;
 import com.xwarner.eml.interpreter.context.variables.Variable;
 
@@ -13,13 +13,13 @@ public class EObject extends Variable {
 		this.cls = cls;
 	}
 
-	public void instantiate(Bundle bundle) {
-		bundle.context.enterObject(this);
+	public void instantiate() {
+		Core.context.enterObject(this);
 		if (cls != null) {
-			cls.getBody().pre_invoke(bundle);
-			cls.getBody().invoke(bundle);
+			cls.getBody().pre_invoke();
+			cls.getBody().invoke();
 		}
-		bundle.context.exitObject();
+		Core.context.exitObject();
 	}
 
 	public String toString() {

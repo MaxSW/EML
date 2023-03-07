@@ -3,7 +3,6 @@ package com.xwarner.eml.interpreter.context.variables;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.definitions.Definition;
 import com.xwarner.eml.nodes.ReferenceNode;
 import com.xwarner.eml.nodes.variables.VariableReferenceNode;
@@ -21,9 +20,9 @@ public class StringVariable extends Variable {
 		this.setDefinition(definition);
 	}
 
-	public Object getValue(Bundle bundle) {
+	public Object getValue() {
 		if (isEquation())
-			return definition.evaluate(bundle);
+			return definition.evaluate();
 		else
 			return value;
 	}
@@ -33,7 +32,7 @@ public class StringVariable extends Variable {
 		value = (String) obj;
 	}
 
-	public Object runFunction(ReferenceNode ref, ArrayList<Object> args, Bundle bundle, int level) {
+	public Object runFunction(ReferenceNode ref, ArrayList<Object> args, int level) {
 		VariableReferenceNode node = (VariableReferenceNode) ref.getChildren().get(level);
 		Object object = args.get(0);
 		if (node.name.equals("subString")) {
@@ -55,7 +54,7 @@ public class StringVariable extends Variable {
 		return null;
 	}
 
-	public Variable getVariable(ReferenceNode ref, int level, Bundle bundle) {
+	public Variable getVariable(ReferenceNode ref, int level) {
 		VariableReferenceNode node = (VariableReferenceNode) ref.getChildren().get(level);
 		if (node.name.equals("length")) {
 			return new NumericVariable(value.length());

@@ -3,10 +3,10 @@ package com.xwarner.eml;
 import java.io.File;
 import java.io.IOException;
 
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.Interpreter;
 import com.xwarner.eml.parser.Parser;
 import com.xwarner.eml.parser.Tree;
-import com.xwarner.eml.util.IOManager;
 
 public class Bootstrap {
 
@@ -17,7 +17,7 @@ public class Bootstrap {
 		}
 		String path = args[0];
 		if (args.length == 2)
-			IOManager.libRoot = args[1];
+			Core.libRoot = args[1];
 
 		String[] split = path.split(File.separator);
 
@@ -26,10 +26,10 @@ public class Bootstrap {
 
 		String src = "";
 
-		IOManager.root = root;
+		Core.root = root;
 
 		try {
-			src = IOManager.readFile(file);
+			src = Core.readFile(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

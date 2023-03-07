@@ -4,8 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
-
 public class NativeFunction extends Function {
 
 	private Method method;
@@ -14,7 +12,7 @@ public class NativeFunction extends Function {
 		this.method = method;
 	}
 
-	public Object run(ArrayList<Object> args, Bundle bundle) {
+	public Object run(ArrayList<Object> args) {
 		Object[] args2 = new Object[] {};
 
 		// TODO handle all these errors better

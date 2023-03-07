@@ -2,8 +2,6 @@ package com.xwarner.eml.nodes;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
-
 public class Node {
 
 	private ArrayList<Node> children;
@@ -41,7 +39,7 @@ public class Node {
 	 * @param bundle
 	 * @return
 	 */
-	public Object pre_invoke(Bundle bundle) {
+	public Object pre_invoke() {
 		return null;
 	}
 
@@ -53,7 +51,7 @@ public class Node {
 	 * @param bundle
 	 * @return
 	 */
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		return null;
 	}
 
@@ -62,7 +60,7 @@ public class Node {
 	 * 
 	 * @param bundle
 	 */
-	public void optimise(Bundle bundle) {
+	public void optimise() {
 
 	}
 

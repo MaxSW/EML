@@ -1,6 +1,5 @@
 package com.xwarner.eml.interpreter.context.variables;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.definitions.Definition;
 
 public class BooleanVariable extends Variable {
@@ -16,9 +15,9 @@ public class BooleanVariable extends Variable {
 		this.setDefinition(definition);
 	}
 
-	public Object getValue(Bundle bundle) {
+	public Object getValue() {
 		if (isEquation())
-			return definition.evaluate(bundle);
+			return definition.evaluate();
 		else
 			return value;
 	}

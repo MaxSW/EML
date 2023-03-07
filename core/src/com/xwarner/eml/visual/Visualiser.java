@@ -2,6 +2,7 @@ package com.xwarner.eml.visual;
 
 import java.io.IOException;
 
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.Interpreter;
 import com.xwarner.eml.parser.InputStream;
 import com.xwarner.eml.parser.Parser;
@@ -11,7 +12,6 @@ import com.xwarner.eml.parser.TokenStream3;
 import com.xwarner.eml.parser.TokenStream4;
 import com.xwarner.eml.parser.TokenStream5;
 import com.xwarner.eml.parser.Tree;
-import com.xwarner.eml.util.IOManager;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -44,9 +44,9 @@ public class Visualiser extends Application {
 		String file = split[split.length - 1];
 		String root = path.substring(0, path.length() - split[split.length - 1].length());
 		String src = "";
-		IOManager.root = root;
+		Core.root = root;
 		try {
-			src = IOManager.readFile(file);
+			src = Core.readFile(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

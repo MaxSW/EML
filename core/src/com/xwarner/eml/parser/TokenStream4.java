@@ -2,7 +2,6 @@ package com.xwarner.eml.parser;
 
 import com.xwarner.eml.parser.tokens.Token;
 import com.xwarner.eml.parser.tokens.TokenDataSet;
-import com.xwarner.eml.util.ErrorHandler;
 
 /**
  * Converts the stream of tokens into a new stream of tokens with expressions
@@ -15,7 +14,6 @@ import com.xwarner.eml.util.ErrorHandler;
 public class TokenStream4 extends TokenStream {
 
 	private TokenStream3 stream;
-	public ErrorHandler error;
 
 	private boolean lastAssignment;
 	private boolean lastSemiColon;
@@ -23,7 +21,6 @@ public class TokenStream4 extends TokenStream {
 
 	public TokenStream4(TokenStream3 stream) {
 		this.stream = stream;
-		this.error = stream.error;
 	}
 
 	protected Token readNext() {

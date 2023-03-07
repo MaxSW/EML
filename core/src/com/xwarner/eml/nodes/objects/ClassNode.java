@@ -2,7 +2,7 @@ package com.xwarner.eml.nodes.objects;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.context.objects.EClass;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.functions.BodyNode;
@@ -25,7 +25,7 @@ public class ClassNode extends Node {
 		return "class - name: " + name;
 	}
 
-	public Object pre_invoke(Bundle bundle) {
+	public Object pre_invoke() {
 		EClass cls = new EClass();
 
 		ArrayList<Node> children = getChildren();
@@ -36,7 +36,7 @@ public class ClassNode extends Node {
 				cls.addArg((FunctionArgumentNode) node);
 		}
 
-		bundle.context.setClass(name, cls);
+		Core.context.setClass(name, cls);
 		return null;
 	}
 

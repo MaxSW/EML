@@ -2,7 +2,6 @@ package com.xwarner.eml.interpreter.context.variables;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.definitions.Definition;
 import com.xwarner.eml.nodes.ReferenceNode;
 
@@ -35,7 +34,7 @@ public class Variable {
 		listeners = new ArrayList<VariableListener>();
 	}
 
-	public Object getValue(Bundle bundle) {
+	public Object getValue() {
 		return null;
 	}
 
@@ -74,16 +73,16 @@ public class Variable {
 		this.definition = definition;
 	}
 
-	public Variable getVariable(ReferenceNode ref, int level, Bundle bundle) {
+	public Variable getVariable(ReferenceNode ref, int level) {
 		System.err.println("this should not be called 1 (Variable.java)!");
 		return null;
 	}
 
-	public void setVariable(ReferenceNode ref, int level, Bundle bundle, Object object) {
+	public void setVariable(ReferenceNode ref, int level, Object object) {
 		System.err.println("this should not be called 2 (Variable.java)!");
 	}
 
-	public Object runFunction(ReferenceNode ref, ArrayList<Object> args, Bundle bundle, int level) {
+	public Object runFunction(ReferenceNode ref, ArrayList<Object> args, int level) {
 		System.err.println("this should not be called 3 (Variable.java)!");
 		return null;
 	}

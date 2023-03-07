@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.interpreter.context.objects.EClass;
 import com.xwarner.eml.interpreter.context.objects.EObject;
@@ -15,7 +15,6 @@ import com.xwarner.eml.interpreter.context.variables.values.Matrix;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.ReferenceNode;
 import com.xwarner.eml.nodes.variables.VariableReferenceNode;
-import com.xwarner.eml.util.ErrorHandler;
 
 public class SubContext {
 	private HashMap<String, Function> funcs;
@@ -44,31 +43,31 @@ public class SubContext {
 	 * @param name
 	 * @param object
 	 */
-	public void createVariable(String name, Object object, Bundle bundle) {
+	public void createVariable(String name, Object object) {
 		if (object instanceof Variable)
 			map.put(name, store.put((Variable) object));
 		else
-			map.put(name, store.put(bundle.vars.generateVariable(object)));
+			map.put(name, store.put(Core.vars.generateVariable(object)));
 	}
 
-	public void createVariable(ReferenceNode ref, Object object, int level, Bundle bundle) {
+	public void createVariable(ReferenceNode ref, Object object, int level) {
 		VariableReferenceNode vrn = (VariableReferenceNode) ref.getChildren().get(level);
 		if (ref.getChildren().size() == level + 1) {
-			createVariable(vrn.name, object, bundle);
+			createVariable(vrn.name, object);
 		} else {
 			if (map.containsKey(vrn.name)) {
 				Variable var2 = store.get(map.get(vrn.name));
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
-					obj.context.createVariable(ref, object, level + 1, bundle);
+					obj.context.createVariable(ref, object, level + 1);
 					return;
 				} else if (var2 instanceof MatrixVariable) {
 					MatrixVariable var3 = (MatrixVariable) var2;
-					var3.setVariable(ref, level + 1, bundle, object);
+					var3.setVariable(ref, level + 1, object);
 					return;
 				}
 			}
-			ErrorHandler.error("unknown variable reference " + vrn.name);
+			Core.error.error("unknown variable reference " + vrn.name);
 		}
 	}
 
@@ -80,12 +79,12 @@ public class SubContext {
 		} else if (parent != null)
 			return parent.getVariable(name, ref);
 		else
-			ErrorHandler.error("unknown variable " + name);
+			Core.error.error("unknown variable " + name);
 		return null;
 
 	}
 
-	public Variable getVariable(ReferenceNode ref, int level, Bundle bundle) {
+	public Variable getVariable(ReferenceNode ref, int level) {
 		VariableReferenceNode vrn = (VariableReferenceNode) ref.getChildren().get(level);
 		if (ref.getChildren().size() == level + 1) {
 			return getVariable(vrn.name, ref);
@@ -95,7 +94,7 @@ public class SubContext {
 				Variable var = null;
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
-					var = obj.context.getVariable(ref, level + 1, bundle);
+					var = obj.context.getVariable(ref, level + 1);
 					var.setReference(ref);
 					/*
 					 * } else if (var2 instanceof ArrayVariable) { ArrayVariable var3 =
@@ -110,22 +109,22 @@ public class SubContext {
 				} else if (var2 instanceof MatrixVariable) {
 					MatrixVariable mat = (MatrixVariable) var2;
 					Node node = ref.getChildren().get(level + 1);
-					int i = ((BigDecimal) node.invoke(bundle)).intValue();
+					int i = ((BigDecimal) node.invoke()).intValue();
 					node = ref.getChildren().get(level + 2);
-					int j = ((BigDecimal) node.invoke(bundle)).intValue();
-					Matrix matrix = (Matrix) mat.getValue(bundle);
+					int j = ((BigDecimal) node.invoke()).intValue();
+					Matrix matrix = (Matrix) mat.getValue();
 					var = new NumericVariable(matrix.vals[j][i]);
 					var.setReference(ref);
 				} else {
-					var = var2.getVariable(ref, level + 1, bundle);
+					var = var2.getVariable(ref, level + 1);
 					if (var == null)
-						ErrorHandler.error("unknown variable of " + vrn.name);
+						Core.error.error("unknown variable of " + vrn.name);
 					else
 						var.setReference(ref);
 				}
 				return var;
 			}
-			ErrorHandler.error("unknown variable reference " + vrn.name);
+			Core.error.error("unknown variable reference " + vrn.name);
 			return null;
 		}
 
@@ -135,35 +134,35 @@ public class SubContext {
 		funcs.put(name, function);
 	}
 
-	public Object runFunction(String name, ArrayList<Object> args, Bundle bundle) {
+	public Object runFunction(String name, ArrayList<Object> args) {
 		if (funcs.containsKey(name))
-			return funcs.get(name).run(args, bundle);
+			return funcs.get(name).run(args);
 		else if (parent != null)
-			return parent.runFunction(name, args, bundle);
+			return parent.runFunction(name, args);
 		else
-			ErrorHandler.error("unknown function " + name);
+			Core.error.error("unknown function " + name);
 		return null;
 	}
 
-	public Object runFunction(ReferenceNode ref, ArrayList<Object> args, Bundle bundle, int level) {
+	public Object runFunction(ReferenceNode ref, ArrayList<Object> args, int level) {
 		VariableReferenceNode vrn = (VariableReferenceNode) ref.getChildren().get(level);
 		if (ref.getChildren().size() == level + 1) {
-			return runFunction(vrn.name, args, bundle);
+			return runFunction(vrn.name, args);
 		} else {
 			if (map.containsKey(vrn.name)) {
 				Variable var2 = store.get(map.get(vrn.name));
 				if (var2 instanceof EObject) {
 					EObject obj = (EObject) var2;
-					return obj.context.runFunction(ref, args, bundle, level + 1);
+					return obj.context.runFunction(ref, args, level + 1);
 				} else if (var2 instanceof MatrixVariable) {
 					MatrixVariable var3 = (MatrixVariable) var2;
-					EObject obj = (EObject) var3.getVariable(ref, level + 1, bundle);
-					return obj.context.runFunction(ref, args, bundle, level + 2);
+					EObject obj = (EObject) var3.getVariable(ref, level + 1);
+					return obj.context.runFunction(ref, args, level + 2);
 				} else if (var2 instanceof Variable) {
-					return ((Variable) var2).runFunction(ref, args, bundle, level + 1);
+					return ((Variable) var2).runFunction(ref, args, level + 1);
 				}
 			}
-			ErrorHandler.error("unknown variable reference");
+			Core.error.error("unknown variable reference");
 			return null;
 		}
 	}
@@ -188,7 +187,7 @@ public class SubContext {
 					return obj.context.getClass(ref, level + 1);
 				}
 			}
-			ErrorHandler.error("unknown variable reference");
+			Core.error.error("unknown variable reference");
 			return null;
 		}
 	}

@@ -2,7 +2,6 @@ package com.xwarner.eml.parser;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.functions.BodyNode;
@@ -23,9 +22,8 @@ public class TreeOptimiser {
 	}
 
 	public Tree optimise(Tree tree) {
-		Bundle bundle = new Bundle();
 		for (Node node : tree.getChildren()) {
-			optimiseNode(node, bundle);
+			optimiseNode(node);
 		}
 
 		// TODO there may be other things we want to do that are more complex than doing
@@ -34,15 +32,15 @@ public class TreeOptimiser {
 		return tree;
 	}
 
-	private Node optimiseNode(Node node, Bundle bundle) {
+	private Node optimiseNode(Node node) {
 		if (parentList.contains(node.getClass())) {
 			// Nodes to look into
 			for (Node subnode : node.getChildren()) {
-				optimiseNode(subnode, bundle);
+				optimiseNode(subnode);
 			}
 		} else if (directList.contains(node.getClass())) {
 			// Nodes to optimise
-			node.optimise(bundle);
+			node.optimise();
 		}
 		// Default is to do nothing
 		return node;

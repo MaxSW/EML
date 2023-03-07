@@ -1,6 +1,5 @@
 package com.xwarner.eml.nodes.logic;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.flags.ReturnFlag;
 import com.xwarner.eml.nodes.Node;
 
@@ -10,10 +9,10 @@ public class ReturnNode extends Node {
 		return "return";
 	}
 
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		Object o = null;
 		if (getChildren().size() > 0)
-			o = getChildren().get(0).invoke(bundle);
+			o = getChildren().get(0).invoke();
 		return new ReturnFlag(o);
 	}
 

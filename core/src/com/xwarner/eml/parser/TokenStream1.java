@@ -2,7 +2,6 @@ package com.xwarner.eml.parser;
 
 import com.xwarner.eml.parser.tokens.Token;
 import com.xwarner.eml.parser.tokens.TokenMatcher;
-import com.xwarner.eml.util.ErrorHandler;
 
 /**
  * Converts the input stream into a stream of basic tokens
@@ -15,8 +14,6 @@ public class TokenStream1 extends TokenStream {
 
 	private InputStream input; // the input stream
 
-	public ErrorHandler error; // the error handler
-
 	/**
 	 * Create a new TokenStream using the given InputStream
 	 * 
@@ -24,7 +21,6 @@ public class TokenStream1 extends TokenStream {
 	 */
 	public TokenStream1(InputStream input) {
 		this.input = input;
-		this.error = input.error;
 	}
 
 	/**

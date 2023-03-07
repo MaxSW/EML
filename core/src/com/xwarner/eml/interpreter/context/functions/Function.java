@@ -3,7 +3,7 @@ package com.xwarner.eml.interpreter.context.functions;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.context.variables.BooleanVariable;
 import com.xwarner.eml.interpreter.context.variables.NullVariable;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
@@ -23,13 +23,13 @@ public class Function extends Variable {
 		args = new ArrayList<FunctionArgumentNode>();
 	}
 
-	public Object run(ArrayList<Object> args2, Bundle bundle) {
-		bundle.context.enterFunction();
+	public Object run(ArrayList<Object> args2) {
+		Core.context.enterFunction();
 
 		if (args2 == null && args.size() != 0) {
 			for (int i = 0; i < args.size(); i++) {
 				FunctionArgumentNode node = args.get(i);
-				bundle.context.createVariable(node.name, new NullVariable(), bundle);
+				Core.context.createVariable(node.name, new NullVariable());
 			}
 		} else {
 
@@ -52,20 +52,20 @@ public class Function extends Variable {
 					var = new NullVariable();
 				}
 
-				bundle.context.createVariable(node.name, var, bundle);
+				Core.context.createVariable(node.name, var);
 			}
 		}
 		ArrayList<Node> children = body.getChildren();
 		for (int i = 0; i < children.size(); i++) {
 			Node node = children.get(i);
-			Object o = node.invoke(bundle);
+			Object o = node.invoke();
 			if (o instanceof ReturnFlag) {
-				bundle.context.exitFunction();
+				Core.context.exitFunction();
 				return ((ReturnFlag) o).obj;
 			}
 		}
 
-		bundle.context.exitFunction();
+		Core.context.exitFunction();
 		return null;
 	}
 

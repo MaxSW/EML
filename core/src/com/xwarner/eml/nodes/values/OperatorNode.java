@@ -2,7 +2,6 @@ package com.xwarner.eml.nodes.values;
 
 import java.util.HashMap;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.evaluator.operators.EqualityOperator;
 import com.xwarner.eml.interpreter.evaluator.operators.InequalityOperator;
 import com.xwarner.eml.interpreter.evaluator.operators.LeftBracketOperator;
@@ -70,7 +69,7 @@ public class OperatorNode extends Node {
 		return "operator - value: " + operator;
 	}
 
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		if (cache == null)
 			cache = operators.get(operator);
 		return cache;

@@ -2,11 +2,11 @@ package com.xwarner.eml;
 
 import java.io.IOException;
 
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.Interpreter;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.parser.Parser;
 import com.xwarner.eml.parser.Tree;
-import com.xwarner.eml.util.IOManager;
 
 public class Dev {
 	public static void main(String[] args) {
@@ -16,7 +16,7 @@ public class Dev {
 		}
 		String path = args[0];
 		if (args.length == 2)
-			IOManager.libRoot = args[1];
+			Core.libRoot = args[1];
 
 		// TODO better way of doing this
 		String[] split = path.split("/");
@@ -26,13 +26,15 @@ public class Dev {
 
 		String src = "";
 
-		IOManager.root = root;
+		Core.root = root;
 
 		try {
-			src = IOManager.readFile(file);
+			src = Core.readFile(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		Core.init();
 
 		Parser parser = new Parser(src);
 		Tree tree = parser.parse();

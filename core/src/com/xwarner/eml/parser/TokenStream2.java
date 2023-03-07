@@ -6,7 +6,6 @@ import com.xwarner.eml.nodes.values.NumberNode;
 import com.xwarner.eml.nodes.values.OperatorNode;
 import com.xwarner.eml.nodes.variables.VariableReferenceNode;
 import com.xwarner.eml.parser.tokens.Token;
-import com.xwarner.eml.util.ErrorHandler;
 
 /**
  * Converts the stream of tokens into a new stream of tokens with variable
@@ -19,7 +18,6 @@ import com.xwarner.eml.util.ErrorHandler;
 public class TokenStream2 extends TokenStream {
 
 	private TokenStream1 stream; // the input TokenStream
-	public ErrorHandler error; // the error handler
 
 	/**
 	 * Creates a new TokenStream using the previous TokenStream as input
@@ -28,7 +26,6 @@ public class TokenStream2 extends TokenStream {
 	 */
 	public TokenStream2(TokenStream1 stream) {
 		this.stream = stream;
-		this.error = stream.error;
 	}
 
 	/**

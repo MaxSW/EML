@@ -2,7 +2,6 @@ package com.xwarner.eml.interpreter.context.variables.definitions;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.variables.Variable;
 import com.xwarner.eml.interpreter.context.variables.VariableListener;
 import com.xwarner.eml.nodes.ExpressionNode;
@@ -13,21 +12,21 @@ public class Definition implements VariableListener {
 	private Object cache;
 	private boolean change;
 
-	public Definition(ExpressionNode expression, Bundle bundle) {
+	public Definition(ExpressionNode expression) {
 		this.expression = expression;
-		setup(bundle);
+		setup();
 	}
 
-	public Object evaluate(Bundle bundle) {
+	public Object evaluate() {
 		if (change || cache == null) {
-			cache = expression.invoke(bundle);
+			cache = expression.invoke();
 			change = false;
 		}
 		return cache;
 	}
 
-	public void setup(Bundle bundle) {
-		ArrayList<Variable> vars = expression.getVariables(bundle);
+	public void setup() {
+		ArrayList<Variable> vars = expression.getVariables();
 		for (Variable var : vars)
 			var.addListener(this);
 	}
@@ -40,9 +39,9 @@ public class Definition implements VariableListener {
 		return expression;
 	}
 
-	public void setExpression(ExpressionNode expression, Bundle bundle) {
+	public void setExpression(ExpressionNode expression) {
 		this.expression = expression;
-		setup(bundle);
+		setup();
 	}
 
 	public boolean hasChanged() {

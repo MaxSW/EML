@@ -2,7 +2,6 @@ package com.xwarner.eml.nodes.values;
 
 import java.math.BigDecimal;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.nodes.Node;
 
 public class NumberNode extends Node {
@@ -28,7 +27,7 @@ public class NumberNode extends Node {
 		return "number - value: " + value;
 	}
 
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		if (cache == null)
 			cache = BigDecimal.valueOf(value);
 		return cache;

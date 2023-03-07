@@ -3,7 +3,7 @@ package com.xwarner.eml.nodes.variables;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.context.objects.BlankObject;
 import com.xwarner.eml.interpreter.context.objects.EObject;
 import com.xwarner.eml.interpreter.context.variables.BooleanVariable;
@@ -34,48 +34,47 @@ public class DeclarationNode extends Node {
 		return "declaration - type: " + varType;
 	}
 
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		ArrayList<Node> children = getChildren();
 		ReferenceNode ref = (ReferenceNode) children.get(0);
 		if (ref.flag) {
 			if (children.size() == 2) {
 				ExpressionNode exp = (ExpressionNode) children.get(1);
-				Definition def = new Definition(exp, bundle);
+				Definition def = new Definition(exp);
 				if (varType.equals("var"))
-					bundle.context.createVariable(ref, new NumericVariable(def), 0, bundle);
+					Core.context.createVariable(ref, new NumericVariable(def), 0);
 				else if (varType.equals("str"))
-					bundle.context.createVariable(ref, new StringVariable(def), 0, bundle);
+					Core.context.createVariable(ref, new StringVariable(def), 0);
 				else if (varType.equals("bool"))
-					bundle.context.createVariable(ref, new BooleanVariable(def), 0, bundle);
+					Core.context.createVariable(ref, new BooleanVariable(def), 0);
 				else if (varType.equals("mat") || varType.equals("vec"))
-					bundle.context.createVariable(ref, new MatrixVariable(def), 0, bundle);
+					Core.context.createVariable(ref, new MatrixVariable(def), 0);
 			}
 		} else {
 			if (children.size() == 2) {
 				if (children.get(1) instanceof ExpressionNode) {
 					ExpressionNode exp = (ExpressionNode) children.get(1);
 					if (varType.equals("bool")) {
-						bundle.context.createVariable(ref, new BooleanVariable((boolean) exp.invoke(bundle)), 0,
-								bundle);
+						Core.context.createVariable(ref, new BooleanVariable((boolean) exp.invoke()), 0);
 					} else if (varType.equals("str")) {
-						bundle.context.createVariable(ref, new StringVariable((String) exp.invoke(bundle)), 0, bundle);
+						Core.context.createVariable(ref, new StringVariable((String) exp.invoke()), 0);
 					} else if (varType.equals("var")) {
 						NumericVariable var;
 						// if (varType.equals("def"))
 						// var = new DefVariable(exp, (BigDecimal) exp.invoke(bundle));
 						// else
-						var = new NumericVariable((BigDecimal) exp.invoke(bundle));
-						bundle.context.createVariable(ref, var, 0, bundle);
+						var = new NumericVariable((BigDecimal) exp.invoke());
+						Core.context.createVariable(ref, var, 0);
 					} else if (varType.equals("vec") || varType.equals("mat") || varType.equals("arr")) {
-						bundle.context.createVariable(ref, new MatrixVariable((Matrix) exp.invoke(bundle)), 0, bundle);
+						Core.context.createVariable(ref, new MatrixVariable((Matrix) exp.invoke()), 0);
 					}
 				} else if (children.get(1) instanceof ObjectCreationNode) {
-					EObject obj = (EObject) children.get(1).invoke(bundle);
-					bundle.context.createVariable(ref, obj, 0, bundle);
+					EObject obj = (EObject) children.get(1).invoke();
+					Core.context.createVariable(ref, obj, 0);
 
 				} else if (children.get(1) instanceof InvocationNode) {
-					EObject obj = (EObject) children.get(1).invoke(bundle);
-					bundle.context.createVariable(ref, obj, 0, bundle);
+					EObject obj = (EObject) children.get(1).invoke();
+					Core.context.createVariable(ref, obj, 0);
 				}
 				/*
 				 * else if (varType.equals("arr")) { DeclarationNode n = (DeclarationNode)
@@ -85,10 +84,10 @@ public class DeclarationNode extends Node {
 			} else {
 				if (varType.equals("obj") && children.size() == 1) {
 					EObject obj = new BlankObject();
-					obj.instantiate(bundle);
-					bundle.context.createVariable(ref, obj, 0, bundle);
+					obj.instantiate();
+					Core.context.createVariable(ref, obj, 0);
 				} else if (varType.equals("arr")) {
-					bundle.context.createVariable(ref, new MatrixVariable(0, 0), 0, bundle);
+					Core.context.createVariable(ref, new MatrixVariable(0, 0), 0);
 				}
 			}
 

@@ -2,7 +2,7 @@ package com.xwarner.eml.nodes.functions;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.ReferenceNode;
@@ -13,19 +13,19 @@ public class InvocationNode extends Node {
 		return "invocation";
 	}
 
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		ReferenceNode ref = (ReferenceNode) getChildren().get(0);
 		if (getChildren().size() == 1) {
-			return bundle.context.runFunction(ref, null, bundle, 0);
+			return Core.context.runFunction(ref, null, 0);
 		} else {
 			ArrayList<Object> objects = new ArrayList<Object>();
 			for (Node n : getChildren()) {
 				if (n instanceof ExpressionNode) {
 					ExpressionNode arg = (ExpressionNode) n;
-					objects.add(arg.invoke(bundle));
+					objects.add(arg.invoke());
 				}
 			}
-			return bundle.context.runFunction(ref, objects, bundle, 0);
+			return Core.context.runFunction(ref, objects, 0);
 		}
 	}
 

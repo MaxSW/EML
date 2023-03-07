@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
 
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.evaluator.operators.LeftBracketOperator;
 import com.xwarner.eml.interpreter.evaluator.operators.Operator;
 import com.xwarner.eml.interpreter.evaluator.operators.RightBracketOperator;
-import com.xwarner.eml.util.ErrorHandler;
 
 public class Evaluator {
 
@@ -111,10 +111,10 @@ public class Evaluator {
 					e.type = ExpressionEntry.TYPE_STRING;
 					e.stringValue = a.value.toString() + b.stringValue;
 				} else {
-					ErrorHandler.error("unexpected operator");
+					Core.error.error("unexpected operator");
 				}
 			} else {
-				ErrorHandler.error("unexpected variable type in operation");
+				Core.error.error("unexpected variable type in operation");
 			}
 		} else if (a.type == ExpressionEntry.TYPE_BOOL) {
 			if (b.type == ExpressionEntry.TYPE_BOOL) {
@@ -125,10 +125,10 @@ public class Evaluator {
 					e.type = ExpressionEntry.TYPE_STRING;
 					e.stringValue = a.booleanValue + b.stringValue;
 				} else {
-					ErrorHandler.error("unexpected operator");
+					Core.error.error("unexpected operator");
 				}
 			} else {
-				ErrorHandler.error("unexpected variable type in operation");
+				Core.error.error("unexpected variable type in operation");
 			}
 		} else if (a.type == ExpressionEntry.TYPE_STRING) {
 			if (b.type == ExpressionEntry.TYPE_STRING) {
@@ -151,7 +151,7 @@ public class Evaluator {
 					e.stringValue = a.stringValue + b.matrix;
 				}
 			} else {
-				ErrorHandler.error("unexpected operator");
+				Core.error.error("unexpected operator");
 			}
 			/*
 			 * } else if (a.type == ExpressionEntry.TYPE_VEC) { if (b.type ==

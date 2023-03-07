@@ -2,6 +2,7 @@ package com.xwarner.eml.parser;
 
 import java.util.ArrayList;
 
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.nodes.ExpressionNode;
 import com.xwarner.eml.nodes.Node;
 import com.xwarner.eml.nodes.functions.BodyNode;
@@ -20,7 +21,6 @@ import com.xwarner.eml.nodes.variables.DeclarationNode;
 import com.xwarner.eml.nodes.variables.VariableChangeNode;
 import com.xwarner.eml.parser.tokens.Token;
 import com.xwarner.eml.parser.tokens.TokenRule;
-import com.xwarner.eml.util.ErrorHandler;
 
 /**
  * Converts the final TokenStream into a Tree of Nodes. Most of the `grammar'
@@ -173,7 +173,7 @@ public class Parser extends TokenStream {
 			return t.node;
 		}
 
-		ErrorHandler.error("unknown token \"" + t.value + "\"", t);
+		Core.error.error("unknown token \"" + t.value + "\"", t);
 		return null;
 
 		// TODO if nothing matches we can do really nice error handling by reporting
@@ -295,7 +295,7 @@ public class Parser extends TokenStream {
 					ArrayList<Token> tokens2 = argumentRule.getTokens();
 					node.addChild(new FunctionArgumentNode(tokens2.get(0).value, tokens2.get(1).value));
 				} else {
-					ErrorHandler.error("incorrect argument definition 1");
+					Core.error.error("incorrect argument definition 1");
 				}
 				if (stream.next().value.equals(")"))
 					break;
@@ -314,7 +314,7 @@ public class Parser extends TokenStream {
 					ArrayList<Token> tokens2 = argumentRule.getTokens();
 					node.addChild(new FunctionArgumentNode(tokens2.get(0).value, tokens2.get(1).value));
 				} else {
-					ErrorHandler.error("incorrect argument definition 1");
+					Core.error.error("incorrect argument definition 1");
 				}
 				if (stream.next().value.equals(")"))
 					break;
@@ -341,7 +341,7 @@ public class Parser extends TokenStream {
 
 		Token t = stream.next();
 		if (!t.value.equals("{"))
-			ErrorHandler.error("missing { in function definition", t);
+			Core.error.error("missing { in function definition", t);
 
 		int count = 0;
 

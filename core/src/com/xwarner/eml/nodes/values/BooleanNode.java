@@ -1,6 +1,5 @@
 package com.xwarner.eml.nodes.values;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.nodes.Node;
 
 public class BooleanNode extends Node {
@@ -20,7 +19,7 @@ public class BooleanNode extends Node {
 		return "boolean - value: " + value;
 	}
 
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		return value;
 	}
 

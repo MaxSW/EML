@@ -1,15 +1,11 @@
 package com.xwarner.eml.parser;
 
-import com.xwarner.eml.util.ErrorHandler;
-
 public class InputStream {
 
 	private String source;
 	private int pos = 0;
 	// line and col for tracking error locations
 	private int line = 1;
-
-	public ErrorHandler error;
 
 	public InputStream(String source) {
 		this.source = source;

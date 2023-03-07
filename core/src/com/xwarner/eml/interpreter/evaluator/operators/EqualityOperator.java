@@ -2,8 +2,8 @@ package com.xwarner.eml.interpreter.evaluator.operators;
 
 import java.math.BigDecimal;
 
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
-import com.xwarner.eml.util.ErrorHandler;
 
 public class EqualityOperator extends Operator {
 
@@ -25,7 +25,7 @@ public class EqualityOperator extends Operator {
 
 	public boolean evaluateMatrixBoolean(Matrix a, Matrix b) {
 		if (a.w != b.w || a.h != b.h)
-			ErrorHandler.error("matrices must have the same dimensions");
+			Core.error.error("matrices must have the same dimensions");
 		for (int i = 0; i < a.h; i++) {
 			for (int j = 0; j < a.w; j++) {
 				if (!a.vals[i][j].equals(b.vals[i][j]))

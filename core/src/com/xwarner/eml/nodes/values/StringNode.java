@@ -1,6 +1,5 @@
 package com.xwarner.eml.nodes.values;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.nodes.Node;
 
 public class StringNode extends Node {
@@ -16,7 +15,7 @@ public class StringNode extends Node {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		return value;
 	}
 

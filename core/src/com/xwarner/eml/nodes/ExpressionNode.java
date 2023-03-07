@@ -3,7 +3,7 @@ package com.xwarner.eml.nodes;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.context.variables.MatrixVariable;
 import com.xwarner.eml.interpreter.context.variables.Variable;
 import com.xwarner.eml.interpreter.context.variables.values.Matrix;
@@ -20,13 +20,13 @@ public class ExpressionNode extends Node {
 	}
 
 	/** Evaluate the expression **/
-	public Object invoke(Bundle bundle) {
+	public Object invoke() {
 		// TODO we could pre-do a lot of this
 		ArrayList<ExpressionEntry> vals = new ArrayList<ExpressionEntry>();
 
 		Object last = null;
 		for (Node n : getChildren()) {
-			Object o = n.invoke(bundle);
+			Object o = n.invoke();
 			if (o == null)
 				continue;
 			if (o instanceof BigDecimal) {
@@ -74,7 +74,7 @@ public class ExpressionNode extends Node {
 				}
 				ExpressionEntry e = new ExpressionEntry();
 				e.type = ExpressionEntry.TYPE_MAT;
-				e.matrix = (Matrix) ((MatrixVariable) o).getValue(bundle);
+				e.matrix = (Matrix) ((MatrixVariable) o).getValue();
 				vals.add(e);
 			}
 
@@ -103,22 +103,22 @@ public class ExpressionNode extends Node {
 		if (vals.isEmpty())
 			return null;
 
-		return bundle.evaluator.evaluate(vals);
+		return Core.evaluator.evaluate(vals);
 	}
 
-	public ArrayList<Variable> getVariables(Bundle bundle) {
+	public ArrayList<Variable> getVariables() {
 		ArrayList<Variable> vars = new ArrayList<Variable>();
 		for (Node node : getChildren())
-			loopVars(vars, node, bundle);
+			loopVars(vars, node);
 		return vars;
 	}
 
-	private void loopVars(ArrayList<Variable> vars, Node node, Bundle bundle) {
+	private void loopVars(ArrayList<Variable> vars, Node node) {
 		if (node instanceof ReferenceNode)
-			vars.add(bundle.context.getVariable((ReferenceNode) node, 0, bundle));
+			vars.add(Core.context.getVariable((ReferenceNode) node, 0));
 		else {
 			for (Node n : node.getChildren()) {
-				loopVars(vars, n, bundle);
+				loopVars(vars, n);
 			}
 		}
 	}
@@ -132,10 +132,10 @@ public class ExpressionNode extends Node {
 		return false;
 	}
 
-	public void optimise(Bundle bundle) {
+	public void optimise() {
 		// simplest rule - if there are no invocations, pre-evaluate
 		if (!hasDependencies(this)) {
-			Object result = invoke(bundle);
+			Object result = invoke();
 			if (result instanceof Number) {
 				getChildren().clear();
 				getChildren().add(new NumberNode(((Number) result).floatValue()));

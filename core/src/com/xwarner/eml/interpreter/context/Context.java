@@ -2,7 +2,6 @@ package com.xwarner.eml.interpreter.context;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
 import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.interpreter.context.objects.EClass;
 import com.xwarner.eml.interpreter.context.objects.EObject;
@@ -51,32 +50,32 @@ public class Context {
 	}
 
 	/** Interface functions **/
-	public void createVariable(String name, Object obj, Bundle bundle) {
-		current.createVariable(name, obj, bundle);
+	public void createVariable(String name, Object obj) {
+		current.createVariable(name, obj);
 	}
 
-	public void createVariable(ReferenceNode ref, Object obj, int level, Bundle bundle) {
-		current.createVariable(ref, obj, level, bundle);
+	public void createVariable(ReferenceNode ref, Object obj, int level) {
+		current.createVariable(ref, obj, level);
 	}
 
 	public Variable getVariable(String name, ReferenceNode ref) {
 		return current.getVariable(name, ref);
 	}
 
-	public Variable getVariable(ReferenceNode ref, int level, Bundle bundle) {
-		return current.getVariable(ref, level, bundle);
+	public Variable getVariable(ReferenceNode ref, int level) {
+		return current.getVariable(ref, level);
 	}
 
 	public void setFunction(String name, Function function) {
 		current.setFunction(name, function);
 	}
 
-	public Object runFunction(String name, ArrayList<Object> args, Bundle bundle) {
-		return current.runFunction(name, args, bundle);
+	public Object runFunction(String name, ArrayList<Object> args) {
+		return current.runFunction(name, args);
 	}
 
-	public Object runFunction(ReferenceNode ref, ArrayList<Object> args, Bundle bundle, int level) {
-		return current.runFunction(ref, args, bundle, level);
+	public Object runFunction(ReferenceNode ref, ArrayList<Object> args, int level) {
+		return current.runFunction(ref, args, level);
 	}
 
 	public void setClass(String name, EClass cls) {

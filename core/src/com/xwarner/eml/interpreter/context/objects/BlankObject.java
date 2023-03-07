@@ -2,7 +2,7 @@ package com.xwarner.eml.interpreter.context.objects;
 
 import java.util.HashMap;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.interpreter.context.variables.Variable;
 
@@ -28,13 +28,13 @@ public class BlankObject extends EObject {
 	 * Sets up the object in the context, including setting the functions and
 	 * variables
 	 */
-	public void instantiate(Bundle bundle) {
-		bundle.context.enterObject(this);
+	public void instantiate() {
+		Core.context.enterObject(this);
 		for (String s : vars.keySet())
-			bundle.context.createVariable(s, vars.get(s), bundle);
+			Core.context.createVariable(s, vars.get(s));
 		for (String s : funcs.keySet())
-			bundle.context.setFunction(s, funcs.get(s));
-		bundle.context.exitObject();
+			Core.context.setFunction(s, funcs.get(s));
+		Core.context.exitObject();
 	}
 
 }

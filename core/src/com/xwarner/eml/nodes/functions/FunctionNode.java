@@ -2,7 +2,7 @@ package com.xwarner.eml.nodes.functions;
 
 import java.util.ArrayList;
 
-import com.xwarner.eml.interpreter.bundle.Bundle;
+import com.xwarner.eml.core.Core;
 import com.xwarner.eml.interpreter.context.functions.Function;
 import com.xwarner.eml.nodes.Node;
 
@@ -22,7 +22,7 @@ public class FunctionNode extends Node {
 		return "function - name: " + name;
 	}
 
-	public Object pre_invoke(Bundle bundle) {
+	public Object pre_invoke() {
 		Function func = new Function();
 
 		ArrayList<Node> children = getChildren();
@@ -33,7 +33,7 @@ public class FunctionNode extends Node {
 				func.addArg((FunctionArgumentNode) node);
 		}
 
-		bundle.context.setFunction(name, func);
+		Core.context.setFunction(name, func);
 
 		return null;
 	}
