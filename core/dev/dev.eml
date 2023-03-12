@@ -1,9 +1,6 @@
-var x = 0
-x++
+var x = 1.25
 print(x)
-x--
+x.round(1)
 print(x)
-
-str y = "hello"
-y += " world"
-print(y)
+x.round()
+print(x)

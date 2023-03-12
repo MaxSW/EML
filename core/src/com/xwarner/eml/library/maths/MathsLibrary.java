@@ -7,8 +7,8 @@ public class MathsLibrary {
 
 	public static BigDecimal round(BigDecimal value, BigDecimal places) {
 		if (places == null)
-			return value.setScale(0, RoundingMode.HALF_EVEN);
-		return value.setScale(places.intValue(), RoundingMode.HALF_EVEN);
+			return value.setScale(0, RoundingMode.HALF_UP);
+		return value.setScale(places.intValue(), RoundingMode.HALF_UP);
 	}
 
 	public static BigDecimal floor(BigDecimal value, BigDecimal places) {
