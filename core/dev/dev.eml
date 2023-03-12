@@ -1,6 +1,5 @@
-var x = 1.25
-print(x)
-x.round(1)
-print(x)
-x.round()
-print(x)
+print("hello")
+config("output", false)
+print("world")
+config("output", true)
+print("again")

@@ -12,6 +12,7 @@ import com.xwarner.eml.interpreter.VariableTools;
 import com.xwarner.eml.interpreter.context.Context;
 import com.xwarner.eml.interpreter.context.variables.NumericVariable;
 import com.xwarner.eml.interpreter.evaluator.Evaluator;
+import com.xwarner.eml.library.global.ConfigFunction;
 import com.xwarner.eml.library.global.ExpFunction;
 import com.xwarner.eml.library.global.ImportFunction;
 import com.xwarner.eml.library.global.LnFunction;
@@ -26,6 +27,7 @@ public class Core {
 	public static PrintStream output;
 	public static VariableTools vars;
 	public static ErrorHandler error;
+	public static Config config;
 
 	public static void init() {
 		context = new Context();
@@ -33,10 +35,12 @@ public class Core {
 		output = System.out;
 		vars = new VariableTools();
 		error = new ErrorHandler();
+		config = new Config();
 
 		// initialise global functions
 		context.setFunction("print", new PrintFunction());
 		context.setFunction("import", new ImportFunction());
+		context.setFunction("config", new ConfigFunction());
 		context.setFunction("exp", new ExpFunction());
 		context.setFunction("ln", new LnFunction());
 		context.createVariable("pi", new NumericVariable(BigDecimal.valueOf(Math.PI)));
